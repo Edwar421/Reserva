@@ -10,102 +10,83 @@ import { ConversionEmail } from "../Classes/Adapter/conversionEmail";
 import Header from "../Classes/Header/Header";
 import { FachadaDeEstados } from "../Classes/Estados/Fachada/FachadaDeEstados";
 
-
 function Registro() {
-  const fachada= new FachadaDeEstados();
+  const fachada = new FachadaDeEstados();
+  const emailAdapter = new ConversionEmail();
+  const navigate = useNavigate();
 
   const [alertText, setAlertText] = useState("");
   const [showAlert, setShowAlert] = useState(fachada.getMostrarAlerta());
   const [alertState, setAlertState] = useState(fachada.getEstadoDeAlerta());
+  const [loading, setLoading] = useState(false);
 
   const [cliente, setCliente] = useState({
     nombre: "",
     email: "",
     password: "",
-    tipoCliente: "",
+    tipo: "",
+    cedula: "",
+    codigoEstudiantil: "",
   });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const emailAdapter = new ConversionEmail();
-
-  const clientSubmit = async (e) => {
-    console.log(cliente.email);
-    e.preventDefault();
-    setLoading(true);
-    try {
-      if (cliente.nombre.length > 45) {
-        setShowAlert(fachada.cambioMostrarAlerta());
-        setAlertText("El nombre es mayor a 45 caracteres");
-        setAlertState(fachada.cambioEstadoDeAlerta(1));
-        setLoading(false);
-      } else if (cliente.email.length > 45) {
-        setShowAlert(fachada.cambioMostrarAlerta());
-        setAlertText("El correo es mayor a 45 caracteres");
-        setAlertState(fachada.cambioEstadoDeAlerta(1));
-        setLoading(false);
-      } else if (cliente.password.length > 45) {
-        setShowAlert(fachada.cambioMostrarAlerta());
-        setAlertText("La contraseña es mayor a 45 caracteres");
-        setAlertState(fachada.cambioEstadoDeAlerta(1));
-        setLoading(false);
-      } else {
-        cliente.email = emailAdapter.convertirEmailAMinuscula(cliente.email);
-        if (cliente.tipoCliente == "Artista") {
-          const res = await fetch("http://localhost:3000/artista/crearArtista", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(cliente),
-          });
-          const data = await res.json();
-          if (data.statusCode == 200) {
-            setLoading(false);
-            setShowAlert(fachada.cambioMostrarAlerta());
-            setAlertText("El usuario está duplicado");
-            setAlertState(fachada.cambioEstadoDeAlerta(1));
-            setLoading(false);
-          } else {
-            setLoading(false);
-            setLoading(false);
-            console.log("emailMinuscula");
-            setAlertText("El registro se realizó correctamente");
-            setAlertState(fachada.cambioEstadoDeAlerta(0));
-            setShowAlert(fachada.cambioMostrarAlerta());
-            setTimeout(() => navigate("/login"), 500);
-          }
-        } else if (cliente.tipoCliente == "Cliente") {
-          const res = await fetch("http://localhost:3000/cliente/crearCliente", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(cliente),
-          });
-          const data = await res.json();
-          if (data.statusCode == 200) {
-            setShowAlert(fachada.cambioMostrarAlerta());
-            setAlertText("El usuario está duplicado");
-            setAlertState(fachada.cambioEstadoDeAlerta(1));
-            setLoading(false);
-          } else {
-            setLoading(false);
-            setAlertText("El registro se realizó correctamente");
-            setAlertState(fachada.cambioEstadoDeAlerta(0));
-            setShowAlert(fachada.cambioMostrarAlerta());
-            setTimeout(() => navigate("/login"), 500);
-            console.log(emailAdapter.convertirEmailAMinuscula(cliente.email));
-          }
-        }
-      }
-    } catch (error) {
-      console.log("Error");
-    }
-  };
 
   const clientChange = (e) =>
     setCliente({ ...cliente, [e.target.name]: e.target.value });
 
   const handleSelect = (e) => {
-    setCliente({ ...cliente, tipoCliente: e.target.value });
+    const tipo = e.target.value;
+    setCliente({ ...cliente, tipo, codigoEstudiantil: "" });
   };
+
+  const clientSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { nombre, email, password, tipo, cedula, codigoEstudiantil } = cliente;
+
+      if (nombre.length > 45 || email.length > 45 || password.length > 45) {
+        setAlertText("Los campos no deben exceder 45 caracteres");
+        setAlertState(fachada.cambioEstadoDeAlerta(1));
+        setShowAlert(fachada.cambioMostrarAlerta());
+        setLoading(false);
+        return;
+      }
+
+      const emailLower = emailAdapter.convertirEmailAMinuscula(email);
+      const payload = {
+        ...cliente,
+        email: emailLower,
+        codigoEstudiantil: tipo === "Estudiante" ? codigoEstudiantil : null,
+      };
+
+      const res = await fetch("http://localhost:3000/usuario/crearUsuario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (data.statusCode === 200) {
+        setAlertText("El usuario ya existe");
+        setAlertState(fachada.cambioEstadoDeAlerta(1));
+        setShowAlert(fachada.cambioMostrarAlerta());
+      } else {
+        setAlertText("Registro exitoso");
+        setAlertState(fachada.cambioEstadoDeAlerta(0));
+        setShowAlert(fachada.cambioMostrarAlerta());
+        setTimeout(() => navigate("/login"), 500);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setAlertText("Error en el registro");
+      setAlertState(fachada.cambioEstadoDeAlerta(1));
+      setShowAlert(fachada.cambioMostrarAlerta());
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -121,66 +102,74 @@ function Registro() {
           {alertText}
         </Alert>
 
-        <Form onSubmit={clientSubmit} data-testid="Form">
-          <Form.Group className="mb-5 mt-5" controlId="formBasicTipo">
-            <Image src="/logo.png" fluid width="50%" />
+        <Form onSubmit={clientSubmit}>
+          <Form.Group className="mb-4 mt-4" controlId="formLogo">
+            <Image src="/logo.png" fluid width="25%" />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicTipo">
-            <Form.Select
-              aria-label="Default select example"
-              onChange={handleSelect}
-              data-testid="Tipo de registro"
-            >
-              <option value="">Tipo de registro</option>
-              <option value="Cliente">Cliente</option>
-              <option value="Artista">Artista</option>
+          <Form.Group className="mb-3" controlId="formTipoUsuario">
+            <Form.Select onChange={handleSelect} value={cliente.tipo}>
+              <option value="">Selecciona tu rol</option>
+              <option value="Estudiante">Estudiante</option>
+              <option value="Profesor">Profesor</option>
+              <option value="Externo">Externo</option>
+              <option value="Laborista">Laborista</option>
             </Form.Select>
-            <Form.Text>¿Bajo qué rol deseas registrate?.</Form.Text>
+            <Form.Text>¿Cuál es tu rol dentro del sistema?</Form.Text>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicUsername">
+          <Form.Group className="mb-3" controlId="formNombre">
             <Form.Control
-              type="username"
+              type="text"
               name="nombre"
               placeholder="Nombre"
               onChange={clientChange}
               value={cliente.nombre}
-              data-testid="Nombre"
             />
-            <Form.Text>
-              Escribe tu nombre para que tus amigos te reconozcan.
-            </Form.Text>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3" controlId="formEmail">
             <Form.Control
               type="email"
               name="email"
               placeholder="Correo electrónico"
               onChange={clientChange}
               value={cliente.email}
-              data-testid="Correo"
             />
-
-            <Form.Text className="text-muted">
-              Nunca compartiremos su dirección de correo electrónico.
-            </Form.Text>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3" controlId="formPassword">
             <Form.Control
               type="password"
-              placeholder="Contraseña"
               name="password"
+              placeholder="Contraseña"
               onChange={clientChange}
               value={cliente.password}
-              data-testid="Contraseña"
             />
-            <Form.Text className="text-muted">
-              Debe contener por lo menos un número.
-            </Form.Text>
           </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCedula">
+            <Form.Control
+              type="text"
+              name="cedula"
+              placeholder="Cédula"
+              onChange={clientChange}
+              value={cliente.cedula}
+            />
+          </Form.Group>
+
+          {cliente.tipo === "Estudiante" && (
+            <Form.Group className="mb-3" controlId="formCodigoEstudiantil">
+              <Form.Control
+                type="text"
+                name="codigoEstudiantil"
+                placeholder="Código Estudiantil"
+                onChange={clientChange}
+                value={cliente.codigoEstudiantil}
+              />
+            </Form.Group>
+          )}
+
           <Button
             variant="primary"
             type="submit"
@@ -188,19 +177,19 @@ function Registro() {
               !cliente.nombre ||
               !cliente.email ||
               !cliente.password ||
-              !cliente.tipoCliente
+              !cliente.tipo ||
+              !cliente.cedula ||
+              (cliente.tipo === "Estudiante" && !cliente.codigoEstudiantil)
             }
-            data-testid="Registrarme"
           >
-            {loading ? loading : "Registrarme"}
+            {loading ? "Registrando..." : "Registrarme"}
           </Button>
         </Form>
+
         <Form.Group>
           <hr />
           <Link to={"/login"}>
-            <Button variant="outline-primary" type="submit">
-              Login
-            </Button>
+            <Button variant="outline-primary">Login</Button>
           </Link>
         </Form.Group>
       </div>

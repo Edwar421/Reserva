@@ -36,128 +36,74 @@ function Login() {
   const [showAlert, setShowAlert] = useState(fachada.getMostrarAlerta());
   const [alertState, setAlertState] = useState(fachada.getEstadoDeAlerta());
 
-  const loadCliente = async (email) => {
+  const loadUsuario = async () => {
     try {
-      let tipoUsuario = document.querySelector("#tipoUsuario").value;
-      if (tipoUsuario) {
-        if (cliente.email.length > 45) {
-          setAlertText("El correo es mayor a 45 caracteres");
-          setAlertState(fachada.cambioEstadoDeAlerta(1));
-          setShowAlert(fachada.cambioMostrarAlerta());
-        } else if (cliente.password.length > 45) {
-          setAlertText("La contraseña es mayor a 45 caracteres");
-          setAlertState(fachada.cambioEstadoDeAlerta(1));
-          setShowAlert(fachada.cambioMostrarAlerta());
-        } else {
-          cliente.email = emailAdapter.convertirEmailAMinuscula(cliente.email);
-          if (tipoUsuario == "Cliente") {
-            const res = await fetch("http://localhost:3000/cliente/Login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(cliente),
-            });
-            if (res.ok) {
-              const data = await res.json();
-              console.log(data);
-              if (data.message) {
-                setAlertText(data.message);
-                setAlertState(fachada.cambioEstadoDeAlerta(1));
-                setShowAlert(fachada.cambioMostrarAlerta());
-              } else {
-                setAlertText("Correo y contraseña válidos :D");
-                setAlertState(fachada.cambioEstadoDeAlerta(0));
-                setShowAlert(fachada.cambioMostrarAlerta());
-                localStorage.setItem("email", data.user[0].email);
-                localStorage.setItem("username", data.user[0].nombre);
-                localStorage.setItem("dinero", 3000000);
-                localStorage.setItem("tipoDeCliente", "Cliente");
-                setTimeout(() => navigate("/"), 200);
-              }
-            } else {
-              setAlertText("Correo no registrado");
-              setAlertState(fachada.cambioEstadoDeAlerta(1));
-              setShowAlert(fachada.cambioMostrarAlerta());
-              // Mostrar la alerta en caso de error
-            }
-          } else if (tipoUsuario == "Artista") {
-            const res = await fetch("http://localhost:3000/artista/Login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(cliente),
-            });
-            if (res.ok) {
-              const data = await res.json();
-              console.log(data);
-              if (data.message) {
-                setAlertText(data.message);
-                setAlertState(fachada.cambioEstadoDeAlerta(1));
-                setShowAlert(fachada.cambioMostrarAlerta());
-              } else {
-                setAlertText("Correo y contraseña válidos :D");
-                setAlertState(fachada.cambioEstadoDeAlerta(0));
-                setShowAlert(fachada.cambioMostrarAlerta());
-                localStorage.setItem("email", data.user[0].email);
-                localStorage.setItem("username", data.user[0].nombre);
-                localStorage.setItem("tipoDeCliente", "Artista");
-                setTimeout(() => navigate("/catalogoEstampado"), 200);
-              }
-            } else {
-              setAlertText("Correo no registrado");
-              setAlertState(fachada.cambioEstadoDeAlerta(1));
-              setShowAlert(fachada.cambioMostrarAlerta());
-              // Mostrar la alerta en caso de error
-            }
-          } else if (tipoUsuario == "Administrador") {
-            const res = await fetch("http://localhost:3000/administrador/Login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(cliente),
-            });
-            if (res.ok) {
-              const data = await res.json();
-              console.log(data);
-              if (data.message) {
-                setAlertText(data.message);
-                setAlertState(fachada.cambioEstadoDeAlerta(1));
-                setShowAlert(fachada.cambioMostrarAlerta());
-              } else {
-                setAlertText("Correo y contraseña válidos :D");
-                setAlertState(fachada.cambioEstadoDeAlerta(0));
-                setShowAlert(fachada.cambioMostrarAlerta());
-                localStorage.setItem("email", data.user[0].email);
-                localStorage.setItem("username", data.user[0].nombre);
-                localStorage.setItem("tipoDeCliente", "Administrador");
-                setTimeout(() => navigate("/catalogoEstampado"), 200);
-              }
-            } else {
-              setAlertText("Correo no registrado");
-              setAlertState(fachada.cambioEstadoDeAlerta(1));
-              setShowAlert(fachada.cambioMostrarAlerta());
-              // Mostrar la alerta en caso de error
-            }
-          }
-        }
-      } else {
-        setAlertText("¿Qué tipo de usuario eres?");
+      if (cliente.email.length > 45) {
+        setAlertText("El correo es mayor a 45 caracteres");
         setAlertState(fachada.cambioEstadoDeAlerta(1));
         setShowAlert(fachada.cambioMostrarAlerta());
+      } else if (cliente.password.length > 45) {
+        setAlertText("La contraseña es mayor a 45 caracteres");
+        setAlertState(fachada.cambioEstadoDeAlerta(1));
+        setShowAlert(fachada.cambioMostrarAlerta());
+      } else {
+        cliente.email = emailAdapter.convertirEmailAMinuscula(cliente.email);
+        const res = await fetch("http://localhost:3000/usuario/Login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(cliente),
+        });
+  
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data);
+  
+          if (data.message) {
+            setAlertText(data.message);
+            setAlertState(fachada.cambioEstadoDeAlerta(1));
+            setShowAlert(fachada.cambioMostrarAlerta());
+          } else {
+            const { email, nombre, tipo } = data.user[0];
+  
+            setAlertText("Correo y contraseña válidos :D");
+            setAlertState(fachada.cambioEstadoDeAlerta(0));
+            setShowAlert(fachada.cambioMostrarAlerta());
+  
+            localStorage.setItem("email", email);
+            localStorage.setItem("username", nombre);
+  
+            // Redirigir según tipo
+            /*if (tipo === "Cliente") {
+              localStorage.setItem("dinero", 3000000);
+              setTimeout(() => navigate("/"), 200);
+            } else if (tipo === "Artista") {
+              setTimeout(() => navigate("/catalogoEstampado"), 200);
+            } else if (tipo === "Administrador") {
+              setTimeout(() => navigate("/adminDashboard"), 200);
+            }*/
+          }
+        } else {
+          setAlertText("Correo no registrado");
+          setAlertState(fachada.cambioEstadoDeAlerta(1));
+          setShowAlert(fachada.cambioMostrarAlerta());
+        }
       }
     } catch (error) {
+      console.error(error);
+      setAlertText("Error de red o del servidor");
       setAlertState(fachada.cambioEstadoDeAlerta(1));
       setShowAlert(fachada.cambioMostrarAlerta());
-      // Mostrar la alerta en caso de error
-      // Manejar errores de red o del servidor
-      console.error(error);
     }
   };
+  
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (cliente.email && cliente.password) {
-      await loadCliente(cliente.email); // Espera a que loadCliente termine antes de continuar
-      //await loadCliente(cliente.password);
+      await loadUsuario();
     }
   };
+  
 
   const clientChange = (e) =>
     setCliente({ ...cliente, [e.target.name]: e.target.value });
@@ -175,23 +121,11 @@ function Login() {
         {alertText}
       </Alert>
       <div className="text-center content">
-        <h1>Estampa Tu Idea</h1>
-        <Form.Group className="mb-5 mt-5" controlId="formBasicTipo">
-          <Image src="/logo.png" fluid width="50%" />
+        <h1>Reservas UD</h1>
+        <Form.Group className="mb-4 mt-4" controlId="formBasicTipo">
+          <Image src="/logo.png" fluid width="22%" />
         </Form.Group>
         <Form onSubmit={handleFormSubmit} data-testid="Form">
-          <Form.Group className="mb-3" controlId="tipoUsuario">
-            <Form.Select
-              aria-label="Default select example"
-              data-testid="Tipo de registro"
-              onChange={null}
-            >
-              <option value="">Tipo de registro</option>
-              <option value="Cliente">Cliente</option>
-              <option value="Artista">Artista</option>
-              <option value="Administrador">Administrador</option>
-            </Form.Select>
-          </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Control

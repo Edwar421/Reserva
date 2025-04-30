@@ -31,11 +31,11 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
         <Navbar.Brand href="/#/">
           <img
             src="logo.png"
-            width="35"
-            height="35"
+            width="40"
+            height="40"
             className="d-inline-block align-top"
           />
-          Estampa tu idea
+          Reservas UD
         </Navbar.Brand>
         <Navbar.Offcanvas
           id={`offcanvasNavbar-expand-md`}
