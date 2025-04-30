@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Reserva } from './reserva.entity';
 
 export enum TipoUsuario {
   Estudiante = "Estudiante",
@@ -9,7 +10,7 @@ export enum TipoUsuario {
 }
 
 @Entity()
-export class usuario {
+export class Usuario {
   @PrimaryColumn({ type: 'varchar', length: 45 })
   email: string;
 
@@ -20,7 +21,7 @@ export class usuario {
   @Column({ type: 'varchar', length: 45 })
   password: string;
 
-  @Column({ type: "enum", enum: TipoUsuario,})
+  @Column({ type: 'enum', enum: TipoUsuario })
   tipo: TipoUsuario;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
@@ -28,4 +29,7 @@ export class usuario {
 
   @Column({ type: 'varchar', length: 20 })
   cedula: string;
+
+  @OneToMany(() => Reserva, (reserva) => reserva.usuario)
+  reservas: Reserva[];
 }

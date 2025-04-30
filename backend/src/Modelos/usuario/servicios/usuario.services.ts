@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { usuario } from 'src/database/Entidades/usuario.entity';
+import { Usuario } from 'src/database/Entidades/usuario.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { crearLoginDto } from '../dto/login.dto';
 import {
@@ -11,8 +11,8 @@ import {
 @Injectable()
 export class usuarioService {
   constructor(
-    @InjectRepository(usuario)
-    private usuarioRepo: Repository<usuario>,
+    @InjectRepository(Usuario)
+    private usuarioRepo: Repository<Usuario>,
   ) {}
 
   prueba(): string {
