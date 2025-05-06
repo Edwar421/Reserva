@@ -188,7 +188,7 @@ function Registro() {
 
         <Form.Group>
           <hr />
-          <Link to={"/login"}>
+          <Link to={"/"}>
             <Button variant="outline-primary">Login</Button>
           </Link>
         </Form.Group>

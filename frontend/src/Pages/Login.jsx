@@ -71,16 +71,30 @@ function Login() {
   
             localStorage.setItem("email", email);
             localStorage.setItem("username", nombre);
+            localStorage.setItem("tipoUsuario", tipo);
+
+            console.log(tipo)
+
   
-            // Redirigir según tipo
-            /*if (tipo === "Cliente") {
-              localStorage.setItem("dinero", 3000000);
-              setTimeout(() => navigate("/"), 200);
-            } else if (tipo === "Artista") {
-              setTimeout(() => navigate("/catalogoEstampado"), 200);
-            } else if (tipo === "Administrador") {
-              setTimeout(() => navigate("/adminDashboard"), 200);
-            }*/
+            // Redirigir según el tipo de usuario
+            switch (tipo) {
+              case "Estudiante":
+                setTimeout(() => navigate("/reserva"), 200);
+                break;
+              case "Docente":
+                setTimeout(() => navigate("/reserva"), 200);
+                break;
+              case "Externo":
+                setTimeout(() => navigate("/reserva"), 200);
+                break;
+              case "Laborista":
+                setTimeout(() => navigate("/laborista/dashboard"), 200);
+                break;
+              default:
+                setAlertText("Tipo de usuario desconocido");
+                setAlertState(fachada.cambioEstadoDeAlerta(1));
+                setShowAlert(fachada.cambioMostrarAlerta());
+            }
           }
         } else {
           setAlertText("Correo no registrado");
