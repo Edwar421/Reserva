@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import HeaderStrategy from "./HeaderStrategy";
 
 // Estrategia para cliente autenticado
-class ClienteHeaderStrategy implements HeaderStrategy {
+class LaboristaHeaderStrategy implements HeaderStrategy {
   // Atributos de la clase
   private navigate = useNavigate();
 
@@ -99,4 +99,4 @@ class ClienteHeaderStrategy implements HeaderStrategy {
   }
 }
 
-export default ClienteHeaderStrategy;
+export default LaboristaHeaderStrategy;

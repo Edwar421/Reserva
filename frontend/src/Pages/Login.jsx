@@ -88,7 +88,7 @@ function Login() {
                 setTimeout(() => navigate("/reserva"), 200);
                 break;
               case "Laborista":
-                setTimeout(() => navigate("/laborista/dashboard"), 200);
+                setTimeout(() => navigate("/laborista"), 200);
                 break;
               default:
                 setAlertText("Tipo de usuario desconocido");

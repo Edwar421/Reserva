@@ -13,6 +13,9 @@ import {
 import Login from "./Pages/Login.jsx";
 import Registro from "./Pages/Registro.jsx";
 import Reserva from "./Pages/Reserva.jsx"
+import ReservaMaterial from "./Pages/ReservaMaterial.jsx";
+import MisReservas from "./Pages/MisReservas.jsx";
+import Laborista from "./Pages/Laborista.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +23,9 @@ const router = createBrowserRouter(
       <Route path="/" element={<Login />} />
       <Route path="/registro" element={<Registro />} />
       <Route path="/reserva" element={<Reserva />}/>
-      
+      <Route path="/reservaMaterial" element={<ReservaMaterial />}/>
+      <Route path="/misReservas" element={<MisReservas />}/>
+      <Route path="/laborista" element={<Laborista />}/>
     </>
   )
 );

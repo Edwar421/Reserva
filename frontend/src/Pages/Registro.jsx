@@ -75,7 +75,7 @@ function Registro() {
         setAlertText("Registro exitoso");
         setAlertState(fachada.cambioEstadoDeAlerta(0));
         setShowAlert(fachada.cambioMostrarAlerta());
-        setTimeout(() => navigate("/login"), 500);
+        setTimeout(() => navigate("/"), 500);
       }
 
       setLoading(false);

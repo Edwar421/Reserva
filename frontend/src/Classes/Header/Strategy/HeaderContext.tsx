@@ -1,12 +1,11 @@
 import HeaderStrategy from "./HeaderStrategy";
 import ClienteHeaderStrategy from "./ClienteHeaderStrategy";
 import NoAuthHeaderStrategy from "./NoAuthHeaderStrategy";
-import ArtistaHeaderStrategy from "./ArtistaHeaderStrategy";
-import AdministradorHeaderStrategy from "./AdministradorHeaderStrategy";
+import LaboristaHeaderStrategy from "./LaboristaHeaderStrategy";
 
 // Clase de contexto que gestiona la estrategia
 class HeaderContext {
-  private strategy: HeaderStrategy; // Se deckara el objeto de tipo estrategia
+  private strategy: HeaderStrategy;
 
   constructor() {
     this.strategy = new NoAuthHeaderStrategy(); // Estrategia inicial por defecto
@@ -16,20 +15,24 @@ class HeaderContext {
     this.strategy = strategy;
   }
 
-  // Método para obtener y renderizar el navbar según el navbar necesario
+  // Método para obtener y renderizar el navbar según el tipo de usuario
   public renderNavbar(isUserAuthenticated: boolean): JSX.Element {
-    let tipoCliente = localStorage.getItem("tipoDeCliente");
+    const tipoCliente = localStorage.getItem("tipoUsuario");
+    console.log(tipoCliente)
 
-    if (isUserAuthenticated && tipoCliente == "Cliente") {
-      this.setStrategy(new ClienteHeaderStrategy());
-    } else if (isUserAuthenticated && tipoCliente == "Artista") {
-      this.setStrategy(new ArtistaHeaderStrategy());
-    } else if (isUserAuthenticated && tipoCliente == "Administrador") {
-      this.setStrategy(new AdministradorHeaderStrategy());
-    }else {
+    if (isUserAuthenticated) {
+      if (["Estudiante", "Docente", "Externo"].includes(tipoCliente || "")) {
+        this.setStrategy(new ClienteHeaderStrategy());
+      } else if (tipoCliente === "Laborista") {
+        this.setStrategy(new LaboristaHeaderStrategy());
+      } else {
+        this.setStrategy(new NoAuthHeaderStrategy());
+      }
+    } else {
       this.setStrategy(new NoAuthHeaderStrategy());
     }
-    return this.strategy.renderNavbar(); // Renderiza el navbar según la estrategia
+
+    return this.strategy.renderNavbar();
   }
 }
 

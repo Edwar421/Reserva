@@ -47,20 +47,6 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
               variant="pills"
               className="justify-content-end flex-grow-1 pe-3"
             >
-              <Nav.Item>
-                <Nav.Link as={Link} to="/" active={location.pathname === "/"}>
-                  <FontAwesomeIcon icon={faShop} /> Catalogo
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link
-                  as={Link}
-                  to="/catalogoEstampado"
-                  active={location.pathname === "/catalogoEstampado"}
-                >
-                  <FontAwesomeIcon icon={faStar} /> Estampados
-                </Nav.Link>
-              </Nav.Item>
               <NavDropdown
                 title={
                   <span>
@@ -71,8 +57,8 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
               >
                 <NavDropdown.Item
                   as={Link}
-                  to="/login"
-                  active={location.pathname === "/login"}
+                  to="/"
+                  active={location.pathname === "/"}
                 >
                   <FontAwesomeIcon icon={faSignIn} /> Log in
                 </NavDropdown.Item>

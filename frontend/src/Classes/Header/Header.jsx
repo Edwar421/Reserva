@@ -2,23 +2,33 @@ import Container from "react-bootstrap/Container";
 import HeaderContext from "./Strategy/HeaderContext";
 import { useState, useEffect } from "react";
 
-//Cabecera
+// Cabecera
 const Header = () => {
-  // Variables que estan pendientes del cierre o inicio de sesion
-  const contexto = new HeaderContext();
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [contexto, setContexto] = useState(new HeaderContext());
+
   useEffect(() => {
     const username = localStorage.getItem("username");
     setIsUserAuthenticated(username !== null);
-  }, [localStorage.username]);
+  }, []);
 
-  // Se renderiza la barra de navegacion
+  // Escucha manual de cambios en el localStorage (opcional, en caso de que la sesión se modifique desde otra pestaña)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const username = localStorage.getItem("username");
+      setIsUserAuthenticated(username !== null);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
-    <>
-      <Container fluid className="mx-0 px-0">
-        {contexto.renderNavbar(isUserAuthenticated)}
-      </Container>
-    </>
+    <Container fluid className="mx-0 px-0">
+      {contexto.renderNavbar(isUserAuthenticated)}
+    </Container>
   );
 };
 
