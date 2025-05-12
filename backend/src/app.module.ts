@@ -11,6 +11,10 @@ import { join } from 'path';
 import { UsuarioModule } from './Modelos/usuario/usuario.module';
 import { EspacioModule } from './Modelos/espacio/espacio.module';
 import { ReservaModule } from './Modelos/reserva/reserva.module';
+import { Material } from './database/Entidades/material.entity';
+import { MaterialModule } from './Modelos/material/material.module';
+import { Reserva } from './database/Entidades/reserva.entity';
+import { ReservaMaterialModule } from './Modelos/reservaMaterial/reservaMaterial.module';
 
 @Module({
   imports: [
@@ -24,10 +28,12 @@ import { ReservaModule } from './Modelos/reserva/reserva.module';
       serveRoot: '/uploads', // route to serve the static files
     }),
     DatabaseModule,
-    UploadModule,
     UsuarioModule,
     EspacioModule,
     ReservaModule,
+    MaterialModule,
+    ReservaMaterialModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

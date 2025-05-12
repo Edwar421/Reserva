@@ -10,62 +10,71 @@ async function cargarEspaciosYReservas() {
   const lineasEspacios = espaciosData.split('\n').filter((linea) => linea.trim() !== '');
   const lineasReservas = reservasData.split('\n').filter((linea) => linea.trim() !== '');
 
-  const espacios: Espacio[] = [];
-  const reservas: Reserva[] = [];
+  const espacioRepo = AppDataSource.getRepository(Espacio);
+  const reservaRepo = AppDataSource.getRepository(Reserva);
 
-  // Cargar espacios
-  lineasEspacios.forEach((linea) => {
+  await reservaRepo.clear();
+  await espacioRepo.clear();
+
+  const espacios: Espacio[] = [];
+
+  function convertirATipoEspacio(valor: string): TipoEspacio | null {
+    const textoNormalizado = valor
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // quita acentos
+      .trim();
+  
+    switch (textoNormalizado) {
+      case 'aula':
+        return TipoEspacio.AULA;
+      case 'laboratorio de computacion':
+        return TipoEspacio.LAB_COMP;
+      case 'laboratorio de fisica':
+        return TipoEspacio.LAB_FISICA;
+      default:
+        console.warn(`Tipo de espacio desconocido: "${valor}"`);
+        return null;
+    }
+  }
+  
+
+  for (const linea of lineasEspacios) {
     const [nombre, tipoTexto, capacidadStr, descripcion] = linea.split(';').map((v) => v.trim());
     const tipo = convertirATipoEspacio(tipoTexto);
     const capacidad = parseInt(capacidadStr);
+    const idExtraido = parseInt(nombre.match(/\d+/)?.[0] || '0');
     if (tipo && !isNaN(capacidad)) {
       const espacio = new Espacio();
+      espacio.id = idExtraido;
       espacio.nombre = nombre;
       espacio.tipo = tipo;
       espacio.capacidad = capacidad;
       espacio.descripcion = descripcion;
       espacios.push(espacio);
     }
-  });
+  }
 
-  // Cargar reservas
-  lineasReservas.forEach((linea) => {
-    const [idEspacio, fecha, horaInicio, horaFin] = linea.split(';').map((v) => v.trim());
+  await espacioRepo.save(espacios);
+
+  const reservas: Reserva[] = [];
+
+  for (const linea of lineasReservas) {
+    const [idEspacioStr, fecha, horaInicio, horaFin] = linea.split(';').map((v) => v.trim());
+    const idEspacio = parseInt(idEspacioStr);
+
+    const espacio = await espacioRepo.findOneBy({ id: idEspacio });
+    if (!espacio) continue;
+
     const reserva = new Reserva();
-    reserva.espacio = { id: parseInt(idEspacio) } as Espacio;
+    reserva.espacio = espacio;
     reserva.fecha = fecha;
     reserva.horaInicio = horaInicio;
     reserva.horaFin = horaFin;
+    // reserva.usuario = algúnUsuario; // Si decides asignar uno
     reservas.push(reserva);
-  });
+  }
 
-  const espacioRepo = AppDataSource.getRepository(Espacio);
-  const reservaRepo = AppDataSource.getRepository(Reserva);
-
-  await espacioRepo.save(espacios);
   await reservaRepo.save(reservas);
   console.log('Datos de espacios y reservas cargados correctamente');
 }
-
-function convertirATipoEspacio(valor: string): TipoEspacio | null {
-  switch (valor.toLowerCase()) {
-    case 'aula':
-      return TipoEspacio.AULA;
-    case 'laboratorio de computación':
-      return TipoEspacio.LAB_COMP;
-    case 'laboratorio de física':
-      return TipoEspacio.LAB_FISICA;
-    default:
-      return null;
-  }
-}
-
-AppDataSource.initialize()
-  .then(async () => {
-    await cargarEspaciosYReservas();
-    process.exit();
-  })
-  .catch((err) => {
-    console.error('Error al conectar a la base de datos', err);
-    process.exit(1);
-  });

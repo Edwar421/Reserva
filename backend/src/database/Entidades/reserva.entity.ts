@@ -10,8 +10,9 @@ export class Reserva {
   @ManyToOne(() => Espacio, (espacio) => espacio.reservas)
   espacio: Espacio;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.reservas)
+  @ManyToOne(() => Usuario, (usuario) => usuario.reservas, { nullable: true })
   usuario: Usuario;
+
 
   @Column()
   fecha: string; // YYYY-MM-DD
