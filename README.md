@@ -1,5 +1,5 @@
 # **¿Que es este proyecto?**
-El presente proyecto es una página de venta de camisas a las cuales se les puede agregar estampados, dicha pagina fue hecha con Vite + React, junto a TypeScript y JavaScript.
+El presente proyecto es una página de reservas de espacios, dicha pagina fue hecha con Vite + React, junto a TypeScript y JavaScript.
 
 # **Motivacion detras de este proyecto**
 El propósito bajo el cual se creó este proyecto fue con el fin de aprender a programar tanto frontend como backend en el framework React, por lo que este proyecto está orientado a ser ejecutado de forma local y no sobre el internet. Aunque con algunos cambios y el despliegue del backend se podría desplegar esta página en la web, este no era el objetivo final del proyecto, por lo que no se realizó.
