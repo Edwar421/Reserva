@@ -12,7 +12,7 @@ import {
 //import ProtectedRoutes from "./Utils/ProtectedRoutes.jsx";
 import Login from "./Pages/Login.jsx";
 import Registro from "./Pages/Registro.jsx";
-import Reserva from "./Pages/Reserva.jsx"
+import Reserva from "./Pages/Reserva.tsx"
 import ReservaMaterial from "./Pages/ReservaMaterial.jsx";
 import MisReservas from "./Pages/MisReservas.jsx";
 import Laborista from "./Pages/Laborista.jsx";

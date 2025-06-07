@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
+import { Usuario } from './Entidades/usuario.entity';
 import { Espacio } from './Entidades/espacio.entity';
 import { Reserva } from './Entidades/reserva.entity';
 
@@ -9,9 +10,9 @@ export const AppDataSource = new DataSource({
   port: 5432,
   username: 'postgres',
   password: '1234',
-  database: 'nombre_basedatos',
+  database: 'reservas',
   schema: 'public',
   synchronize: false,
   logging: false,
-  entities: [Espacio, Reserva],
+  entities: [Espacio, Reserva,Usuario],
 });
