@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { Usuario } from './Entidades/usuario.entity';
 import { Espacio } from './Entidades/espacio.entity';
 import { Reserva } from './Entidades/reserva.entity';
+import { Material } from './Entidades/material.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -14,5 +15,5 @@ export const AppDataSource = new DataSource({
   schema: 'public',
   synchronize: false,
   logging: false,
-  entities: [Espacio, Reserva,Usuario],
+  entities: [Espacio, Reserva,Usuario, Material],
 });

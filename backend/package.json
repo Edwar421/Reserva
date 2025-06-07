@@ -19,7 +19,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "cargar-espacios": "ts-node src/database/scripts/cargarEspacios.ts",
-    "seed:espacios": "npm run cargar-espacios"
+    "seed:espacios": "npm run cargar-espacios",
+    "cargar-material": "ts-node src/database/scripts/cargarMaterial.ts",
+    "seed:material": "npm run cargar-material"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

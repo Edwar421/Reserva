@@ -1,0 +1,30 @@
+Multímetro digital;10
+Generador de funciones;4
+Osciloscopio;6
+Fuente de alimentación DC;8
+Protoboard;20
+Cables tipo banana;50
+Resistencias surtidas (1/4W);500
+Capacitores surtidos;300
+Inductores;100
+Imán de neodimio;15
+Balanza digital de precisión;5
+Cinta métrica;12
+Calibrador Vernier;10
+Cronómetro digital;20
+Poleas con base;10
+Pesas de laboratorio (juego completo);8
+Pistas de aire;2
+Carros dinámicos;6
+Soportes universales;15
+Pinzas para soporte;25
+Tubos de ensayo;100
+Lámparas de espectro;4
+Prismas de vidrio;6
+Esferas metálicas para colisiones;10
+Nivel de burbuja;7
+Reglas metálicas;20
+Electroscopio;3
+Disco óptico para rotación;2
+Termómetro digital;10
+Sensor de movimiento;4
