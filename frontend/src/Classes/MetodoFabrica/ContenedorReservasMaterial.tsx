@@ -9,19 +9,19 @@ class ContenedorReservasMaterial extends Contenedor {
   render(): JSX.Element {
     const [materiales, setMateriales] = useState<any[]>([]);
     const tipoDeCliente = localStorage.getItem("tipoDeCliente");
-
+    const email = localStorage.getItem("email");
     useEffect(() => {
       obtenerMateriales();
     }, []);
 
     const obtenerMateriales = async () => {
       try {
-        const response = await fetch("http://localhost:3000/materiales/consultar");
-        if (!response.ok) throw new Error("Error al obtener materiales");
+        const response = await fetch(`http://localhost:3000/reservas/material?email=${email}}`);
+        if (!response.ok) throw new Error("Error al obtener materiales reservados");
         const json = await response.json();
         setMateriales(json);
       } catch (error) {
-        console.error("Error al obtener materiales:", error);
+        console.error("Error:", error);
       }
     };
 

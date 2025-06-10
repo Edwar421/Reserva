@@ -1,79 +1,55 @@
-import React, { useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import ComponenteReserva from "../../Components/ComponenteReserva";
-import { useState } from "react";
-import { useGeneral } from "../../Utils/GeneralContext";
 import Contenedor from "./Contenedor";
+import ComponenteReserva from "../../Components/ComponenteReserva";
+import { useGeneral } from "../../Utils/GeneralContext";
 
 class ContenedorReservas extends Contenedor {
   render(): JSX.Element {
-    const [espacios, setEspacios] = useState<any[]>([]);
+    const [reservas, setReservas] = useState<any[]>([]);
+    const { handleShow, setTipoReserva } = useGeneral();
     const tipoDeCliente = localStorage.getItem("tipoDeCliente");
+    const email = localStorage.getItem("email");
 
     useEffect(() => {
-      obtenerEspacios();
-    }, []);
+      if (email) {
+        obtenerReservasPorEmail(email);
+      }
+    }, [email]);
 
-    const obtenerEspacios = async () => {
+    const obtenerReservasPorEmail = async (email: string) => {
       try {
-        const response = await fetch("http://localhost:3000/espacios/consultar");
-        if (!response.ok) throw new Error("Error al obtener espacios");
+        const response = await fetch(`http://localhost:3000/reservas?email=${email}`);
+        if (!response.ok) throw new Error("Error al obtener reservas");
         const json = await response.json();
-        setEspacios(json);
+        setReservas(json);
       } catch (error) {
-        console.error("Error al obtener espacios:", error);
+        console.error("Error al obtener reservas:", error);
       }
     };
 
-    const { handleShow, setTipoReserva } = useGeneral();
-
-    const handleDelete = async (espacio) => {
+    const handleDelete = async (reserva) => {
       const confirmDelete = window.confirm(
-        `¿Estás seguro de que quieres eliminar el espacio "${espacio.nombre}"?`
+        `¿Estás seguro de que quieres eliminar la reserva del espacio "${reserva.espacio.nombre}"?`
       );
       if (!confirmDelete) return;
 
       try {
         const response = await fetch(
-          `http://localhost:3000/espacios/eliminar/${espacio.id}`,
+          `http://localhost:3000/reservas/eliminar/${reserva.id}`,
           {
             method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
           }
         );
-        if (!response.ok) throw new Error("Error al eliminar el espacio");
+        if (!response.ok) throw new Error("Error al eliminar la reserva");
 
-        setEspacios(espacios.filter((e) => e.id !== espacio.id));
+        setReservas(reservas.filter((r) => r.id !== reserva.id));
       } catch (error) {
-        console.error("Error al eliminar el espacio:", error);
+        console.error("Error al eliminar la reserva:", error);
       }
     };
-
-    const Cartas = espacios.map((data, index) => (
-      <Col key={index} xs="12" sm="6" md="4" lg="3" className="text-center mt-3">
-        <div onClick={() => handleShow(data)}>
-          <ComponenteReserva
-            nombre={data.nombre}
-            tipo={data.tipo}
-            capacidad={data.capacidad}
-            descripcion={data.descripcion}
-            cantidad={undefined}
-            disponible={true}
-          />
-        </div>
-        {tipoDeCliente === "Administrador" && (
-          <Button
-            variant="danger"
-            className="mt-2"
-            onClick={() => handleDelete(data)}
-          >
-            Eliminar
-          </Button>
-        )}
-      </Col>
-    ));
 
     return (
       <>
@@ -86,10 +62,32 @@ class ContenedorReservas extends Contenedor {
             setTipoReserva("espacio");
           }}
         >
-          {espacios.length > 0 ? (
-            Cartas
+          {reservas.length > 0 ? (
+            reservas.map((reserva, index) => (
+              <Col key={index} xs="12" sm="6" md="4" lg="3" className="text-center mt-3">
+                <div onClick={() => handleShow(reserva)}>
+                  <ComponenteReserva
+                    nombre={reserva.espacio.nombre}
+                    tipo={reserva.espacio.tipo}
+                    capacidad={reserva.espacio.capacidad}
+                    descripcion={reserva.espacio.descripcion}
+                    cantidad={reserva.cantidad}
+                    disponible={true}
+                  />
+                </div>
+                {tipoDeCliente === "Administrador" && (
+                  <Button
+                    variant="danger"
+                    className="mt-2"
+                    onClick={() => handleDelete(reserva)}
+                  >
+                    Eliminar
+                  </Button>
+                )}
+              </Col>
+            ))
           ) : (
-            <p className="h2">No hay espacios disponibles</p>
+            <p className="h2">No tienes espacios reservados</p>
           )}
         </Row>
       </>
