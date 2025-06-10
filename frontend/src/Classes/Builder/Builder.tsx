@@ -1,15 +1,22 @@
 import Carta from "./Carta";
 
 export abstract class Builder {
-    protected carta:Carta;
+  protected carta: Carta;
 
-    constructor() {
-        this.carta = new Carta();
-    }
+  constructor() {
+    this.carta = new Carta();
+  }
 
-    abstract construirParte(propiedades: { img: string, text: string, price?: number, artista?: string, style?: string }): void;
+  abstract construirParte(propiedades: {
+    nombre: string;
+    tipo?: string;
+    capacidad?: number;
+    descripcion?: string;
+    cantidad?: number;
+    disponible?: boolean;
+  }): void;
 
-    getCarta():Carta{
-        return this.carta;
-    }
+  getCarta(): Carta {
+    return this.carta;
+  }
 }

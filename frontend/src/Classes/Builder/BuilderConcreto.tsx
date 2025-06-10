@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Card } from "react-bootstrap";
+import { Col, Card, Badge } from "react-bootstrap";
 import { Builder } from "./Builder";
 import Carta from "./Carta";
 
@@ -8,12 +8,18 @@ export class BuilderConcreto extends Builder {
     super();
   }
 
-  construirParte(propiedades: { img: string, text: string, price?: number, artista?: string, style?: string }): void {
+  construirParte(propiedades: {
+    nombre: string;
+    tipo?: string;
+    capacidad?: number;
+    descripcion?: string;
+    cantidad?: number;
+    disponible?: boolean;
+  }): void {
     this.carta.setPropiedades(propiedades);
   }
 
   crearCarta() {
-    this.createImg();
     this.createText();
     this.createBody();
     this.createCard();
@@ -21,12 +27,38 @@ export class BuilderConcreto extends Builder {
   }
 
   createText(): JSX.Element {
-    const { text, price, artista } = this.carta.getPropiedades();
+    const { nombre, tipo, capacidad, descripcion, cantidad, disponible } =
+      this.carta.getPropiedades();
+    
     const cardText = (
       <Card.Text>
-        {text}
+        <strong>{nombre}</strong>
         <br />
-        {price ? `$${price}` : `${artista}`}
+        {tipo && (
+          <>
+            <Badge bg="info" className="me-2">
+              {tipo}
+            </Badge>
+            <br />
+          </>
+        )}
+        {capacidad && (
+          <>
+            <small>Capacidad: {capacidad} personas</small>
+            <br />
+          </>
+        )}
+        {cantidad !== undefined && (
+          <>
+            <small>Cantidad disponible: {cantidad}</small>
+            <br />
+          </>
+        )}
+        {descripcion && <small className="text-muted">{descripcion}</small>}
+        <br />
+        <Badge bg={disponible ? "success" : "danger"}>
+          {disponible ? "Disponible" : "No disponible"}
+        </Badge>
       </Card.Text>
     );
     this.carta.setCardText(cardText);
@@ -40,20 +72,15 @@ export class BuilderConcreto extends Builder {
     return cardBody;
   }
 
-  createImg(): JSX.Element {
-    let { img } = this.carta.getPropiedades();
-    img = `http://localhost:3000/uploads/${img}`;
-    const createImg = <Card.Img className="custom-img" variant="top" src={img} />;
-    this.carta.setCreateImg(createImg);
-    return createImg;
-  }
-
   createCard(): JSX.Element {
-    const imgElement = this.carta.getCreateImg();
     const bodyElement = this.carta.getCardBody();
+    const { disponible } = this.carta.getPropiedades();
+    
     const createCard = (
-      <Card className="custom-card">
-        {imgElement}
+      <Card className={`custom-card ${!disponible ? 'opacity-75' : ''}`}>
+        <Card.Header className="text-center">
+          <i className="fas fa-calendar-alt fa-2x text-primary"></i>
+        </Card.Header>
         {bodyElement}
       </Card>
     );
@@ -63,9 +90,8 @@ export class BuilderConcreto extends Builder {
 
   createCol(): JSX.Element {
     const cardElement = this.carta.getCreateCard();
-    const { style } = this.carta.getPropiedades();
     const createCol = (
-      <Col className={style ? style : "text-center centered"}>
+      <Col className="text-center centered">
         {cardElement}
       </Col>
     );

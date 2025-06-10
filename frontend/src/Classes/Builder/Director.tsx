@@ -1,11 +1,17 @@
 import Carta from "./Carta";
 import { BuilderConcreto } from "./BuilderConcreto";
 
-// Director
 class Director {
   private builder: BuilderConcreto;
 
-  constructor(propiedades: { img: string, text: string, price?: number, artista?: string, style?: string }) {
+  constructor(propiedades: {
+    nombre: string;
+    tipo?: string;
+    capacidad?: number;
+    descripcion?: string;
+    cantidad?: number;
+    disponible?: boolean;
+  }) {
     this.builder = new BuilderConcreto();
     this.builder.construirParte(propiedades);
     this.builder.crearCarta();

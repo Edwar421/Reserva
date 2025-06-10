@@ -1,46 +1,61 @@
 import React from "react";
-import { Col, Card } from "react-bootstrap";
 
 class Carta {
-  private img: string;
-  private text: string;
-  private price?: number;
-  private artista?: string;
-  private style?: string;
+  private nombre: string;
+  private tipo?: string;
+  private capacidad?: number;
+  private descripcion?: string;
+  private cantidad?: number;
+  private disponible?: boolean;
   private cardBody: JSX.Element;
   private cardText: JSX.Element;
-  private createImg: JSX.Element;
   private createCard: JSX.Element;
   private createCol: JSX.Element;
 
   constructor() {
-    this.img = "";
-    this.text = "";
-    this.price = undefined;
-    this.artista = undefined;
-    this.style = undefined;
+    this.nombre = "";
+    this.tipo = undefined;
+    this.capacidad = undefined;
+    this.descripcion = undefined;
+    this.cantidad = undefined;
+    this.disponible = undefined;
     this.cardBody = <></>;
     this.cardText = <></>;
-    this.createImg = <></>;
     this.createCard = <></>;
     this.createCol = <></>;
   }
 
-  setPropiedades({ img, text, price, artista, style }: { img: string, text: string, price?: number, artista?: string, style?: string }) {
-    this.img = img;
-    this.text = text;
-    this.price = price;
-    this.artista = artista;
-    this.style = style;
+  setPropiedades({
+    nombre,
+    tipo,
+    capacidad,
+    descripcion,
+    cantidad,
+    disponible,
+  }: {
+    nombre: string;
+    tipo?: string;
+    capacidad?: number;
+    descripcion?: string;
+    cantidad?: number;
+    disponible?: boolean;
+  }) {
+    this.nombre = nombre;
+    this.tipo = tipo;
+    this.capacidad = capacidad;
+    this.descripcion = descripcion;
+    this.cantidad = cantidad;
+    this.disponible = disponible;
   }
 
   getPropiedades() {
     return {
-      img: this.img,
-      text: this.text,
-      price: this.price,
-      artista: this.artista,
-      style: this.style,
+      nombre: this.nombre,
+      tipo: this.tipo,
+      capacidad: this.capacidad,
+      descripcion: this.descripcion,
+      cantidad: this.cantidad,
+      disponible: this.disponible,
     };
   }
 
@@ -51,10 +66,6 @@ class Carta {
 
   getCardText(): JSX.Element {
     return this.cardText;
-  }
-
-  getCreateImg(): JSX.Element {
-    return this.createImg;
   }
 
   getCreateCard(): JSX.Element {
@@ -72,10 +83,6 @@ class Carta {
 
   setCardText(cardText: JSX.Element) {
     this.cardText = cardText;
-  }
-
-  setCreateImg(createImg: JSX.Element) {
-    this.createImg = createImg;
   }
 
   setCreateCard(createCard: JSX.Element) {

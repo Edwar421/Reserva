@@ -4,12 +4,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 /* Componentes personalizados */
-import { GeneralProvider } from "../Utils/generalContext";
+// { GeneralProvider } from "../Utils/generalContext";
 //import { SpecificProvider } from "../Utils/SpecificContext";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
 import ThemeSwitcher from "../Components/ThemeSwitcher";
-//import ContenedorCartas from "../Components/ContenedorCartas";
+import ContenedorCartas from "../Components/ContenedorCartas";
 import FiltroReservas from "../Components/FiltroReservas";
 import CalendarioDisponibilidad from "../Components/CalendarioDisponibilidad";
 
