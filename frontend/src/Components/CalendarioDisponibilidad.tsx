@@ -7,33 +7,46 @@ interface Props {
 }
 
 const CalendarioDisponibilidad: React.FC<Props> = ({ idEspacio }) => {
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(
+  const [fechaSeleccionada, setFechaSeleccionada] = useState<string>(
     new Date().toISOString().split('T')[0]
   );
-  const { disponibilidad, loading, error } = useDisponibilidad(idEspacio, fechaSeleccionada);
+  const { disponibilidad, loading, error } = useDisponibilidad(
+    idEspacio,
+    fechaSeleccionada
+  );
 
   const reservarHorario = async (hora: string, horaFin: string) => {
     try {
-      const response = await fetch('/api/reservas', {
+      // Llamada al endpoint /reservas (proxy en package.json -> localhost:3000)
+      const response = await fetch('/reservas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           espacioId: idEspacio,
           fecha: fechaSeleccionada,
           horaInicio: hora,
-          horaFin: horaFin
-        })
+          horaFin: horaFin,
+        }),
       });
+
+      // Lee como texto para depurar si no es JSON
+      const text = await response.text();
+      let payload: any;
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        console.error('Respuesta no-JSON de /reservas:', text);
+        throw new Error('Respuesta inesperada del servidor');
+      }
 
       if (response.ok) {
         alert('Reserva creada exitosamente');
-        // Aquí podrías refrescar los datos
+        // Aquí podrías refrescar disponibilidad (p.ej. forzar re-fetch)
       } else {
-        const error = await response.json();
-        alert(`Error: ${error.error}`);
+        alert(`Error: ${payload.error || 'desconocido'}`);
       }
     } catch (err) {
-      alert('Error al crear la reserva');
+      alert(err instanceof Error ? err.message : 'Error al crear la reserva');
     }
   };
 
@@ -61,26 +74,32 @@ const CalendarioDisponibilidad: React.FC<Props> = ({ idEspacio }) => {
           </div>
         ) : disponibilidad ? (
           <Row>
-            {disponibilidad.disponibilidad.map((slot, index) => (
-              <Col key={index} md={6} className="mb-3">
-                <Card className={`h-100 ${!slot.disponible ? 'bg-light border-danger' : 'border-success'}`}>
+            {disponibilidad.disponibilidad.map((slot, idx) => (
+              <Col key={idx} md={6} className="mb-3">
+                <Card
+                  className={`h-100 ${
+                    !slot.disponible ? 'bg-light border-danger' : 'border-success'
+                  }`}
+                >
                   <Card.Body className="d-flex flex-column">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <strong>{slot.hora} - {slot.horaFin}</strong>
+                      <strong>
+                        {slot.hora} - {slot.horaFin}
+                      </strong>
                       <Badge bg={slot.disponible ? 'success' : 'danger'}>
                         {slot.disponible ? 'Disponible' : 'Ocupado'}
                       </Badge>
                     </div>
-                    
+
                     {!slot.disponible && slot.reserva && (
                       <small className="text-muted mb-2">
                         Reservado por: {slot.reserva.usuarioNombre}
                       </small>
                     )}
-                    
+
                     {slot.disponible && (
-                      <Button 
-                        variant="primary" 
+                      <Button
+                        variant="primary"
                         size="sm"
                         onClick={() => reservarHorario(slot.hora, slot.horaFin)}
                         className="mt-auto"

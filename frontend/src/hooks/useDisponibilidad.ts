@@ -26,7 +26,7 @@ export const useDisponibilidad = (espacioId: number | null, fecha: string) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`/api/espacios/${espacioId}/disponibilidad?fecha=${fecha}`);
+      const response = await fetch("http://localhost:3000/reservas");
       if (!response.ok) throw new Error('Error al cargar disponibilidad');
       
       const data = await response.json();

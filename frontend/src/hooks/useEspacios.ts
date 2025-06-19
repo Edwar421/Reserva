@@ -14,8 +14,8 @@ export const useEspacios = (filtros?: FiltrosReserva) => {
         
         if (filtros?.tipoEspacio) params.append('tipo', filtros.tipoEspacio);
         if (filtros?.capacidadMinima) params.append('capacidadMinima', filtros.capacidadMinima.toString());
-
-        const response = await fetch(`/api/espacios?${params}`);
+        
+        const response = await fetch("http://localhost:3000/espacios");
         if (!response.ok) throw new Error('Error al cargar espacios');
         
         const data = await response.json();
