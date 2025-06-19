@@ -23,3 +23,11 @@
   background-color: #f0f0f0;
   color: #999;
 }
+
+.pasado {
+  background-color: #e0e0e0 !important;
+  color: #888;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+

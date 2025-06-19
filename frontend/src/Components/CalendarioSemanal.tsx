@@ -217,18 +217,33 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                           if (!slot) {
                             return <td key={`${dia.fecha}-${hora}`} className="no-disponible">—</td>;
                           }
+                          const slotDateTime = new Date(`${dia.fecha}T${hora}`);
+                          const ahora = new Date();
+                          const esPasado = slotDateTime < ahora;
+
                           return (
                             <td
                               key={`${dia.fecha}-${hora}`}
-                              className={slot.disponible ? 'disponible' : 'ocupado'}
+                              className={
+                                esPasado
+                                  ? 'pasado'
+                                  : slot.disponible
+                                    ? 'disponible'
+                                    : 'ocupado'
+                              }
                               onClick={() =>
-                                slot.disponible &&
+                                !esPasado && slot.disponible &&
                                 handleReservarHorario(dia.fecha, dia.dia, hora, horaFin)
                               }
                             >
-                              {slot.disponible ? 'Libre' : slot.reserva?.usuarioNombre || 'Ocupado'}
+                              {esPasado
+                                ? 'No disponible'
+                                : slot.disponible
+                                  ? 'Libre'
+                                  : slot.reserva?.usuarioNombre || 'Ocupado'}
                             </td>
                           );
+
                         })}
                       </tr>
                     );
