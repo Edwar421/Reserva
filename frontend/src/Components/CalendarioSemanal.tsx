@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Badge, Button, Alert, Spinner, Table } from 'react-bootstrap';
 import ConfirmacionReserva from './ConfirmacionReserva';
+import '../Styles/Calendario.css'; // Asegúrate de tener estilos para la tabla
 
 interface Props {
   idEspacio: number;
@@ -77,7 +78,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
       setError(null);
       const fechasSemana = obtenerFechasSemana(semanaActual);
       const disponibilidadPromesas = fechasSemana.map(async ({ fecha, dia }) => {
-        const response = await fetch(`/api/disponibilidad/${idEspacio}?fecha=${fecha}`);
+        const response = await fetch(`http://localhost:3000/reservas/disponibilidad/${idEspacio}?fecha=${fecha}`);
         if (!response.ok) throw new Error('Error al cargar disponibilidad');
         const data = await response.json();
         return {
@@ -116,7 +117,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
   const handleConfirmarReserva = async () => {
     if (!reservaSeleccionada) return;
     try {
-      const response = await fetch('/api/reservas', {
+      const response = await fetch('http://localhost:3000/reservas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -124,6 +125,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
           fecha: reservaSeleccionada.fecha,
           horaInicio: reservaSeleccionada.horaInicio,
           horaFin: reservaSeleccionada.horaFin,
+          usuarioId: localStorage.getItem("email"),
         }),
       });
 
@@ -195,20 +197,12 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
             </div>
           ) : disponibilidadSemana.length > 0 ? (
             <div className="table-responsive">
-              <Table bordered hover size="sm">
+              <Table bordered hover size="sm" className="tabla-horario">
                 <thead className="table-light">
                   <tr>
-                    <th style={{ width: '100px' }}>Horario</th>
+                    <th>Horario</th>
                     {disponibilidadSemana.map((dia) => (
-                      <th key={dia.fecha} className="text-center">
-                        <div>{dia.dia}</div>
-                        <small className="text-muted">
-                          {new Date(dia.fecha + 'T00:00:00').toLocaleDateString('es-ES', {
-                            day: '2-digit',
-                            month: '2-digit',
-                          })}
-                        </small>
-                      </th>
+                      <th key={dia.fecha}>{dia.dia}</th>
                     ))}
                   </tr>
                 </thead>
@@ -217,42 +211,22 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                     const horaFin = calcularHoraFin(hora);
                     return (
                       <tr key={hora}>
-                        <td className="align-middle text-center fw-bold bg-light">
-                          <div>{hora}</div>
-                          <div>{horaFin}</div>
-                        </td>
+                        <td><strong>{hora} - {horaFin}</strong></td>
                         {disponibilidadSemana.map((dia) => {
                           const slot = dia.disponibilidad.find((s) => s.hora === hora);
+                          if (!slot) {
+                            return <td key={`${dia.fecha}-${hora}`} className="no-disponible">—</td>;
+                          }
                           return (
-                            <td key={`${dia.fecha}-${hora}`} className="p-1">
-                              {slot ? (
-                                <div className="h-100">
-                                  {slot.disponible ? (
-                                    <Button
-                                      variant="success"
-                                      size="sm"
-                                      className="w-100 py-2"
-                                      onClick={() =>
-                                        handleReservarHorario(dia.fecha, dia.dia, hora, horaFin)
-                                      }
-                                    >
-                                      <div>Disponible</div>
-                                      <small>Reservar</small>
-                                    </Button>
-                                  ) : (
-                                    <div className="bg-danger text-white p-2 rounded text-center">
-                                      <div>
-                                        <strong>Ocupado</strong>
-                                      </div>
-                                      {slot.reserva && <small>{slot.reserva.usuarioNombre}</small>}
-                                    </div>
-                                  )}
-                                </div>
-                              ) : (
-                                <div className="bg-light p-2 rounded text-center text-muted">
-                                  No disponible
-                                </div>
-                              )}
+                            <td
+                              key={`${dia.fecha}-${hora}`}
+                              className={slot.disponible ? 'disponible' : 'ocupado'}
+                              onClick={() =>
+                                slot.disponible &&
+                                handleReservarHorario(dia.fecha, dia.dia, hora, horaFin)
+                              }
+                            >
+                              {slot.disponible ? 'Libre' : slot.reserva?.usuarioNombre || 'Ocupado'}
                             </td>
                           );
                         })}
@@ -261,6 +235,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                   })}
                 </tbody>
               </Table>
+
             </div>
           ) : (
             <Alert variant="info">No hay datos de disponibilidad para mostrar</Alert>

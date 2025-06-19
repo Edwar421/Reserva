@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
 import ThemeSwitcher from "../Components/ThemeSwitcher";
-import { GeneralProvider } from "../Utils/generalContext";
+import { GeneralProvider } from "../Utils/GeneralContext";
 import axios from "axios"; // Necesario para consultar la API
 
 import "../Styles/Catalogo.css";
@@ -17,7 +17,7 @@ function ReservaMaterial() {
   useEffect(() => {
     // Cargar materiales desde la API
     axios
-      .get("/api/materiales") // Asegúrate de tener este endpoint
+      .get("http://localhost:3000/materiales") // Asegúrate de tener este endpoint
       .then((res) => setMateriales(res.data))
       .catch((err) => console.error("Error cargando materiales:", err));
   }, []);

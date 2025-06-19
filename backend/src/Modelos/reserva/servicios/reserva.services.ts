@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Reserva } from '../../../database/Entidades/reserva.entity';
+import { EstadoReserva, Reserva } from '../../../database/Entidades/reserva.entity';
 import { Repository } from 'typeorm';
 import { CreateReservaDto } from '../dto/create.dto';
 import { UpdateReservaDto } from '../dto/update.dto';
@@ -18,7 +18,9 @@ export class ReservaService {
 
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
-  ) {}
+  ) { }
+
+  
 
   async create(dto: CreateReservaDto) {
     const espacio = await this.espacioRepository.findOne({ where: { id: dto.espacioId } });
@@ -60,6 +62,49 @@ export class ReservaService {
 
     return this.reservaRepository.save(reserva);
   }
+
+  async getDisponibilidadPorEspacioYFecha(espacioId: number, fecha: string) {
+    const reservas = await this.reservaRepository.find({
+      where: {
+        espacio: { id: espacioId },
+        fecha,
+        estado: EstadoReserva.ACTIVA,
+      },
+      relations: ['usuario'],
+    });
+
+    const horariosBase = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+
+    const disponibilidad = horariosBase.map((hora) => {
+      const reserva = reservas.find((r) => r.horaInicio === hora);
+      if (reserva) {
+        return {
+          hora,
+          horaFin: reserva.horaFin,
+          disponible: false,
+          reserva: {
+            id: reserva.id,
+            usuarioNombre: reserva.usuario?.nombre || 'Desconocido',
+          },
+        };
+      } else {
+        return {
+          hora,
+          horaFin: this.calcularHoraFin(hora),
+          disponible: true,
+        };
+      }
+    });
+
+    return { disponibilidad };
+  }
+
+private calcularHoraFin(horaInicio: string): string {
+  const [horas, minutos] = horaInicio.split(':').map(Number);
+  const nuevaHora = horas + 2;
+  return `${nuevaHora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+}
+
 
   remove(id: number) {
     return this.reservaRepository.delete(id);

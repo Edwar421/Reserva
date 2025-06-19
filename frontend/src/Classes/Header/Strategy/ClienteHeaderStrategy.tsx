@@ -86,14 +86,18 @@ class ClienteHeaderStrategy implements HeaderStrategy {
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item onClick={() => this.reset()}>
-                  <Nav.Link>
-                    <FontAwesomeIcon icon={faSignOut} /> Cerrar sesión
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    active={location.pathname === "/" }
+                    >
+                      <FontAwesomeIcon icon={faSignOut} /> Cerrar sesión
                   </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            </Offcanvas.Body>
-          </Navbar.Offcanvas>
-        </Navbar>
+              </Nav.Item>
+            </Nav>
+          </Offcanvas.Body>
+        </Navbar.Offcanvas>
+      </Navbar >
       </>
     );
   }

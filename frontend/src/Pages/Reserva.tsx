@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
-import { GeneralProvider } from '../Utils/generalContext';
+import { GeneralProvider } from '../Utils/GeneralContext';
 import Footer from '../Components/Footer';
 import Header from '../Classes/Header/Header';
 import ThemeSwitcher from '../Components/ThemeSwitcher';
 import FiltroReservas from '../Components/FiltroReservas';
-import CalendarioDisponibilidad from '../Components/CalendarioDisponibilidad';
 import { FiltrosReserva } from '../types/reserva.types';
+import CalendarioSemanal from '../Components/CalendarioSemanal';
 
 const ReservaPage: React.FC = () => {
   const [espacioSeleccionado, setEspacioSeleccionado] = useState<string | null>(null);
@@ -57,8 +57,9 @@ const ReservaPage: React.FC = () => {
             />
             
             {espacioSeleccionado && (
-              <CalendarioDisponibilidad 
+              <CalendarioSemanal 
                 idEspacio={parseInt(espacioSeleccionado)} 
+                nombreEspacio={espacioSeleccionado}
               />
             )}
           </Col>

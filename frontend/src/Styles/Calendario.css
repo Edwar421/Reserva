@@ -1,0 +1,25 @@
+.tabla-horario th,
+.tabla-horario td {
+  text-align: center;
+  vertical-align: middle;
+  height: 60px;
+  padding: 8px;
+}
+
+.tabla-horario td.disponible {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tabla-horario td.ocupado {
+  background-color: #f8d7da; /* Rojo claro */
+  color: #721c24;
+  font-weight: bold;
+}
+
+.tabla-horario td.no-disponible {
+  background-color: #f0f0f0;
+  color: #999;
+}

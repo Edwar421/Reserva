@@ -16,7 +16,7 @@ class ContenedorReservasMaterial extends Contenedor {
 
     const obtenerMateriales = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/reservas/material?email=${email}}`);
+        const response = await fetch(`http://localhost:3000/reservas-material?email=${email}}`);
         if (!response.ok) throw new Error("Error al obtener materiales reservados");
         const json = await response.json();
         setMateriales(json);
