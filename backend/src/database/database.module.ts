@@ -21,7 +21,7 @@ import config from 'src/config';
           database: name,
           schema: schema,
           username: user,
-          password: password || '1234',
+          password: password || 'toor',
           port,
           synchronize: true,
           autoLoadEntities: true,

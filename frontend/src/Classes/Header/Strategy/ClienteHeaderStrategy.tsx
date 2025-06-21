@@ -21,7 +21,7 @@ class ClienteHeaderStrategy implements HeaderStrategy {
   // Metodo para cerrar sesion
   public reset = (): void => {
     localStorage.clear();
-    this.navigate("/login");
+    this.navigate("/");
     window.location.reload();
   };
 
