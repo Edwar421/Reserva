@@ -31,11 +31,11 @@ export class ReservaMaterial {
   @Column()
   fecha: string; // YYYY-MM-DD
 
-  @Column()
-  horaInicio: string; // HH:mm
+  @Column({ nullable: true })
+  horaInicio?: string; // HH:mm
 
-  @Column()
-  horaFin: string; // HH:mm
+  @Column({ nullable: true })
+  horaFin?: string; // HH:mm
 
   @CreateDateColumn()
   fechaReserva: Date;

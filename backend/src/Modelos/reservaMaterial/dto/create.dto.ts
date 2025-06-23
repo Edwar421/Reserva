@@ -17,11 +17,11 @@ export class CreateReservaMaterialDto {
   @IsString()
   fecha: string; // YYYY-MM-DD
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   horaInicio: string; // HH:mm
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   horaFin: string; // HH:mm
 }

@@ -7,6 +7,8 @@ import { Usuario } from '../../../database/Entidades/usuario.entity';
 import { CreateReservaMaterialDto } from '../dto/create.dto';
 import { UpdateReservaMaterialDto } from '../dto/update.dto';
 import { EstadoReservaMaterial } from 'src/database/Entidades/reservaMaterial.entity';
+//import { format } from 'date-fns';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class ReservaMaterialService {
@@ -38,7 +40,9 @@ export class ReservaMaterialService {
   }
 
   findAll() {
-    return this.reservaMaterialRepository.find({relations: ['material', 'usuario'] });
+    return this.reservaMaterialRepository.find({
+      relations: ['material', 'usuario'],
+    });
   }
 
   findOne(id: number) {
@@ -74,7 +78,25 @@ export class ReservaMaterialService {
     return this.reservaMaterialRepository.delete(id);
   }
 
-  updateEstado(id: number, estado: EstadoReservaMaterial) {
+  //updateEstado(id: number, estado: EstadoReservaMaterial) {
+  //  return this.reservaMaterialRepository.update(id, { estado });
+  //}
+
+  updateHoraInicio(id: number, estado: EstadoReservaMaterial) {
     return this.reservaMaterialRepository.update(id, { estado });
+  }
+
+  updateEstado(id: number, estado: EstadoReservaMaterial) {
+    const ahora = new Date();
+    const horaActual = ahora.toTimeString().slice(0, 5); // HH:mm
+    const dataToUpdate: Partial<ReservaMaterial> = { estado };
+
+    if (estado === EstadoReservaMaterial.Entregado) {
+      dataToUpdate.horaInicio = horaActual;
+    }else if (estado === EstadoReservaMaterial.Devuelto) {
+      dataToUpdate.horaFin = horaActual;
+    }
+
+    return this.reservaMaterialRepository.update(id, dataToUpdate);
   }
 }

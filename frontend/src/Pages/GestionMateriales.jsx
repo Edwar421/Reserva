@@ -28,6 +28,21 @@ function GestionMateriales() {
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
   const [nuevoEstado, setNuevoEstado] = useState("Pendiente");
 
+  //Filtro
+  const [filtroEmail, setFiltroEmail] = useState("");
+  const [filtroId, setFiltroId] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("");
+
+  const materialesFiltrados = materiales.filter((material) => {
+    const coincideEmail =
+      filtroEmail === "" ||
+      material.usuario.email.toLowerCase().includes(filtroEmail.toLowerCase());
+    const coincideId = filtroId === "" || material.id.toString() === filtroId;
+    const coincideEstado =
+      filtroEstado === "" || material.estado === filtroEstado;
+    return coincideEmail && coincideId && coincideEstado;
+  });
+
   useEffect(() => {
     obtenerMateriales();
   }, []);
@@ -47,8 +62,50 @@ function GestionMateriales() {
             </Row>
           </Col>
         </Row>
+        <Form className="m-4 p-3 border rounded bg-light">
+          <Row>
+            <Col md={4}>
+              <Form.Group controlId="filtroEmail">
+                <Form.Label>Email del usuario</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="ej. usuario@email.com"
+                  value={filtroEmail}
+                  onChange={(e) => setFiltroEmail(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={4}>
+              <Form.Group controlId="filtroId">
+                <Form.Label>ID de reserva</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="ej. 5"
+                  value={filtroId}
+                  onChange={(e) => setFiltroId(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+
+            <Col md={4}>
+              <Form.Group controlId="filtroEstado">
+                <Form.Label>Estado</Form.Label>
+                <Form.Select
+                  value={filtroEstado}
+                  onChange={(e) => setFiltroEstado(e.target.value)}
+                >
+                  <option value="">Todos</option>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Entregado">Entregado</option>
+                  <option value="Devuelto">Devuelto</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+        </Form>
         <Col className="materiales-lista centered">
-          {materiales.map((material, index) => (
+          {materialesFiltrados.map((material, index) => (
             <Card
               style={{ width: "250px", margin: "10px" }}
               key={index}
@@ -67,10 +124,8 @@ function GestionMateriales() {
                   <br />
                   Fin: {material.horaFin}
                 </Card.Text>
-                  <hr />
-                <Card.Text>
-                  Estado: {material.estado}
-                </Card.Text>
+                <hr />
+                <Card.Text>Estado: {material.estado}</Card.Text>
               </Card.Body>
               <div className="text-center" style={{ marginBottom: "10px" }}>
                 <Button
