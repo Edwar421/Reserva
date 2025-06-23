@@ -43,7 +43,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
               height="35"
               className="d-inline-block align-top"
             />
-            Estampa tu idea
+            Reservas
           </Navbar.Brand>
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-md`}
@@ -62,18 +62,14 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                     <FontAwesomeIcon icon={faUser} /> {localStorage.username}
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link as={Link} to="/reserva" active={location.pathname === "/"}>
-                    <FontAwesomeIcon icon={faShop} /> Reservar Espacio
-                  </Nav.Link>
-                </Nav.Item>
+
                 <Nav.Item>
                   <Nav.Link
                     as={Link}
-                    to="/reservaMaterial"
-                    active={location.pathname === "/reservaMaterial"}
+                    to="/gestionMateriales"
+                    active={location.pathname === "/gestionMateriales"}
                   >
-                    <FontAwesomeIcon icon={faStar} /> Reservar Material
+                    <FontAwesomeIcon icon={faStar} /> Gestión de materiales
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -82,7 +78,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                     to="/misReservas"
                     active={location.pathname === "/misReservas"}
                   >
-                    <FontAwesomeIcon icon={faCartShopping} /> Mis Reservas
+                    <FontAwesomeIcon icon={faCartShopping} /> Gestión de reservas
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item onClick={() => this.reset()}>

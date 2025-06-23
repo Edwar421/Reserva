@@ -7,6 +7,9 @@ class Carta {
   private descripcion?: string;
   private cantidad?: number;
   private disponible?: boolean;
+  private fecha?: string;
+  private horaInicio?: string;
+  private horaFin?: string;
   private cardBody: JSX.Element;
   private cardText: JSX.Element;
   private createCard: JSX.Element;
@@ -19,6 +22,9 @@ class Carta {
     this.descripcion = undefined;
     this.cantidad = undefined;
     this.disponible = undefined;
+    this.fecha = undefined;
+    this.horaInicio = undefined;
+    this.horaFin = undefined;
     this.cardBody = <></>;
     this.cardText = <></>;
     this.createCard = <></>;
@@ -32,6 +38,9 @@ class Carta {
     descripcion,
     cantidad,
     disponible,
+    fecha,
+    horaInicio,
+    horaFin,
   }: {
     nombre: string;
     tipo?: string;
@@ -39,6 +48,9 @@ class Carta {
     descripcion?: string;
     cantidad?: number;
     disponible?: boolean;
+    fecha?: string;
+    horaInicio?: string;
+    horaFin?: string;
   }) {
     this.nombre = nombre;
     this.tipo = tipo;
@@ -46,6 +58,9 @@ class Carta {
     this.descripcion = descripcion;
     this.cantidad = cantidad;
     this.disponible = disponible;
+    this.fecha = fecha;
+    this.horaInicio = horaInicio;
+    this.horaFin = horaFin;
   }
 
   getPropiedades() {
@@ -56,6 +71,9 @@ class Carta {
       descripcion: this.descripcion,
       cantidad: this.cantidad,
       disponible: this.disponible,
+      fecha: this.fecha,
+      horaInicio: this.horaInicio,
+      horaFin: this.horaFin,
     };
   }
 

@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Reserva } from './reserva.entity';
+import { ReservaMaterial } from './reservaMaterial.entity';
 
 export enum TipoUsuario {
   Estudiante = "Estudiante",
@@ -32,4 +33,7 @@ export class Usuario {
 
   @OneToMany(() => Reserva, (reserva) => reserva.usuario)
   reservas: Reserva[];
+
+  @OneToMany(() => ReservaMaterial, (reservaMaterial) => reservaMaterial.usuario, { nullable: true })
+  reservasMaterial: ReservaMaterial[];
 }

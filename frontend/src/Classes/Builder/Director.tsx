@@ -11,6 +11,9 @@ class Director {
     descripcion?: string;
     cantidad?: number;
     disponible?: boolean;
+    fecha?: string;
+    horaInicio?: string;
+    horaFin?: string;
   }) {
     this.builder = new BuilderConcreto();
     this.builder.construirParte(propiedades);

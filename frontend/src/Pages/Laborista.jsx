@@ -50,11 +50,11 @@ function Laborista() {
           </Col>
         </Row>
 
-        <GeneralProvider>
+        {/*<GeneralProvider>
         
         </GeneralProvider>
 
-        <ThemeSwitcher />
+        <ThemeSwitcher />*/}
 
         <br />
         <br />

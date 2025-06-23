@@ -9,7 +9,7 @@ class ContenedorReservas extends Contenedor {
   render(): JSX.Element {
     const [reservas, setReservas] = useState<any[]>([]);
     const { handleShow, setTipoReserva } = useGeneral();
-    const tipoDeCliente = localStorage.getItem("tipoDeCliente");
+    const tipoDeCliente = localStorage.getItem("tipoUsuario");
     const email = localStorage.getItem("email");
 
     useEffect(() => {
@@ -73,15 +73,18 @@ class ContenedorReservas extends Contenedor {
                     descripcion={reserva.espacio.descripcion}
                     cantidad={reserva.cantidad}
                     disponible={true}
+                    fecha={reserva.fecha}
+                    horaInicio={reserva.horaInicio}
+                    horaFin={reserva.horaFin}
                   />
                 </div>
-                {tipoDeCliente === "Administrador" && (
+                {tipoDeCliente === "Estudiante" && (
                   <Button
                     variant="danger"
                     className="mt-2"
                     onClick={() => handleDelete(reserva)}
                   >
-                    Eliminar
+                    Cancelar
                   </Button>
                 )}
               </Col>

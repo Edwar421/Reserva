@@ -37,7 +37,7 @@ export class ReservaMaterialService {
   }
 
   findAll() {
-    return this.reservaMaterialRepository.find();
+    return this.reservaMaterialRepository.find({relations: ['material', 'usuario'] });
   }
 
   findOne(id: number) {

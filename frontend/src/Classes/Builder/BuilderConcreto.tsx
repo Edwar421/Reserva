@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Card, Badge } from "react-bootstrap";
+import { Col, Card, Badge, Button } from "react-bootstrap";
 import { Builder } from "./Builder";
 import Carta from "./Carta";
 
@@ -15,6 +15,9 @@ export class BuilderConcreto extends Builder {
     descripcion?: string;
     cantidad?: number;
     disponible?: boolean;
+    fecha?: string;
+    horaInicio?: string;  
+    horaFin?: string;
   }): void {
     this.carta.setPropiedades(propiedades);
   }
@@ -27,7 +30,7 @@ export class BuilderConcreto extends Builder {
   }
 
   createText(): JSX.Element {
-    const { nombre, tipo, capacidad, descripcion, cantidad, disponible } =
+    const { nombre, tipo, capacidad, descripcion, cantidad, disponible, fecha, horaInicio, horaFin } =
       this.carta.getPropiedades();
     
     const cardText = (
@@ -59,6 +62,15 @@ export class BuilderConcreto extends Builder {
         <Badge bg={disponible ? "success" : "danger"}>
           {disponible ? "Disponible" : "No disponible"}
         </Badge>
+        <hr/>
+        <div className="horario">
+          <small>Horario</small> 
+          <br />
+          <small className="text-muted">{fecha}</small>
+          <br />
+        {horaInicio && <small className="text-muted">{horaInicio}</small>} - {horaFin && <small className="text-muted">{horaFin}</small>}
+        </div>
+       
       </Card.Text>
     );
     this.carta.setCardText(cardText);
@@ -77,7 +89,7 @@ export class BuilderConcreto extends Builder {
     const { disponible } = this.carta.getPropiedades();
     
     const createCard = (
-      <Card className={`custom-card ${!disponible ? 'opacity-75' : ''}`}>
+      <Card style={{width:'200px', height:'auto'}} className={`custom-card ${!disponible ? 'opacity-75' : ''}`}>
         <Card.Header className="text-center">
           <i className="fas fa-calendar-alt fa-2x text-primary"></i>
         </Card.Header>

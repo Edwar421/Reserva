@@ -16,7 +16,7 @@ export class ReservaMaterial {
   @ManyToOne(() => Material, { eager: true })
   material: Material;
 
-  @ManyToOne(() => Usuario, { nullable: true })
+  @ManyToOne(() => Usuario, (usuario) => usuario.reservasMaterial, { nullable: true })
   usuario: Usuario;
 
   @Column()

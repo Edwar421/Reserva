@@ -14,6 +14,9 @@ export abstract class Builder {
     descripcion?: string;
     cantidad?: number;
     disponible?: boolean;
+    fecha?: string;
+    horaInicio?: string;  
+    horaFin?: string;
   }): void;
 
   getCarta(): Carta {

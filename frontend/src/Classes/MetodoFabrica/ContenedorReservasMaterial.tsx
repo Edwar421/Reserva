@@ -8,7 +8,7 @@ import { useGeneral } from "../../Utils/GeneralContext";
 class ContenedorReservasMaterial extends Contenedor {
   render(): JSX.Element {
     const [materiales, setMateriales] = useState<any[]>([]);
-    const tipoDeCliente = localStorage.getItem("tipoDeCliente");
+    const tipoDeCliente = localStorage.getItem("tipoUsuario");
     const email = localStorage.getItem("email");
     useEffect(() => {
       obtenerMateriales();
@@ -61,9 +61,12 @@ class ContenedorReservasMaterial extends Contenedor {
             descripcion={undefined}
             cantidad={data.cantidad}
             disponible={data.cantidad > 0}
+            fecha={data.fecha}
+            horaInicio={data.horaInicio}  
+            horaFin={data.horaFin}
           />
         </div>
-        {tipoDeCliente === "Administrador" && (
+        {tipoDeCliente === "Estudiante" && (
           <Button
             variant="danger"
             className="mt-2"

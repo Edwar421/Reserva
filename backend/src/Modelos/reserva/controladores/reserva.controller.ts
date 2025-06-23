@@ -46,7 +46,7 @@ export class ReservaController {
     return this.reservaService.update(+id, updateReservaDto);
   }
 
-  @Delete(':id')
+  @Delete('eliminar/:id')
   remove(@Param('id') id: string) {
     return this.reservaService.remove(+id);
   }
