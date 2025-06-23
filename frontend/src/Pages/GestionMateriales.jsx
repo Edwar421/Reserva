@@ -22,6 +22,12 @@ function GestionMateriales() {
       console.error("Error al obtener materiales reservados:", error);
     }
   };
+
+  //Actualizar el estado de un material
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
+  const [nuevoEstado, setNuevoEstado] = useState("Pendiente");
+
   useEffect(() => {
     obtenerMateriales();
   }, []);
@@ -32,7 +38,6 @@ function GestionMateriales() {
         <Row className="width-100vw">
           <Header />
         </Row>
-
         <Row className="width-100vw">
           <Col xs={{ span: 8, offset: 2 }}>
             <Row width="100%" className="p-5">
@@ -42,7 +47,6 @@ function GestionMateriales() {
             </Row>
           </Col>
         </Row>
-
         <Col className="materiales-lista centered">
           {materiales.map((material, index) => (
             <Card
@@ -62,24 +66,85 @@ function GestionMateriales() {
                   Inicio: {material.horaInicio}
                   <br />
                   Fin: {material.horaFin}
+                </Card.Text>
                   <hr />
+                <Card.Text>
                   Estado: {material.estado}
                 </Card.Text>
               </Card.Body>
               <div className="text-center" style={{ marginBottom: "10px" }}>
-                <Button variant="primary" style={{ width: "150px" }}>
-                  Actualizar
+                <Button
+                  variant="primary"
+                  style={{ width: "150px" }}
+                  className="actualizarEstado"
+                  onClick={() => {
+                    setReservaSeleccionada(material);
+                    setNuevoEstado(material.estado); // inicia con el estado actual
+                    setMostrarModal(true);
+                  }}
+                >
+                  Actualizar estado
                 </Button>
               </div>
             </Card>
           ))}
         </Col>
-
         <br />
         <br />
         <br />
         <br />
         <br />
+        /* Ventana emergente para actualizar el estado */
+        {mostrarModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h5>
+                Actualizar estado para la reserva #{reservaSeleccionada?.id}
+              </h5>
+              <Form.Select
+                value={nuevoEstado}
+                onChange={(e) => setNuevoEstado(e.target.value)}
+              >
+                <option value="Pendiente">Pendiente</option>
+                <option value="Entregado">Entregado</option>
+                <option value="Devuelto">Devuelto</option>
+              </Form.Select>
+              <div className="mt-3 d-flex justify-content-between">
+                <Button
+                  variant="secondary"
+                  onClick={() => setMostrarModal(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={async () => {
+                    try {
+                      const response = await fetch(
+                        `http://localhost:3000/reservas-material/estado/${reservaSeleccionada.id}`,
+                        {
+                          method: "PATCH",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({ estado: nuevoEstado }),
+                        }
+                      );
+                      if (!response.ok)
+                        throw new Error("Error al actualizar estado");
+                      await obtenerMateriales(); // recarga la lista
+                      setMostrarModal(false);
+                    } catch (error) {
+                      console.error("Error actualizando estado:", error);
+                    }
+                  }}
+                >
+                  Actualizar
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         <Footer />
       </Container>
     </>

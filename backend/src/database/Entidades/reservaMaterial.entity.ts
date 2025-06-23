@@ -8,6 +8,12 @@ import {
 import { Material } from './material.entity';
 import { Usuario } from './usuario.entity';
 
+export enum EstadoReservaMaterial {
+  Pendiente = "Pendiente",
+  Entregado = "Entregado",
+  Devuelto = "Devuelto",
+}
+
 @Entity()
 export class ReservaMaterial {
   @PrimaryGeneratedColumn()
@@ -33,4 +39,11 @@ export class ReservaMaterial {
 
   @CreateDateColumn()
   fechaReserva: Date;
+
+  @Column({
+    type: "enum",
+    enum: EstadoReservaMaterial,
+    default: EstadoReservaMaterial.Pendiente,
+  })
+  estado: EstadoReservaMaterial;
 }

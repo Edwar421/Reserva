@@ -6,6 +6,7 @@ import { Material } from '../../../database/Entidades/material.entity';
 import { Usuario } from '../../../database/Entidades/usuario.entity';
 import { CreateReservaMaterialDto } from '../dto/create.dto';
 import { UpdateReservaMaterialDto } from '../dto/update.dto';
+import { EstadoReservaMaterial } from 'src/database/Entidades/reservaMaterial.entity';
 
 @Injectable()
 export class ReservaMaterialService {
@@ -71,5 +72,9 @@ export class ReservaMaterialService {
 
   remove(id: number) {
     return this.reservaMaterialRepository.delete(id);
+  }
+
+  updateEstado(id: number, estado: EstadoReservaMaterial) {
+    return this.reservaMaterialRepository.update(id, { estado });
   }
 }

@@ -1,11 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ReservaMaterialService } from '../servicios/reservaMaterial.services';
 import { CreateReservaMaterialDto } from '../dto/create.dto';
 import { UpdateReservaMaterialDto } from '../dto/update.dto';
+import { EstadoReservaMaterial } from 'src/database/Entidades/reservaMaterial.entity';
 
 @Controller('reservas-material')
 export class ReservaMaterialController {
-  constructor(private readonly reservaMaterialService: ReservaMaterialService) {}
+  constructor(
+    private readonly reservaMaterialService: ReservaMaterialService,
+  ) {}
 
   @Post()
   create(@Body() dto: CreateReservaMaterialDto) {
@@ -36,4 +47,10 @@ export class ReservaMaterialController {
   findByEmail(@Param('email') email: string) {
     return this.reservaMaterialService.findByEmail(email);
   }
+
+  @Patch('estado/:id')
+  updateEstado( @Param('id') id: number, @Body('estado') estado: EstadoReservaMaterial) {
+    return this.reservaMaterialService.updateEstado(id, estado);
+  }
 }
+

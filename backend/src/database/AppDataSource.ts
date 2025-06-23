@@ -4,16 +4,18 @@ import { Usuario } from './Entidades/usuario.entity';
 import { Espacio } from './Entidades/espacio.entity';
 import { Reserva } from './Entidades/reserva.entity';
 import { Material } from './Entidades/material.entity';
+import { ReservaMaterial } from './Entidades/reservaMaterial.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: 'localhost', // o config.postgres.host si lo importas
   port: 5432,
   username: 'postgres',
-  password: 'toor',
+  password: '1234',
   database: 'reservas',
   schema: 'public',
   synchronize: false,
   logging: false,
-  entities: [Espacio, Reserva,Usuario, Material],
+  entities: [Espacio, Reserva,Usuario, Material,ReservaMaterial],
+  migrations: ['src/database/migrations/*.ts'],
 });
