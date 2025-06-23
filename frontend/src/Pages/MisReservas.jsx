@@ -21,7 +21,7 @@ function MisReservas() {
             <Row width="100%" className="p-5">
               
               <Col>
-                <h1>Tus reservas</h1>
+                <h1>Mis reservas</h1>
               </Col>
             </Row>
           </Col>

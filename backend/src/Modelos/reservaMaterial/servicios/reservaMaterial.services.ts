@@ -20,9 +20,13 @@ export class ReservaMaterialService {
 
   async create(dto: CreateReservaMaterialDto) {
     const reserva = new ReservaMaterial();
-    reserva.material = await this.materialRepository.findOne({ where: { id: dto.materialId } });
+    reserva.material = await this.materialRepository.findOne({
+      where: { id: dto.materialId },
+    });
     if (dto.usuarioId) {
-      reserva.usuario = await this.usuarioRepository.findOne({ where: { email: dto.usuarioId } });
+      reserva.usuario = await this.usuarioRepository.findOne({
+        where: { email: dto.usuarioId },
+      });
     }
     reserva.cantidad = dto.cantidad;
     reserva.fecha = dto.fecha;
@@ -40,13 +44,26 @@ export class ReservaMaterialService {
     return this.reservaMaterialRepository.findOne({ where: { id } });
   }
 
+  async findByEmail(email: string) {
+    return this.reservaMaterialRepository.find({
+      where: {
+        usuario: { email },
+      },
+      relations: ['material', 'usuario'],
+    });
+  }
+
   async update(id: number, dto: UpdateReservaMaterialDto) {
     const reserva = await this.findOne(id);
     if (dto.materialId) {
-      reserva.material = await this.materialRepository.findOne({ where: { id: dto.materialId } });
+      reserva.material = await this.materialRepository.findOne({
+        where: { id: dto.materialId },
+      });
     }
     if (dto.usuarioId) {
-      reserva.usuario = await this.usuarioRepository.findOne({ where: { email: dto.usuarioId } });
+      reserva.usuario = await this.usuarioRepository.findOne({
+        where: { email: dto.usuarioId },
+      });
     }
     Object.assign(reserva, dto);
     return this.reservaMaterialRepository.save(reserva);

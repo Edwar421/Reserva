@@ -31,4 +31,9 @@ export class ReservaMaterialController {
   remove(@Param('id') id: string) {
     return this.reservaMaterialService.remove(+id);
   }
+
+  @Get('byEmail/:email')
+  findByEmail(@Param('email') email: string) {
+    return this.reservaMaterialService.findByEmail(email);
+  }
 }

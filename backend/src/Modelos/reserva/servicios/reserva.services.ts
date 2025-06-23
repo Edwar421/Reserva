@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EstadoReserva, Reserva } from '../../../database/Entidades/reserva.entity';
+import {
+  EstadoReserva,
+  Reserva,
+} from '../../../database/Entidades/reserva.entity';
 import { Repository } from 'typeorm';
 import { CreateReservaDto } from '../dto/create.dto';
 import { UpdateReservaDto } from '../dto/update.dto';
@@ -18,13 +21,15 @@ export class ReservaService {
 
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
-  ) { }
-
-  
+  ) {}
 
   async create(dto: CreateReservaDto) {
-    const espacio = await this.espacioRepository.findOne({ where: { id: dto.espacioId } });
-    const usuario = await this.usuarioRepository.findOne({ where: { email: dto.usuarioId } });
+    const espacio = await this.espacioRepository.findOne({
+      where: { id: dto.espacioId },
+    });
+    const usuario = await this.usuarioRepository.findOne({
+      where: { email: dto.usuarioId },
+    });
 
     const reserva = this.reservaRepository.create({
       fecha: dto.fecha,
@@ -42,7 +47,19 @@ export class ReservaService {
   }
 
   findOne(id: number) {
-    return this.reservaRepository.findOne({ where: { id }, relations: ['espacio', 'usuario'] });
+    return this.reservaRepository.findOne({
+      where: { id },
+      relations: ['espacio', 'usuario'],
+    });
+  }
+
+  async findByEmail(email: string) {
+    return this.reservaRepository.find({
+      where: {
+        usuario: { email },
+      },
+      relations: ['espacio', 'usuario'],
+    });
   }
 
   async update(id: number, dto: UpdateReservaDto) {
@@ -50,10 +67,14 @@ export class ReservaService {
     if (!reserva) return null;
 
     if (dto.espacioId) {
-      reserva.espacio = await this.espacioRepository.findOne({ where: { id: dto.espacioId } });
+      reserva.espacio = await this.espacioRepository.findOne({
+        where: { id: dto.espacioId },
+      });
     }
     if (dto.usuarioId) {
-      reserva.usuario = await this.usuarioRepository.findOne({ where: { email: dto.usuarioId } });
+      reserva.usuario = await this.usuarioRepository.findOne({
+        where: { email: dto.usuarioId },
+      });
     }
 
     reserva.fecha = dto.fecha ?? reserva.fecha;
@@ -73,7 +94,15 @@ export class ReservaService {
       relations: ['usuario'],
     });
 
-    const horariosBase = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+    const horariosBase = [
+      '06:00',
+      '08:00',
+      '10:00',
+      '12:00',
+      '14:00',
+      '16:00',
+      '18:00',
+    ];
 
     const disponibilidad = horariosBase.map((hora) => {
       const reserva = reservas.find((r) => r.horaInicio === hora);
@@ -99,12 +128,13 @@ export class ReservaService {
     return { disponibilidad };
   }
 
-private calcularHoraFin(horaInicio: string): string {
-  const [horas, minutos] = horaInicio.split(':').map(Number);
-  const nuevaHora = horas + 2;
-  return `${nuevaHora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
-}
-
+  private calcularHoraFin(horaInicio: string): string {
+    const [horas, minutos] = horaInicio.split(':').map(Number);
+    const nuevaHora = horas + 2;
+    return `${nuevaHora.toString().padStart(2, '0')}:${minutos
+      .toString()
+      .padStart(2, '0')}`;
+  }
 
   remove(id: number) {
     return this.reservaRepository.delete(id);

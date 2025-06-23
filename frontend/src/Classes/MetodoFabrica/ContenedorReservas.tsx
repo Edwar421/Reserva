@@ -20,7 +20,7 @@ class ContenedorReservas extends Contenedor {
 
     const obtenerReservasPorEmail = async (email: string) => {
       try {
-        const response = await fetch(`http://localhost:3000/reservas?email=${email}`);
+        const response = await fetch(`http://localhost:3000/reservas/byEmail/${email}`);
         if (!response.ok) throw new Error("Error al obtener reservas");
         const json = await response.json();
         setReservas(json);
