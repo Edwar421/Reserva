@@ -18,30 +18,38 @@ async function cargarMaterial() {
 
     console.log(`Procesando ${lineas.length} materiales...`);
 
-    for (const linea of lineas) {
-      const [nombre, cantidadStr] = linea.split(';');
+for (const linea of lineas) {
+  const [nombre, cantidadStr, tiempoStr] = linea.split(';');
 
-      const nombreLimpio = nombre.trim();
-      const cantidad = parseInt(cantidadStr.trim());
+  const nombreLimpio = nombre.trim();
+  const cantidad = parseInt(cantidadStr.trim());
+  const tiempo = tiempoStr ? parseInt(tiempoStr.trim()) : null;
 
-      // Verificar si el material ya existe
-      const materialExistente = await materialRepository.findOne({
-        where: { nombre: nombreLimpio },
-      });
+  // Buscar material por nombre
+  const materialExistente = await materialRepository.findOne({
+    where: { nombre: nombreLimpio },
+  });
 
-      if (materialExistente) {
-        console.log(`Material "${nombreLimpio}" ya existe, saltando...`);
-        continue;
-      }
+  if (materialExistente) {
+    console.log(`Material "${nombreLimpio}" ya existe. Actualizando...`);
 
-      // Crear y guardar el nuevo material
-      const nuevoMaterial = new Material();
-      nuevoMaterial.nombre = nombreLimpio;
-      nuevoMaterial.cantidad = cantidad;
+    materialExistente.tiempoPrestamo = tiempo ?? materialExistente.tiempoPrestamo; // actualiza si viene
+    materialExistente.cantidad = cantidad; // opcional: actualizar cantidad
 
-      await materialRepository.save(nuevoMaterial);
-      console.log(`✓ Material "${nombreLimpio}" guardado exitosamente`);
-    }
+    await materialRepository.save(materialExistente);
+    console.log(`✓ Material "${nombreLimpio}" actualizado con tiempo`);
+    continue;
+  }
+
+  // Crear nuevo material
+  const nuevoMaterial = new Material();
+  nuevoMaterial.nombre = nombreLimpio;
+  nuevoMaterial.cantidad = cantidad;
+  nuevoMaterial.tiempoPrestamo = tiempo;
+
+  await materialRepository.save(nuevoMaterial);
+  console.log(`✓ Material "${nombreLimpio}" creado exitosamente`);
+}
 
     console.log('¡Todos los materiales han sido cargados exitosamente!');
 

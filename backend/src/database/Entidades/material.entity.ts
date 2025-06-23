@@ -10,4 +10,7 @@ export class Material {
 
   @Column()
   cantidad: number;
+
+  @Column({ nullable: true })
+  tiempoPrestamo?: number;
 }
