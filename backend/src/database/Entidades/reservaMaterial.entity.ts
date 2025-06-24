@@ -40,6 +40,12 @@ export class ReservaMaterial {
   @CreateDateColumn()
   fechaReserva: Date;
 
+  @Column({ nullable: true })
+  fechaDevolucion?: Date;
+
+  @Column({ nullable: true })
+  fechaLimite?: Date;
+
   @Column({
     type: "enum",
     enum: EstadoReservaMaterial,

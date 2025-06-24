@@ -55,15 +55,15 @@ class ContenedorReservasMaterial extends Contenedor {
       <Col key={index} xs="12" sm="6" md="4" lg="3" className="text-center mt-3">
         <div onClick={() => handleShow(data)}>
           <ComponenteReserva
-            nombre={data.nombre}
+            nombre={data.material.nombre}
             tipo={undefined}
             capacidad={undefined}
             descripcion={undefined}
             cantidad={data.cantidad}
             disponible={data.cantidad > 0}
-            fecha={data.fecha}
-            horaInicio={data.horaInicio}  
-            horaFin={data.horaFin}
+            fecha={data.fecha+" - "+data.fechaLimite}
+            horaInicio={data.estado}  
+            horaFin={undefined}
           />
         </div>
         {tipoDeCliente === "Estudiante" && (
