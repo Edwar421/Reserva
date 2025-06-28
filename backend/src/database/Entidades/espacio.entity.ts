@@ -10,7 +10,7 @@ export enum TipoEspacio {
 @Entity()
 export class Espacio {
   @PrimaryGeneratedColumn({ type: 'int' })
-  id: number;
+  id: number; 
 
   @Column()
   nombre: string;

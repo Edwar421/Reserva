@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Espacio } from './espacio.entity';
 import { Usuario } from './usuario.entity';
+import { IsInt, Min, Max } from 'class-validator';
 
 export enum EstadoReserva {
   ACTIVA = 'activa',
@@ -43,4 +44,16 @@ export class Reserva {
 
   @CreateDateColumn()
   fechaReserva: Date;
+
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  @Column({ nullable: true })
+  calificacion: number;
+
+  @Column({ nullable: true })
+  comentario: string;
+  
+  @Column({ nullable: true })
+  observacionesEntrega: string;
 }

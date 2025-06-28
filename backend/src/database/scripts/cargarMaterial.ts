@@ -35,6 +35,7 @@ for (const linea of lineas) {
 
     materialExistente.tiempoPrestamo = tiempo ?? materialExistente.tiempoPrestamo; // actualiza si viene
     materialExistente.cantidad = cantidad; // opcional: actualizar cantidad
+    materialExistente.cantidadDisponible = cantidad; // actualizar cantidad disponible
 
     await materialRepository.save(materialExistente);
     console.log(`✓ Material "${nombreLimpio}" actualizado con tiempo`);
@@ -46,6 +47,7 @@ for (const linea of lineas) {
   nuevoMaterial.nombre = nombreLimpio;
   nuevoMaterial.cantidad = cantidad;
   nuevoMaterial.tiempoPrestamo = tiempo;
+  nuevoMaterial.cantidadDisponible = cantidad; // establecer cantidad disponible igual a la cantidad total
 
   await materialRepository.save(nuevoMaterial);
   console.log(`✓ Material "${nombreLimpio}" creado exitosamente`);
