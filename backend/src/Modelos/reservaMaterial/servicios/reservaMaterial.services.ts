@@ -99,4 +99,15 @@ export class ReservaMaterialService {
 
     return this.reservaMaterialRepository.update(id, dataToUpdate);
   }
+
+  updateCalificacion(id: number, calificacion: number, comentario?: string) {
+    return this.reservaMaterialRepository.update(id, { calificacion , comentario});
+  }
+
+  updateObservacionesEntrega(
+    id: number,
+    observacionesEntrega: string,
+  ){
+    return this.reservaMaterialRepository.update(id, { observacionesEntrega });
+  }
 }

@@ -49,8 +49,26 @@ export class ReservaMaterialController {
   }
 
   @Patch('estado/:id')
-  updateEstado( @Param('id') id: number, @Body('estado') estado: EstadoReservaMaterial) {
+  updateEstado(
+    @Param('id') id: number,
+    @Body('estado') estado: EstadoReservaMaterial,
+  ) {
     return this.reservaMaterialService.updateEstado(id, estado);
   }
-}
 
+  @Patch('calificacion/:id')
+  updateCalificacion(
+    @Param('id') id: number,
+    @Body('calificacion') calificacion: number,
+    @Body('comentario') comentario: string,
+  ) {
+    return this.reservaMaterialService.updateCalificacion(id, calificacion, comentario);
+  }
+  @Patch('observaciones/:id')
+  updateObservacionesEntrega(
+    @Param('id') id: number,
+    @Body('observacionesEntrega') observacionesEntrega: string,
+  ) {
+    return this.reservaMaterialService.updateObservacionesEntrega(id, observacionesEntrega);
+  } 
+}

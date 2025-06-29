@@ -8,4 +8,12 @@ export class CreateMaterialDto {
   @IsNotEmpty()
   @IsNumber()
   cantidad: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  tiempoPrestamo?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  cantidadDisponible: number;
 }

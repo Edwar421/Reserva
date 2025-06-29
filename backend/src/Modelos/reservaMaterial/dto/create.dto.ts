@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateReservaMaterialDto {
   @IsNotEmpty()
@@ -24,4 +24,32 @@ export class CreateReservaMaterialDto {
   @IsOptional()
   @IsString()
   horaFin: string; // HH:mm
+
+  @IsNotEmpty()
+  @IsDate()
+  fechaReserva: Date;
+
+  @IsOptional()
+  @IsDate()
+  fechaDevolucion?: Date;
+
+  @IsOptional()
+  @IsDate()
+  fechaLimite?: Date;
+
+  @IsOptional()
+  estado?: 'Pendiente' | 'Entregado' | 'Devuelto';
+
+  @IsOptional()
+  @IsNumber()
+  calificacion?: number;
+
+  @IsString()
+  @IsOptional()
+  comentario?: string;
+
+  @IsOptional()
+  @IsString()
+  observacionesEntrega?: string;
+
 }

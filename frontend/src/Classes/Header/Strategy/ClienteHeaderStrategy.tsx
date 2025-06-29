@@ -36,7 +36,7 @@ class ClienteHeaderStrategy implements HeaderStrategy {
           expand="md"
           className="bg-body-tertiary mb-5 border-bottomer ps-5"
         >
-          <Navbar.Brand href="/#/">
+          <Navbar.Brand href="/pagUsuario">
             <img
               src="logo.png"
               width="35"
@@ -58,20 +58,20 @@ class ClienteHeaderStrategy implements HeaderStrategy {
 
 
                 <Nav.Item>
-                  <Nav.Link>
+                  <Nav.Link as={Link} to="/pagUsuario/usuario" active={location.pathname === "/"}>
                     <FontAwesomeIcon icon={faUser} /> {localStorage.username}
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link as={Link} to="/reserva" active={location.pathname === "/"}>
+                  <Nav.Link as={Link} to="/pagUsuario/reserva" active={location.pathname === "/"}>
                     <FontAwesomeIcon icon={faShop} /> Reservar Espacio
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link
                     as={Link}
-                    to="/reservaMaterial"
-                    active={location.pathname === "/reservaMaterial"}
+                    to="/pagUsuario/reservaMaterial"
+                    active={location.pathname === "/"}
                   >
                     <FontAwesomeIcon icon={faStar} /> Reservar Material
                   </Nav.Link>
@@ -79,8 +79,8 @@ class ClienteHeaderStrategy implements HeaderStrategy {
                 <Nav.Item>
                   <Nav.Link
                     as={Link}
-                    to="/misReservas"
-                    active={location.pathname === "/misReservas"}
+                    to="/pagUsuario/misReservas"
+                    active={location.pathname === "/"}
                   >
                     <FontAwesomeIcon icon={faCartShopping} /> Mis Reservas
                   </Nav.Link>
