@@ -64,6 +64,35 @@ class ContenedorReservasMaterial extends Contenedor {
         console.error("Error al eliminar el material:", error);
       }
     };
+    const handleCalificar = async (material, calificacion, comentario) => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/reservas-material/calificar/${material.id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              calificacion,
+              comentario,
+            }),
+          }
+        );
+        if (!response.ok) throw new Error("Error al calificar el material");
+
+        // Actualizar el estado del material
+        setMateriales((prev) =>
+          prev.map((m) =>
+            m.id === material.id ? { ...m, calificacion, comentario } : m
+          )
+        );
+      } catch (error) {
+        console.error("Error al calificar el material:", error);
+      }
+    };
+    const handleShowCalificacion = (material) => {
+    }
 
     const Cartas = materiales.map((data, index) => (
       <Col
@@ -94,13 +123,22 @@ class ContenedorReservasMaterial extends Contenedor {
             Eliminar
           </Button>
         )}
-        {data.estado === "Devuelto" && (
+        {data.estado === "Devuelto" && data.calificacion===null && (
           <Button
             variant="primary"
             className="mt-2"
             onClick={() => handleShowCalificar(data)}
           >
             Calificar
+          </Button>
+        )}
+        {data.calificacion!==null && (
+          <Button
+            variant="secondary"
+            className="mt-2"
+            onClick={() => handleShowCalificacion(data)}
+          >
+            Mostrar calificación
           </Button>
         )}
       </Col>
@@ -172,7 +210,14 @@ class ContenedorReservasMaterial extends Contenedor {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseCalificar}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                handleCloseCalificar();
+                setCalificacion(null);
+                setComentario("");
+              }}
+            >
               Cerrar
             </Button>
             <Button
@@ -180,7 +225,10 @@ class ContenedorReservasMaterial extends Contenedor {
               onClick={() => {
                 console.log("Calificación:", calificacion);
                 console.log("Comentario:", comentario);
+                handleCalificar(material, calificacion, comentario);
                 handleCloseCalificar();
+                setCalificacion(null);
+                setComentario("");
               }}
             >
               Calificar

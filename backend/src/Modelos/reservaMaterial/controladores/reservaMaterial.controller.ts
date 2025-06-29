@@ -56,7 +56,7 @@ export class ReservaMaterialController {
     return this.reservaMaterialService.updateEstado(id, estado);
   }
 
-  @Patch('calificacion/:id')
+  @Patch('calificar/:id')
   updateCalificacion(
     @Param('id') id: number,
     @Body('calificacion') calificacion: number,
