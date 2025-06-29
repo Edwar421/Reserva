@@ -72,13 +72,13 @@ class ContenedorReservas extends Contenedor {
                     capacidad={reserva.espacio.capacidad}
                     descripcion={reserva.espacio.descripcion}
                     cantidad={reserva.cantidad}
-                    disponible={true}
+                    disponible={reserva.estado}
                     fecha={reserva.fecha}
                     horaInicio={reserva.horaInicio}
                     horaFin={reserva.horaFin}
                   />
                 </div>
-                {tipoDeCliente === "Estudiante" && (
+                {reserva.estado === "Pendiente" && (
                   <Button
                     variant="danger"
                     className="mt-2"

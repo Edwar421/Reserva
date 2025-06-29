@@ -12,7 +12,8 @@ import { IsInt, Min, Max } from 'class-validator';
 export enum EstadoReserva {
   ACTIVA = 'activa',
   CANCELADA = 'cancelada',
-  COMPLETADA = 'completada'
+  COMPLETADA = 'completada',
+  PENDIENTE = 'pendiente',
 }
 
 @Entity()

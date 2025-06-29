@@ -1,23 +1,20 @@
 import React from "react";
 import { Col, Card, Badge } from "react-bootstrap";
 
-function ComponenteReserva({
+function ComponenteReservaMaterial({
   nombre,
-  tipo,
-  capacidad,
-  descripcion,
   cantidad,
-  disponible,
   fecha,
+  fechaLimite,
   horaInicio,
   horaFin,
+  estado,
 }) {
-  const estado = disponible;
 
   const badgeColor =
-    estado === "activa"
+    estado === "Devuelto"
       ? "success"
-      : estado === "cancelada"
+      : estado === "Pendiente"
       ? "danger"
       : "primary";
 
@@ -25,7 +22,7 @@ function ComponenteReserva({
     <Col className="text-center centered">
       <Card
         style={{ width: "200px", height: "auto", margin: "auto" }}
-        className={`custom-card ${!disponible ? "opacity-75" : ""}`}
+        className={`custom-card ${!true ? "opacity-75" : ""}`}
       >
         <Card.Header className="text-center">
           <i className="fas fa-calendar-alt fa-2x text-primary"></i>
@@ -34,31 +31,22 @@ function ComponenteReserva({
           <Card.Text>
             <strong>{nombre}</strong>
             <br />
-            {tipo && (
+            {nombre && (
               <>
                 <Badge bg="info" className="me-2">
-                  {tipo}
+                  {nombre}
                 </Badge>
                 <br />
               </>
             )}
-            {capacidad && (
+            {cantidad && (
               <>
-                <small>Capacidad: {capacidad} personas</small>
+                <small>Cantidad: {cantidad} personas</small>
                 <br />
               </>
             )}
-            {cantidad !== undefined && (
-              <>
-                <small>Cantidad disponible: {cantidad}</small>
-                <br />
-              </>
-            )}
-            {descripcion && <small className="text-muted">{descripcion}</small>}
-            <br />
             <Badge bg={badgeColor}>{estado}</Badge>
             <hr />
-            
               <small>Horario</small>
               <br />
               <small className="text-muted">{fecha}</small>
@@ -69,6 +57,10 @@ function ComponenteReserva({
                 </>
               )}
               {horaFin && <small className="text-muted">{horaFin}</small>}
+              <br />
+              {fechaLimite && 
+                    <small className="text-muted">Fecha de Devolución: {fechaLimite}</small>
+                }
           </Card.Text>
         </Card.Body>
       </Card>
@@ -76,4 +68,4 @@ function ComponenteReserva({
   );
 }
 
-export default ComponenteReserva;
+export default ComponenteReservaMaterial;

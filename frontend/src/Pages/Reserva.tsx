@@ -63,6 +63,11 @@ const ReservaPage: React.FC = () => {
         </Row>
 
         <ThemeSwitcher />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
 
       </Container>
     </GeneralProvider>
