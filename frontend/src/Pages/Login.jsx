@@ -82,10 +82,10 @@ function Login() {
                 setTimeout(() => navigate("/pagUsuario"), 200);
                 break;
               case "Docente":
-                setTimeout(() => navigate("/reserva"), 200);
+                setTimeout(() => navigate("/pagUsuario"), 200);
                 break;
               case "Externo":
-                setTimeout(() => navigate("/reserva"), 200);
+                setTimeout(() => navigate("/pagUsuario"), 200);
                 break;
               case "Laborista":
                 setTimeout(() => navigate("/laborista"), 200);

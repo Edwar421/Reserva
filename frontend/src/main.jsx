@@ -15,21 +15,23 @@ import Registro from "./Pages/Registro.jsx";
 import Reserva from "./Pages/Reserva.tsx";
 import ReservaMaterial from "./Pages/ReservaMaterial.jsx";
 import MisReservas from "./Pages/MisReservas.jsx";
-import Laborista from "./Pages/Laborista.jsx";
+import Laborista from "./Pages/PagLaborista.jsx";
 import GestionMateriales from "./Pages/GestionMateriales.jsx";
 import PagUsuario from "./Pages/PagUsuario.jsx";
 import Usuario from "./Pages/Usuario.jsx";
+import GestionReserva from "./Pages/GestionReservas.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Login />} />
       <Route path="/registro" element={<Registro />} />
-      <Route path="/reserva" element={<Reserva />} />
-      <Route path="/reservaMaterial" element={<ReservaMaterial />} />
-      <Route path="/misReservas" element={<MisReservas />} />
-      <Route path="/laborista" element={<Laborista />} />
-      <Route path="/gestionMateriales" element={<GestionMateriales />} />
+      <Route path="/laborista" element={<Laborista />} >
+        <Route path="" element={<Usuario />} />
+        <Route path="usuario" element={<Usuario />} />
+        <Route path="gestionMateriales" element={<GestionMateriales />} />
+        <Route path="gestionReservas" element={<GestionReserva />} />
+      </Route>
       <Route path="/pagUsuario" element={<PagUsuario />}>
         <Route path="" element={<Usuario />} />
         <Route path="usuario" element={<Usuario />} />

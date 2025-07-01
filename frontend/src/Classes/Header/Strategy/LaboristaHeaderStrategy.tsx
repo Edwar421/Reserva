@@ -36,7 +36,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
           expand="md"
           className="bg-body-tertiary mb-5 border-bottomer ps-5"
         >
-          <Navbar.Brand href="/#/">
+          <Navbar.Brand href="/laborista">
             <img
               src="logo.png"
               width="35"
@@ -55,10 +55,12 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                 variant="pills"
                 className="justify-content-end flex-grow-1 pe-3"
               >
-
-
                 <Nav.Item>
-                  <Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/laborista"
+                    active={location.pathname === "/"}
+                  >
                     <FontAwesomeIcon icon={faUser} /> {localStorage.username}
                   </Nav.Link>
                 </Nav.Item>
@@ -66,8 +68,8 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                 <Nav.Item>
                   <Nav.Link
                     as={Link}
-                    to="/gestionMateriales"
-                    active={location.pathname === "/gestionMateriales"}
+                    to="/laborista/gestionMateriales"
+                    active={location.pathname === "/"}
                   >
                     <FontAwesomeIcon icon={faStar} /> Gestión de materiales
                   </Nav.Link>
@@ -75,10 +77,11 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                 <Nav.Item>
                   <Nav.Link
                     as={Link}
-                    to="/misReservas"
-                    active={location.pathname === "/misReservas"}
+                    to="/laborista/gestionReservas"
+                    active={location.pathname === "/"}
                   >
-                    <FontAwesomeIcon icon={faCartShopping} /> Gestión de reservas
+                    <FontAwesomeIcon icon={faCartShopping} /> Gestión de
+                    reservas
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item onClick={() => this.reset()}>

@@ -12,11 +12,11 @@ import ThemeSwitcher from "../Components/ThemeSwitcher";
 import ContenedorCartas from "../Components/ContenedorCartas";
 import FiltroReservas from "../Components/FiltroReservas";
 import CalendarioDisponibilidad from "../Components/CalendarioDisponibilidad";
-
+import { Outlet } from "react-router-dom";
 /* Estilos */
 import "../Styles/Catalogo.css";
 
-function Laborista() {
+function PagLaborista() {
   const [espacioSeleccionado, setEspacioSeleccionado] = useState(null);
 
   return (
@@ -27,42 +27,13 @@ function Laborista() {
         </Row>
 
         <Row className="width-100vw">
-          <Col xs={{ span: 8, offset: 2 }}>
-            <Row className="p-5">
-              <Col className="centered" data-testid="camisas">
-                <img src="/logo.png" alt="Logo" fluid width="22%" />
-              </Col>
-              <Col>
-                <br />
-                <h1>Reserva</h1>
-              </Col>
-            </Row>
-          </Col>
+          <Outlet />
         </Row>
-
-        <Row className="px-5">
-          <Col md={{ span: 6, offset: 3 }}>
-            <h3 className="text-center mb-4">Reservar Aula</h3>
-            <FiltroReservas onSelectEspacio={setEspacioSeleccionado} />
-            {espacioSeleccionado && (
-              <CalendarioDisponibilidad idEspacio={parseInt(espacioSeleccionado)} />
-            )}
-          </Col>
-        </Row>
-
-        {/*<GeneralProvider>
         
-        </GeneralProvider>
-
-        <ThemeSwitcher />*/}
-
-        <br />
-        <br />
-        <br />
         <Footer />
       </Container>
     </>
   );
 }
 
-export default Laborista;
+export default PagLaborista;

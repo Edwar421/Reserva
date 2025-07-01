@@ -51,9 +51,6 @@ function GestionMateriales() {
     <>
       <Container fluid className="align-items-center m-0 p-0">
         <Row className="width-100vw">
-          <Header />
-        </Row>
-        <Row className="width-100vw">
           <Col xs={{ span: 8, offset: 2 }}>
             <Row width="100%" className="p-5">
               <Col>
@@ -128,6 +125,7 @@ function GestionMateriales() {
                 <Card.Text>Estado: {material.estado}</Card.Text>
               </Card.Body>
               <div className="text-center" style={{ marginBottom: "10px" }}>
+                {material.estado!=="Devuelto" &&(
                 <Button
                   variant="primary"
                   style={{ width: "150px" }}
@@ -140,6 +138,19 @@ function GestionMateriales() {
                 >
                   Actualizar estado
                 </Button>
+              )}
+              {material.estado==="Devuelto" &&(
+                <Button
+                  variant="secondary"
+                  style={{ width: "150px" }}
+                  className="observaciones"
+                  onClick={() => {
+                    setReservaSeleccionada(material);
+                  }}
+                >
+                  Observaciones
+                </Button>
+              )}
               </div>
             </Card>
           ))}
@@ -200,7 +211,6 @@ function GestionMateriales() {
             </div>
           </div>
         )}
-        <Footer />
       </Container>
     </>
   );

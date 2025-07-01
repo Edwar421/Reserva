@@ -5,6 +5,7 @@ export enum TipoEspacio {
   AULA = 'Aula',
   LAB_COMP = 'Laboratorio de Computación',
   LAB_FISICA = 'Laboratorio de Física',
+  AUDITORIO = 'Auditorio',
 }
 
 @Entity()
