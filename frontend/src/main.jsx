@@ -20,29 +20,40 @@ import GestionMateriales from "./Pages/GestionMateriales.jsx";
 import PagUsuario from "./Pages/PagUsuario.jsx";
 import Usuario from "./Pages/Usuario.jsx";
 import GestionReserva from "./Pages/GestionReservas.jsx";
+import { GeneralProvider } from "./Utils/GeneralContext";
+import ProtectedRoute from "./Utils/ProtectedRoute";
+import PublicRoute from "./Utils/PublicRoute";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Login />} />
-      <Route path="/registro" element={<Registro />} />
-      <Route path="/laborista" element={<Laborista />} >
-        <Route path="" element={<Usuario />} />
-        <Route path="usuario" element={<Usuario />} />
-        <Route path="gestionMateriales" element={<GestionMateriales />} />
-        <Route path="gestionReservas" element={<GestionReserva />} />
+      <Route element={<PublicRoute />}>
+        <Route path="/" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
       </Route>
-      <Route path="/pagUsuario" element={<PagUsuario />}>
-        <Route path="" element={<Usuario />} />
-        <Route path="usuario" element={<Usuario />} />
-        <Route path="reserva" element={<Reserva />} />
-        <Route path="reservaMaterial" element={<ReservaMaterial />} />
-        <Route path="misReservas" element={<MisReservas />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/laborista" element={<Laborista />} >
+          <Route path="" element={<Usuario />} />
+          <Route path="usuario" element={<Usuario />} />
+          <Route path="gestionMateriales" element={<GestionMateriales />} />
+          <Route path="gestionReservas" element={<GestionReserva />} />
+        </Route>
+        <Route path="/pagUsuario" element={<PagUsuario />}>
+          <Route path="" element={<Usuario />} />
+          <Route path="usuario" element={<Usuario />} />
+          <Route path="reserva" element={<Reserva />} />
+          <Route path="reservaMaterial" element={<ReservaMaterial />} />
+          <Route path="misReservas" element={<MisReservas />} />
+        </Route>
       </Route>
     </>
   )
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <GeneralProvider>
+    <RouterProvider router={router} />
+  </GeneralProvider>
 );

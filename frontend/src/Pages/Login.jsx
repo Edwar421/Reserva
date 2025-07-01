@@ -10,6 +10,8 @@ import Header from "../Classes/Header/Header";
 import "../Styles/Login.css";
 import { ConversionEmail } from "../Classes/Adapter/conversionEmail";
 import { FachadaDeEstados } from "../Classes/Estados/Fachada/FachadaDeEstados";
+import { useGeneral } from "../Utils/GeneralContext";
+
 
 function Login() {
   const navigate = useNavigate();
@@ -24,10 +26,8 @@ function Login() {
     trial372: null,
   });
 
-  const [login, setLogin] = useState({
-    email: "",
-    password: "",
-  });
+  const { login } = useGeneral();
+
 
   const emailAdapter = new ConversionEmail();
   const fachada = new FachadaDeEstados();
@@ -35,6 +35,8 @@ function Login() {
   const [alertText, setAlertText] = useState("");
   const [showAlert, setShowAlert] = useState(fachada.getMostrarAlerta());
   const [alertState, setAlertState] = useState(fachada.getEstadoDeAlerta());
+
+  
 
   const loadUsuario = async () => {
     try {
@@ -53,37 +55,30 @@ function Login() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(cliente),
         });
-  
+
         if (res.ok) {
           const data = await res.json();
           console.log(data);
-  
+
           if (data.message) {
             setAlertText(data.message);
             setAlertState(fachada.cambioEstadoDeAlerta(1));
             setShowAlert(fachada.cambioMostrarAlerta());
           } else {
             const { email, nombre, tipo } = data.user[0];
-  
+
             setAlertText("Correo y contraseña válidos :D");
             setAlertState(fachada.cambioEstadoDeAlerta(0));
             setShowAlert(fachada.cambioMostrarAlerta());
-  
-            localStorage.setItem("email", email);
+
+            login(email); // ✅ usamos el contexto aquí
             localStorage.setItem("username", nombre);
             localStorage.setItem("tipoUsuario", tipo);
 
-            console.log(tipo)
-
-  
-            // Redirigir según el tipo de usuario
+            // Redirigir según tipo de usuario
             switch (tipo) {
               case "Estudiante":
-                setTimeout(() => navigate("/pagUsuario"), 200);
-                break;
               case "Docente":
-                setTimeout(() => navigate("/pagUsuario"), 200);
-                break;
               case "Externo":
                 setTimeout(() => navigate("/pagUsuario"), 200);
                 break;
@@ -94,6 +89,7 @@ function Login() {
                 setAlertText("Tipo de usuario desconocido");
                 setAlertState(fachada.cambioEstadoDeAlerta(1));
                 setShowAlert(fachada.cambioMostrarAlerta());
+
             }
           }
         } else {
@@ -109,7 +105,7 @@ function Login() {
       setShowAlert(fachada.cambioMostrarAlerta());
     }
   };
-  
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -117,7 +113,7 @@ function Login() {
       await loadUsuario();
     }
   };
-  
+
 
   const clientChange = (e) =>
     setCliente({ ...cliente, [e.target.name]: e.target.value });
