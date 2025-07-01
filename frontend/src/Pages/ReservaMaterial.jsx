@@ -22,6 +22,37 @@ function ReservaMaterial() {
       .catch((err) => console.error("Error cargando materiales:", err));
   }, []);
 
+  const handleConfirmarReservaMaterial = async () => {
+    if (!materialSeleccionado) return;
+    try {
+      const response = await fetch('http://localhost:3000/reservas-material', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          materialId: materialSeleccionado,
+          usuarioId: localStorage.getItem("email"),
+          cantidad: 1, 
+          fecha: new Date(),
+          fechaReserva: new Date(),
+          estado: 'pendiente', 
+        }),
+      });
+
+      if (response.ok) {
+        // setShowModal(false);
+        // setReservaSeleccionada(null);
+        // await cargarDisponibilidadSemana();
+        alert('Reserva creada exitosamente');
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.error}`);
+      }
+    } catch (err) {
+      alert('Error al crear la reserva');
+      console.error('Error al crear la reserva:', err);
+    }
+  };
+
   return (
     <Container fluid className="align-items-center m-0 p-0">
 
@@ -66,7 +97,7 @@ function ReservaMaterial() {
                   }
                 </strong>
               </p>
-              <button className="btn btn-primary">Confirmar Préstamo</button>
+              <button className="btn btn-primary" onClick={handleConfirmarReservaMaterial}>Confirmar Préstamo</button>
             </div>
           )}
         </Col>
