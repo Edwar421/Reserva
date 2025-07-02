@@ -139,4 +139,12 @@ export class ReservaService {
   remove(id: number) {
     return this.reservaRepository.delete(id);
   }
+
+  updateCalificacion(id: number, calificacion: number, comentario?: string) {
+    return this.reservaRepository.update(id, { calificacion, comentario });
+  }
+
+  updateObservacionesEntrega(id: number, observacionesEntrega: string) {
+    return this.reservaRepository.update(id, { observacionesEntrega });
+  }
 }

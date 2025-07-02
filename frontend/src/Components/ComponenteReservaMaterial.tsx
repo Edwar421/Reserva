@@ -14,7 +14,7 @@ function ComponenteReservaMaterial({
   const badgeColor =
     estado === "Devuelto"
       ? "success"
-      : estado === "Pendiente"
+      : estado === "Pendiente" || estado === "Atrasado"
       ? "danger"
       : "primary";
 
@@ -31,17 +31,9 @@ function ComponenteReservaMaterial({
           <Card.Text>
             <strong>{nombre}</strong>
             <br />
-            {nombre && (
-              <>
-                <Badge bg="info" className="me-2">
-                  {nombre}
-                </Badge>
-                <br />
-              </>
-            )}
             {cantidad && (
               <>
-                <small>Cantidad: {cantidad} personas</small>
+                <small>Cantidad: {cantidad}</small>
                 <br />
               </>
             )}
@@ -49,18 +41,14 @@ function ComponenteReservaMaterial({
             <hr />
               <small>Horario</small>
               <br />
-              <small className="text-muted">{fecha}</small>
-              <br />
-              {horaInicio && (
-                <>
-                  <small className="text-muted">{horaInicio}</small> -{" "}
-                </>
-              )}
-              {horaFin && <small className="text-muted">{horaFin}</small>}
-              <br />
-              {fechaLimite && 
-                    <small className="text-muted">Fecha de Devolución: {fechaLimite}</small>
+              {fecha && 
+                    <small className="text-muted">Fecha de inicio: {new Date(fecha).toLocaleDateString()}</small>
                 }
+                <br />
+               {fechaLimite && 
+                    <small className="text-muted">Fecha limite: {new Date(fechaLimite).toLocaleDateString()}</small>
+                }
+              <br />
           </Card.Text>
         </Card.Body>
       </Card>

@@ -86,19 +86,32 @@ export class ReservaMaterialService {
     return this.reservaMaterialRepository.update(id, { estado });
   }
 
-  updateEstado(id: number, estado: EstadoReservaMaterial) {
-    const ahora = new Date();
-    const horaActual = ahora.toTimeString().slice(0, 5); // HH:mm
-    const dataToUpdate: Partial<ReservaMaterial> = { estado };
+async updateEstado(id: number, estado: EstadoReservaMaterial) {
+  const ahora = new Date();
+  const horaActual = ahora.toTimeString().slice(0, 5);
+  const dataToUpdate: Partial<ReservaMaterial> = { estado };
+  const reserva = await this.findOne(id);
 
-    if (estado === EstadoReservaMaterial.Entregado) {
-      dataToUpdate.horaInicio = horaActual;
-    }else if (estado === EstadoReservaMaterial.Devuelto) {
-      dataToUpdate.horaFin = horaActual;
-    }
-
-    return this.reservaMaterialRepository.update(id, dataToUpdate);
+  if (
+    reserva.estado === EstadoReservaMaterial.Pendiente &&
+    estado === EstadoReservaMaterial.Entregado
+  ) {
+    dataToUpdate.fechaLimite = dayjs()
+      .add(reserva.material.tiempoPrestamo, "day")
+      .toDate();
+    dataToUpdate.horaInicio = horaActual;
+  } else if (
+    reserva.estado === EstadoReservaMaterial.Entregado &&
+    estado === EstadoReservaMaterial.Devuelto
+  ) {
+    dataToUpdate.fechaDevolucion = ahora;
+    dataToUpdate.horaFin = horaActual;
+  } else {
+    throw new Error("Estado no válido para la transición");
   }
+
+  return this.reservaMaterialRepository.update(id, dataToUpdate);
+}
 
   updateCalificacion(id: number, calificacion: number, comentario?: string) {
     return this.reservaMaterialRepository.update(id, { calificacion , comentario});

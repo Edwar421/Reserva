@@ -13,6 +13,7 @@ export enum EstadoReservaMaterial {
   Pendiente = 'Pendiente',
   Entregado = 'Entregado',
   Devuelto = 'Devuelto',
+  Atrasado = 'Atrasado',
 }
 
 @Entity()

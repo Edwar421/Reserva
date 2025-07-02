@@ -10,11 +10,19 @@ class ContenedorReservasMaterial extends Contenedor {
     const [materiales, setMateriales] = useState<any[]>([]);
     const tipoDeCliente = localStorage.getItem("tipoUsuario");
     const email = localStorage.getItem("email");
+    
     const [show, setShow] = useState(false);
+    const [showCalificacion, setShowCalificacion] = useState(false);
     const handleCloseCalificar = () => setShow(false);
+    
     const [material, setMaterial] = useState<any>(null);
     const handleShowCalificar = (material) => {
       setShow(true);
+      setMaterial(material);
+    };
+    const handleCloseCalificacion = () => setShowCalificacion(false);
+    const handleShowCalificacion = (material) => {
+      setShowCalificacion(true)
       setMaterial(material);
     };
 
@@ -91,8 +99,6 @@ class ContenedorReservasMaterial extends Contenedor {
         console.error("Error al calificar el material:", error);
       }
     };
-    const handleShowCalificacion = (material) => {
-    }
 
     const Cartas = materiales.map((data, index) => (
       <Col
@@ -235,6 +241,27 @@ class ContenedorReservasMaterial extends Contenedor {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Modal show={showCalificacion} onHide={handleCloseCalificacion}>
+          <Modal.Header closeButton>
+            <Modal.Title>Calificación del Material</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Material:{" "}
+              <strong>{material?.material?.nombre || "Desconocido"}</strong>
+            </p>
+            <p>Calificación: {material?.calificacion || "No calificado"}</p>
+            <p>
+              Comentario: {material?.comentario || "No hay comentario disponible"}
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseCalificacion}>
+              Cerrar
+            </Button>
+          </Modal.Footer> 
+          </Modal>
       </>
     );
   }

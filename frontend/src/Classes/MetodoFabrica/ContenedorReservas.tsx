@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row, Modal } from "react-bootstrap";
 import Contenedor from "./Contenedor";
 import ComponenteReserva from "../../Components/ComponenteReserva";
 import { useGeneral } from "../../Utils/GeneralContext";
@@ -20,7 +19,9 @@ class ContenedorReservas extends Contenedor {
 
     const obtenerReservasPorEmail = async (email: string) => {
       try {
-        const response = await fetch(`http://localhost:3000/reservas/byEmail/${email}`);
+        const response = await fetch(
+          `http://localhost:3000/reservas/byEmail/${email}`
+        );
         if (!response.ok) throw new Error("Error al obtener reservas");
         const json = await response.json();
         setReservas(json);
@@ -51,6 +52,51 @@ class ContenedorReservas extends Contenedor {
       }
     };
 
+    //CALIFICAR
+    const [show, setShow] = useState(false);
+    const [showCalificacion, setShowCalificacion] = useState(false);
+    const handleCloseCalificar = () => setShow(false);
+
+    const [reserva, setReserva] = useState<any>(null);
+    const handleShowCalificar = (reserva) => {
+      setShow(true);
+      setReserva(reserva);
+    };
+    const handleCloseCalificacion = () => setShowCalificacion(false);
+    const handleShowCalificacion = (reserva) => {
+      setShowCalificacion(true);
+      setReserva(reserva);
+    };
+    const [calificacion, setCalificacion] = useState<number | null>(null);
+    const [comentario, setComentario] = useState<string>("");
+
+    const handleCalificar = async (reserva, calificacion, comentario) => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/reservas/calificar/${reserva.id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              calificacion,
+              comentario,
+            }),
+          }
+        );
+        if (!response.ok) throw new Error("Error al calificar el espacio");
+
+        // Actualizar el estado del material
+        setReserva((prev) => {
+          if (!prev) return null;
+          return { ...prev, calificacion, comentario };
+        });
+      } catch (error) {
+        console.error("Error al calificar el espacio:", error);
+      }
+    };
+
     return (
       <>
         <div className="align-self-start ps-5 pt-5 mb-5">
@@ -64,7 +110,14 @@ class ContenedorReservas extends Contenedor {
         >
           {reservas.length > 0 ? (
             reservas.map((reserva, index) => (
-              <Col key={index} xs="12" sm="6" md="4" lg="3" className="text-center mt-3">
+              <Col
+                key={index}
+                xs="12"
+                sm="6"
+                md="4"
+                lg="3"
+                className="text-center mt-3"
+              >
                 <div onClick={() => handleShow(reserva)}>
                   <ComponenteReserva
                     nombre={reserva.espacio.nombre}
@@ -78,7 +131,7 @@ class ContenedorReservas extends Contenedor {
                     horaFin={reserva.horaFin}
                   />
                 </div>
-                {reserva.estado === "Pendiente" && (
+                {reserva.estado === "pendiente" && (
                   <Button
                     variant="danger"
                     className="mt-2"
@@ -87,12 +140,128 @@ class ContenedorReservas extends Contenedor {
                     Cancelar
                   </Button>
                 )}
+                {reserva.estado === "completada" &&
+                  reserva.calificacion === null && (
+                    <Button
+                      variant="primary"
+                      className="mt-2"
+                      onClick={() => handleShowCalificar(reserva)}
+                    >
+                      Calificar
+                    </Button>
+                  )}
+                {reserva.calificacion !== null && (
+                  <Button
+                    variant="secondary"
+                    className="mt-2"
+                    onClick={() => handleShowCalificacion(reserva)}
+                  >
+                    Mostrar calificación
+                  </Button>
+                )}
               </Col>
             ))
           ) : (
             <p className="h2">No tienes espacios reservados</p>
           )}
         </Row>
+
+        <Modal show={show} onHide={handleCloseCalificar}>
+          <Modal.Header closeButton>
+            <Modal.Title>Calificar Espacio</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              ¿Cómo calificarías el espacio{" "}
+              <strong>{reserva?.espacio?.nombre || "Desconocido"}</strong>-
+              <strong>{reserva?.espacio?.tipo || "Desconocido"}</strong>?
+            </p>
+
+            <div className="mb-3">
+              <label htmlFor="calificacion" className="form-label">
+                Calificación
+              </label>
+              <select
+                id="calificacion"
+                className="form-select"
+                value={calificacion ?? ""}
+                onChange={(e) => setCalificacion(Number(e.target.value))}
+              >
+                <option value="" disabled>
+                  Selecciona una calificación
+                </option>
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="comentario" className="form-label">
+                Comentario
+              </label>
+              <textarea
+                id="comentario"
+                className="form-control"
+                rows={3}
+                value={comentario}
+                onChange={(e) => setComentario(e.target.value)}
+                placeholder="Escribe un comentario breve..."
+              ></textarea>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                handleCloseCalificar();
+                setCalificacion(null);
+                setComentario("");
+              }}
+            >
+              Cerrar
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                console.log("Calificación:", calificacion);
+                console.log("Comentario:", comentario);
+                setReserva(reserva);
+                handleCalificar(reserva, calificacion, comentario);
+                handleCloseCalificar();
+                setCalificacion(null);
+                setComentario("");
+              }}
+            >
+              Calificar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={showCalificacion} onHide={handleCloseCalificacion}>
+          <Modal.Header closeButton>
+            <Modal.Title>Calificación del Material</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Espacio:{" "}
+              <strong>{reserva?.espacio?.nombre || "Desconocido"}</strong> -
+              <strong>{reserva?.espacio?.tipo || "Desconocido"}</strong>
+            </p>
+            <p>Calificación: {reserva?.calificacion || "No calificado"}</p>
+            <p>
+              Comentario:{" "}
+              {reserva?.comentario || "No hay comentario disponible"}
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseCalificacion}>
+              Cerrar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }

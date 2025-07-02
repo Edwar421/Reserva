@@ -171,7 +171,6 @@ function GestionMateriales() {
                 value={nuevoEstado}
                 onChange={(e) => setNuevoEstado(e.target.value)}
               >
-                <option value="Pendiente">Pendiente</option>
                 <option value="Entregado">Entregado</option>
                 <option value="Devuelto">Devuelto</option>
               </Form.Select>

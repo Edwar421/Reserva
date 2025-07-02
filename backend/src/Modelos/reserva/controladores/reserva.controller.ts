@@ -55,4 +55,25 @@ export class ReservaController {
   findByEmail(@Param('email') email: string) {
     return this.reservaService.findByEmail(email);
   }
+
+  @Patch('calificar/:id')
+  updateCalificacion(
+    @Param('id') id: number,
+    @Body('calificacion') calificacion: number,
+    @Body('comentario') comentario: string,
+  ) {
+    return this.reservaService.updateCalificacion(
+      id,
+      calificacion,
+      comentario,
+    );
+  }
+
+  @Patch('observaciones/:id')
+  updateObservacionesEntrega(
+    @Param('id') id: number,
+    @Body('observacionesEntrega') observacionesEntrega: string,
+  ) {
+    return this.reservaService.updateObservacionesEntrega(id, observacionesEntrega);
+  } 
 }
