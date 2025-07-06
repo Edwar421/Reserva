@@ -4,3 +4,6 @@
     left: 50%;
     translate: -50%;
 }
+.logoCentral{
+    filter: invert(50%)
+}

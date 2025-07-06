@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import "../../../Styles/NoAuthHeader.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShop,
@@ -29,12 +30,6 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
         className="bg-body-tertiary mb-5 border-bottomer ps-5"
       >
         <Navbar.Brand href="/#/">
-          <img
-            src="logo.png"
-            width="40"
-            height="40"
-            className="d-inline-block align-top"
-          />
           Reservas UD
         </Navbar.Brand>
         <Navbar.Offcanvas
@@ -49,8 +44,8 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
             >
               <NavDropdown
                 title={
-                  <span>
-                    <FontAwesomeIcon icon={faUser} /> Registrate
+                  <span className="space">
+                    <FontAwesomeIcon className="iconUser" icon={faUser} /> Registrate
                   </span>
                 }
                 id={`offcanvasNavbarDropdown-expand-md`}
@@ -60,14 +55,14 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
                   to="/"
                   active={location.pathname === "/"}
                 >
-                  <FontAwesomeIcon icon={faSignIn} /> Log in
+                  <FontAwesomeIcon icon={faSignIn} /> Inicia sesión
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   as={Link}
                   to="/registro"
                   active={location.pathname === "/registro"}
                 >
-                  <FontAwesomeIcon icon={faUsers} /> Registrate!
+                  <FontAwesomeIcon icon={faUsers} /> Registrate 
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>

@@ -104,7 +104,7 @@ function Registro() {
 
         <Form onSubmit={clientSubmit}>
           <Form.Group className="mb-4 mt-4" controlId="formLogo">
-            <Image src="/logo.png" fluid width="25%" />
+            <Image className="logoCentral" src="/logo.png" fluid width="25%" />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formTipoUsuario">

@@ -131,9 +131,9 @@ function Login() {
         {alertText}
       </Alert>
       <div className="text-center content">
-        <h1>Reservas UD</h1>
+        <h1 className="prueba">Reservas UD</h1>
         <Form.Group className="mb-4 mt-4" controlId="formBasicTipo">
-          <Image src="/logo.png" fluid width="22%" />
+          <Image className="logoCentral" src="/logo.png" fluid width="22%" />
         </Form.Group>
         <Form onSubmit={handleFormSubmit} data-testid="Form">
 

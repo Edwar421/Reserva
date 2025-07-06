@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
 #root {
   margin: 0;
+  font-family: IBM Plex Sans;
 }
 
 .content {
@@ -12,7 +15,7 @@
 }
 
 .border-bottomer{
-  border-bottom: white 1px solid;
+  border-bottom: rgba(255, 255, 255, 0.634) 1px solid;
 }
 
 .border-toper{
@@ -22,8 +25,7 @@
 .bottom-fixed{
   position: fixed;
   bottom: 0;
-  width: 100vw
-  ;
+  width: 100vw;
 }
 
 .hidden{

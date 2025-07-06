@@ -1,0 +1,16 @@
+.personal{
+    filter: invert(50%);
+    margin-right: 10px;
+}
+
+.iconUser{
+    margin-right : 5px;
+}
+
+.space{
+    margin-right: 3px;
+}
+
+.iconSelection{
+    margin-left: 5px;
+}

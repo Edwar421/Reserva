@@ -2,6 +2,7 @@ import React from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import "../../../Styles/ClienteHeader.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShop,
@@ -37,13 +38,7 @@ class ClienteHeaderStrategy implements HeaderStrategy {
           className="bg-body-tertiary mb-5 border-bottomer ps-5"
         >
           <Navbar.Brand href="/pagUsuario">
-            <img
-              src="logo.png"
-              width="35"
-              height="35"
-              className="d-inline-block align-top"
-            />
-            Estampa tu idea
+            Reservas UD
           </Navbar.Brand>
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-md`}
@@ -57,17 +52,17 @@ class ClienteHeaderStrategy implements HeaderStrategy {
               >
 
 
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link as={Link} to="/pagUsuario/usuario" active={location.pathname === "/"}>
                     <FontAwesomeIcon icon={faUser} /> {localStorage.username}
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link as={Link} to="/pagUsuario/reserva" active={location.pathname === "/"}>
                     <FontAwesomeIcon icon={faShop} /> Reservar Espacio
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link
                     as={Link}
                     to="/pagUsuario/reservaMaterial"
@@ -76,7 +71,7 @@ class ClienteHeaderStrategy implements HeaderStrategy {
                     <FontAwesomeIcon icon={faStar} /> Reservar Material
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link
                     as={Link}
                     to="/pagUsuario/misReservas"
