@@ -1,23 +1,27 @@
-import { IsNotEmpty, IsString, IsDateString, IsNumber } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { EstadoReserva } from '../../../database/Entidades/reserva.entity';
 
 export class CreateReservaDto {
-  @IsNotEmpty()
-  @IsNumber()
-  espacioId: number;
+  @IsInt()
+  calendarioId: number;
 
+  @IsString()
   @IsNotEmpty()
-  @IsNumber()
   usuarioId: string;
 
-  @IsNotEmpty()
-  @IsDateString()
-  fecha: string; // 'YYYY-MM-DD'
+  @IsEnum(EstadoReserva)
+  @IsOptional()
+  estado?: EstadoReserva;
 
-  @IsNotEmpty()
-  @IsString()
-  horaInicio: string; // 'HH:mm'
+  @IsInt()
+  @IsOptional()
+  calificacion?: number;
 
-  @IsNotEmpty()
   @IsString()
-  horaFin: string; // 'HH:mm'
+  @IsOptional()
+  comentario?: string;
+
+  @IsString()
+  @IsOptional()
+  observacionesEntrega?: string;
 }

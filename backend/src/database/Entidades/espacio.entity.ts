@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Reserva } from './reserva.entity';
+import { Calendario } from './calendario.entity';
 
 export enum TipoEspacio {
   AULA = 'Aula',
@@ -28,6 +28,6 @@ export class Espacio {
   @Column({ nullable: true })
   descripcion: string;
 
-  @OneToMany(() => Reserva, (reserva) => reserva.espacio)
-  reservas: Reserva[];
+  @OneToMany(() => Calendario, (calendario) => calendario.espacio, {nullable: true })
+  calendario: Calendario[];
 }

@@ -78,7 +78,7 @@ function Login() {
             // Redirigir según tipo de usuario
             switch (tipo) {
               case "Estudiante":
-              case "Docente":
+              case "Profesor":
               case "Externo":
                 setTimeout(() => navigate("/pagUsuario"), 200);
                 break;

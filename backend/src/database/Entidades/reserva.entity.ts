@@ -5,7 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { Espacio } from './espacio.entity';
+import { Calendario } from './calendario.entity';
 import { Usuario } from './usuario.entity';
 import { IsInt, Min, Max } from 'class-validator';
 
@@ -21,20 +21,11 @@ export class Reserva {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Espacio, (espacio) => espacio.reservas)
-  espacio: Espacio;
+  @ManyToOne(() => Calendario, (calendario) => calendario.reservas, { eager: true })
+  calendario: Calendario;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.reservas, { nullable: true })
+  @ManyToOne(() => Usuario, (usuario) => usuario.reservas, { eager: true })
   usuario: Usuario;
-
-  @Column()
-  fecha: string; // YYYY-MM-DD
-
-  @Column()
-  horaInicio: string; // HH:mm
-
-  @Column()
-  horaFin: string; // HH:mm
 
   @Column({
     type: 'enum',

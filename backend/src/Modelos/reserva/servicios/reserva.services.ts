@@ -1,13 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  EstadoReserva,
-  Reserva,
-} from '../../../database/Entidades/reserva.entity';
 import { Repository } from 'typeorm';
+import { Reserva, EstadoReserva } from '../../../database/Entidades/reserva.entity';
 import { CreateReservaDto } from '../dto/create.dto';
 import { UpdateReservaDto } from '../dto/update.dto';
-import { Espacio } from '../../../database/Entidades/espacio.entity';
+import { Calendario } from '../../../database/Entidades/calendario.entity';
 import { Usuario } from '../../../database/Entidades/usuario.entity';
 
 @Injectable()
@@ -16,49 +13,53 @@ export class ReservaService {
     @InjectRepository(Reserva)
     private readonly reservaRepository: Repository<Reserva>,
 
-    @InjectRepository(Espacio)
-    private readonly espacioRepository: Repository<Espacio>,
+    @InjectRepository(Calendario)
+    private readonly calendarioRepository: Repository<Calendario>,
 
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
   async create(dto: CreateReservaDto) {
-    const espacio = await this.espacioRepository.findOne({
-      where: { id: dto.espacioId },
+    const calendario = await this.calendarioRepository.findOne({
+      where: { id: dto.calendarioId },
     });
+    if (!calendario) throw new NotFoundException('Calendario no encontrado');
+
     const usuario = await this.usuarioRepository.findOne({
       where: { email: dto.usuarioId },
     });
+    if (!usuario) throw new NotFoundException('Usuario no encontrado');
 
     const reserva = this.reservaRepository.create({
-      fecha: dto.fecha,
-      horaInicio: dto.horaInicio,
-      horaFin: dto.horaFin,
-      espacio,
+      calendario,
       usuario,
+      estado: dto.estado ?? EstadoReserva.ACTIVA,
+      calificacion: dto.calificacion,
+      comentario: dto.comentario,
+      observacionesEntrega: dto.observacionesEntrega,
     });
 
     return this.reservaRepository.save(reserva);
   }
 
   findAll() {
-    return this.reservaRepository.find({ relations: ['espacio', 'usuario'] });
+    return this.reservaRepository.find({
+      relations: ['calendario', 'usuario'],
+    });
   }
 
   findOne(id: number) {
     return this.reservaRepository.findOne({
       where: { id },
-      relations: ['espacio', 'usuario'],
+      relations: ['calendario', 'usuario'],
     });
   }
 
   async findByEmail(email: string) {
     return this.reservaRepository.find({
-      where: {
-        usuario: { email },
-      },
-      relations: ['espacio', 'usuario'],
+      where: { usuario: { email } },
+      relations: ['calendario', 'usuario'],
     });
   }
 
@@ -66,74 +67,53 @@ export class ReservaService {
     const reserva = await this.reservaRepository.findOne({ where: { id } });
     if (!reserva) return null;
 
-    if (dto.espacioId) {
-      reserva.espacio = await this.espacioRepository.findOne({
-        where: { id: dto.espacioId },
+    if (dto.calendarioId) {
+      const calendario = await this.calendarioRepository.findOne({
+        where: { id: dto.calendarioId },
       });
-    }
-    if (dto.usuarioId) {
-      reserva.usuario = await this.usuarioRepository.findOne({
-        where: { email: dto.usuarioId },
-      });
+      if (!calendario) throw new NotFoundException('Calendario no encontrado');
+      reserva.calendario = calendario;
     }
 
-    reserva.fecha = dto.fecha ?? reserva.fecha;
-    reserva.horaInicio = dto.horaInicio ?? reserva.horaInicio;
-    reserva.horaFin = dto.horaFin ?? reserva.horaFin;
+    if (dto.usuarioId) {
+      const usuario = await this.usuarioRepository.findOne({
+        where: { email: dto.usuarioId },
+      });
+      if (!usuario) throw new NotFoundException('Usuario no encontrado');
+      reserva.usuario = usuario;
+    }
+
+    reserva.estado = dto.estado ?? reserva.estado;
+    reserva.calificacion = dto.calificacion ?? reserva.calificacion;
+    reserva.comentario = dto.comentario ?? reserva.comentario;
+    reserva.observacionesEntrega = dto.observacionesEntrega ?? reserva.observacionesEntrega;
 
     return this.reservaRepository.save(reserva);
   }
 
   async getDisponibilidadPorEspacioYFecha(espacioId: number, fecha: string) {
-    const reservas = await this.reservaRepository.find({
+    // Buscar calendarios para ese espacio y fecha
+    const calendarios = await this.calendarioRepository.find({
       where: {
         espacio: { id: espacioId },
         fecha,
-        estado: EstadoReserva.ACTIVA,
       },
-      relations: ['usuario'],
+      relations: ['reservas'],
     });
 
-    const horariosBase = [
-      '06:00',
-      '08:00',
-      '10:00',
-      '12:00',
-      '14:00',
-      '16:00',
-      '18:00',
-    ];
-
-    const disponibilidad = horariosBase.map((hora) => {
-      const reserva = reservas.find((r) => r.horaInicio === hora);
-      if (reserva) {
-        return {
-          hora,
-          horaFin: reserva.horaFin,
-          disponible: false,
-          reserva: {
-            id: reserva.id,
-            usuarioNombre: reserva.usuario?.nombre || 'Desconocido',
-          },
-        };
-      } else {
-        return {
-          hora,
-          horaFin: this.calcularHoraFin(hora),
-          disponible: true,
-        };
-      }
-    });
+    const disponibilidad = calendarios.map((c) => ({
+      calendarioId: c.id,
+      horaInicio: c.horaInicio,
+      horaFin: c.horaFin,
+      disponible: c.disponibilidad,
+      capacidad: c.capacidad,
+      reservas: c.reservas?.map((r) => ({
+        reservaId: r.id,
+        usuarioNombre: r.usuario?.nombre || 'Desconocido',
+      })) || [],
+    }));
 
     return { disponibilidad };
-  }
-
-  private calcularHoraFin(horaInicio: string): string {
-    const [horas, minutos] = horaInicio.split(':').map(Number);
-    const nuevaHora = horas + 2;
-    return `${nuevaHora.toString().padStart(2, '0')}:${minutos
-      .toString()
-      .padStart(2, '0')}`;
   }
 
   remove(id: number) {

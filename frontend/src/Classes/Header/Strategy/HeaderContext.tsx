@@ -21,7 +21,7 @@ class HeaderContext {
     console.log(tipoCliente)
 
     if (isUserAuthenticated) {
-      if (["Estudiante", "Docente", "Externo"].includes(tipoCliente || "")) {
+      if (["Estudiante", "Profesor", "Externo"].includes(tipoCliente || "")) {
         this.setStrategy(new ClienteHeaderStrategy());
       } else if (tipoCliente === "Laborista") {
         this.setStrategy(new LaboristaHeaderStrategy());

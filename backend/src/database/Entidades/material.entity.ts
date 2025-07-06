@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ReservaMaterial } from './reservaMaterial.entity';
 @Entity()
 export class Material {
   @PrimaryGeneratedColumn({ type: 'int' })
@@ -11,9 +11,12 @@ export class Material {
   @Column()
   cantidad: number;
 
-  @Column({ nullable: true })
+  @Column()
   tiempoPrestamo?: number;
 
-  @Column({ nullable: true })
+  @Column()
   cantidadDisponible: number;
+
+  @OneToMany(() => ReservaMaterial, (reservaMaterial) => reservaMaterial.material, { nullable: true })  
+  reservas: ReservaMaterial[];
 }

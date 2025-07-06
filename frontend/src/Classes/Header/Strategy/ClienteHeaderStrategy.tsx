@@ -43,7 +43,7 @@ class ClienteHeaderStrategy implements HeaderStrategy {
               height="35"
               className="d-inline-block align-top"
             />
-            Estampa tu idea
+            Reservas
           </Navbar.Brand>
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-md`}

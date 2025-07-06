@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { enviroments } from './enviroments';
 import config from './config';
 import { DatabaseModule } from './dataBase/database.module';
-import { UploadModule } from './Modelos/upload/upload.module';
+//import { UploadModule } from './Modelos/upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UsuarioModule } from './Modelos/usuario/usuario.module';
@@ -15,6 +15,8 @@ import { Material } from './database/Entidades/material.entity';
 import { MaterialModule } from './Modelos/material/material.module';
 import { Reserva } from './database/Entidades/reserva.entity';
 import { ReservaMaterialModule } from './Modelos/reservaMaterial/reservaMaterial.module';
+import { Calendario } from './database/Entidades/calendario.entity';
+import { CalendarioModule } from './Modelos/calendario/calendario.module';
 
 @Module({
   imports: [
@@ -33,7 +35,8 @@ import { ReservaMaterialModule } from './Modelos/reservaMaterial/reservaMaterial
     ReservaModule,
     MaterialModule,
     ReservaMaterialModule,
-    UploadModule,
+    CalendarioModule,
+    //UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
