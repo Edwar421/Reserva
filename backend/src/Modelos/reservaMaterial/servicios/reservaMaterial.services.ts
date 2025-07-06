@@ -9,6 +9,7 @@ import { UpdateReservaMaterialDto } from '../dto/update.dto';
 import { EstadoReservaMaterial } from 'src/database/Entidades/reservaMaterial.entity';
 //import { format } from 'date-fns';
 import * as dayjs from 'dayjs';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class ReservaMaterialService {
@@ -19,25 +20,49 @@ export class ReservaMaterialService {
     private readonly materialRepository: Repository<Material>,
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
+    private readonly dataSource: DataSource,
   ) {}
 
-  async create(dto: CreateReservaMaterialDto) {
-    const reserva = new ReservaMaterial();
-    reserva.material = await this.materialRepository.findOne({
+async create(dto: CreateReservaMaterialDto) {
+  return await this.dataSource.transaction(async (manager) => {
+    const materialRepo = manager.getRepository(Material);
+    const reservaRepo = manager.getRepository(ReservaMaterial);
+
+    const material = await materialRepo.findOne({
       where: { id: dto.materialId },
     });
+
+    if (!material) {
+      throw new Error('Material no encontrado');
+    }
+
+    if (material.cantidadDisponible < dto.cantidad) {
+      throw new Error(
+        `No hay suficiente cantidad disponible. Solo quedan ${material.cantidadDisponible} < ${dto.cantidad}.`
+      );
+    }
+
+    material.cantidadDisponible -= dto.cantidad;
+    await materialRepo.save(material);
+
+    const reserva = reservaRepo.create({
+      material,
+      cantidad: dto.cantidad,
+      fecha: dto.fecha,
+      horaInicio: dto.horaInicio,
+      horaFin: dto.horaFin,
+    });
+
     if (dto.usuarioId) {
-      reserva.usuario = await this.usuarioRepository.findOne({
+      reserva.usuario = await manager.getRepository(Usuario).findOne({
         where: { email: dto.usuarioId },
       });
     }
-    reserva.cantidad = dto.cantidad;
-    reserva.fecha = dto.fecha;
-    reserva.horaInicio = dto.horaInicio;
-    reserva.horaFin = dto.horaFin;
 
-    return this.reservaMaterialRepository.save(reserva);
-  }
+    return await reservaRepo.save(reserva);
+  });
+}
+
 
   findAll() {
     return this.reservaMaterialRepository.find({
