@@ -3,7 +3,7 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 import { GeneralProvider } from "../Utils/GeneralContext";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
-import ClienteProfile from "../Components/ClienteProfile";
+import { Outlet } from "react-router-dom";
 
 function PagUsuario() {
 
@@ -15,7 +15,7 @@ function PagUsuario() {
         </Row>
 
         <Row className="width-100vw">
-          <ClienteProfile />
+          <Outlet />
         </Row>
 
         <Footer />
