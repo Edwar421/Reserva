@@ -31,7 +31,7 @@ export class Usuario {
   @Column({ type: 'varchar', length: 20 })
   cedula: string;
 
-  @OneToMany(() => Reserva, (reserva) => reserva.usuario)
+  @OneToMany(() => Reserva, (reserva) => reserva.usuario, {nullable: true})
   reservas: Reserva[];
 
   @OneToMany(() => ReservaMaterial, (reservaMaterial) => reservaMaterial.usuario, { nullable: true })

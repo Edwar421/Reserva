@@ -5,6 +5,7 @@ import { Espacio } from './Entidades/espacio.entity';
 import { Reserva } from './Entidades/reserva.entity';
 import { Material } from './Entidades/material.entity';
 import { ReservaMaterial } from './Entidades/reservaMaterial.entity';
+import { Calendario } from './Entidades/calendario.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -16,6 +17,6 @@ export const AppDataSource = new DataSource({
   schema: 'public',
   synchronize: false,
   logging: false,
-  entities: [Espacio, Reserva,Usuario, Material,ReservaMaterial],
+  entities: [Espacio, Reserva,Usuario, Material,ReservaMaterial, Calendario],
   migrations: ['src/database/migrations/*.ts'],
 });

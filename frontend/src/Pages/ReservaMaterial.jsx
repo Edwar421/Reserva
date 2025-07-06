@@ -13,6 +13,8 @@ import "../Styles/Catalogo.css";
 function ReservaMaterial() {
   const [materiales, setMateriales] = useState([]);
   const [materialSeleccionado, setMaterialSeleccionado] = useState("");
+  const [cantidadSeleccionada, setCantidad] = useState(null);
+  const [fecha, setFecha] = useState("");
 
   useEffect(() => {
     // Cargar materiales desde la API
@@ -23,39 +25,44 @@ function ReservaMaterial() {
   }, []);
 
   const handleConfirmarReservaMaterial = async () => {
-    if (!materialSeleccionado) return;
+    if (!materialSeleccionado || !fecha || !cantidadSeleccionada) {
+      alert("Por favor complete todos los campos para realizar la reserva");
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3000/reservas-material', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/reservas-material", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           materialId: materialSeleccionado,
           usuarioId: localStorage.getItem("email"),
-          cantidad: 1, 
-          fecha: new Date(),
+          cantidad: cantidadSeleccionada,
+          fecha: fecha,
           fechaReserva: new Date(),
-          estado: 'pendiente', 
+          estado: "pendiente",
         }),
       });
 
       if (response.ok) {
         // setShowModal(false);
-        // setReservaSeleccionada(null);
+        alert("Reserva creada exitosamente");
+        window.location.reload();
         // await cargarDisponibilidadSemana();
-        alert('Reserva creada exitosamente');
       } else {
         const error = await response.json();
         alert(`Error: ${error.error}`);
       }
     } catch (err) {
-      alert('Error al crear la reserva');
-      console.error('Error al crear la reserva:', err);
+      alert("Error al crear la reserva:" + err);
     }
+    setReservaSeleccionada("");
+    setCantidad(null);
+    setFecha("");
   };
 
   return (
     <Container fluid className="align-items-center m-0 p-0">
-
       <Row className="width-100vw">
         <Col xs={{ span: 8, offset: 2 }}>
           <Row className="p-5">
@@ -81,23 +88,76 @@ function ReservaMaterial() {
             <option value="">-- Seleccionar material --</option>
             {materiales.map((mat) => (
               <option key={mat.id} value={mat.id}>
-                {mat.nombre} (Disponibles: {mat.cantidad})
+                {mat.nombre}
               </option>
             ))}
           </select>
 
           {materialSeleccionado && (
             <div className="mt-4 text-center">
-              <p>
-                Material seleccionado:{" "}
-                <strong>
-                  {
-                    materiales.find((m) => m.id === parseInt(materialSeleccionado))
-                      ?.nombre
-                  }
-                </strong>
-              </p>
-              <button className="btn btn-primary" onClick={handleConfirmarReservaMaterial}>Confirmar Préstamo</button>
+              {(() => {
+                const material = materiales.find(
+                  (m) => m.id === parseInt(materialSeleccionado)
+                );
+                const hoy = new Date().toISOString().split("T")[0];
+                const fechaMax = new Date(hoy);
+                fechaMax.setDate(fechaMax.getDate() + 7);
+                const fechaMaxStr = fechaMax.toISOString().split("T")[0];
+                return material ? (
+                  material.cantidadDisponible < 1 ? (
+                    <p>
+                      No hay unidades disponibles, consulte en otro momento.
+                    </p>
+                  ) : (
+                    <>
+                      <p>
+                        Material seleccionado:{" "}
+                        <strong>{material.nombre}</strong> (
+                        {material.cantidadDisponible} unidades disponibles)
+                      </p>
+                      Selecciona la cantidad que desas reservar:{" "}
+                      <input
+                        type="number"
+                        name="cantidad"
+                        min={1}
+                        max={material.cantidadDisponible}
+                        step={1}
+                        value={cantidadSeleccionada}
+                        onChange={(e) => {
+                          let value = parseInt(e.target.value, 10);
+                          if (isNaN(value)) value = "";
+                          else {
+                            if (value < 1) value = 1;
+                            if (value > material.cantidadDisponible)
+                              value = material.cantidadDisponible;
+                          }
+                          setCantidad(value);
+                        }}
+                      />
+                      <p>
+                        Fecha:{" "}
+                        <input
+                          type="date"
+                          value={fecha}
+                          min={hoy}
+                          max={fechaMaxStr}
+                          onChange={(e) => setFecha(e.target.value)}
+                          onKeyDown={(e) => e.preventDefault()}
+                        />
+                      </p>
+                      <hr />
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleConfirmarReservaMaterial}
+                      >
+                        Confirmar Préstamo
+                      </button>
+                    </>
+                  )
+                ) : (
+                  <p>Material no encontrado.</p>
+                );
+              })()}
             </div>
           )}
         </Col>
@@ -108,10 +168,10 @@ function ReservaMaterial() {
       <ThemeSwitcher />
 
       <br />
-        <br />
-        <br />
-        <br />
-        <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </Container>
   );
 }
