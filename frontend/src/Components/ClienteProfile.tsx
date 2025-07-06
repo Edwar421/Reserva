@@ -63,11 +63,12 @@ const CardContent = ({ children, className = "" }) => (
 export default function UserProfile() {
   const [currentDate, setCurrentDate] = useState("");
   const email = localStorage.getItem("email");
-  const [usuario, setUsuario] = useState(null);
+  const [usuario, setUsuario] = useState<any>(null);
   useEffect(() => {
     if (email) {
       obtenerUsuario(email);
-    }
+    } 
+
     const today = new Date();
     const options: Intl.DateTimeFormatOptions = {
       weekday: "long",

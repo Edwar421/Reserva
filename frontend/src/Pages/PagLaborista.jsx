@@ -12,7 +12,6 @@ import ThemeSwitcher from "../Components/ThemeSwitcher";
 import ContenedorCartas from "../Components/ContenedorCartas";
 import FiltroReservas from "../Components/FiltroReservas";
 import CalendarioDisponibilidad from "../Components/CalendarioDisponibilidad";
-import { Outlet } from "react-router-dom";
 /* Estilos */
 import "../Styles/Catalogo.css";
 
@@ -27,7 +26,6 @@ function PagLaborista() {
         </Row>
 
         <Row className="width-100vw">
-          <Outlet />
         </Row>
         
         <Footer />
