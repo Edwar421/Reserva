@@ -37,6 +37,9 @@ export class Calendario {
   @Column()
   disponibilidad: boolean;
 
+  @Column({nullable:true})
+  docenteAsignado: boolean;
+
   @ManyToOne(() => Espacio, (espacio) => espacio.calendario, { eager: true })
   espacio: Espacio;
 

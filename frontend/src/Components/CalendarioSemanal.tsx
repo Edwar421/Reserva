@@ -29,6 +29,7 @@ interface DisponibilidadSlot {
   disponible: boolean;
   reservas?: ReservaInfo[];
   calendarioId: number;
+  docenteAsignado: boolean;
 }
 
 interface DisponibilidadDia {
@@ -254,6 +255,8 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
     return <Alert variant="danger">Error: {error}</Alert>;
   }
 
+  const tipoUsuario = String(localStorage.getItem("tipoUsuario"));
+
   return (
     <>
       <Card className="mt-4">
@@ -328,11 +331,12 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                                 key={`${dia.fecha}-${hora}`}
                                 className="disponible"
                                 onClick={async () => {
-                                  const idCalendario =await handleCrearCalendario(
-                                    dia.fecha,
-                                    hora,
-                                    horaFin
-                                  );
+                                  const idCalendario =
+                                    await handleCrearCalendario(
+                                      dia.fecha,
+                                      hora,
+                                      horaFin
+                                    );
                                   await handleReservarHorario(
                                     dia.fecha,
                                     dia.dia,
@@ -342,7 +346,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                                   );
                                 }}
                               >
-                                Libre
+                                Disponible
                               </td>
                             );
                           }
@@ -352,7 +356,13 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                             <td
                               key={`${dia.fecha}-${hora}`}
                               className={
-                                slot.disponible ? "disponible" : "ocupado"
+                                tipoUsuario !== "Profesor"
+                                  ? slot.disponible
+                                    ? "disponible"
+                                    : "ocupado"
+                                  : slot.docenteAsignado==null
+                                  ? "disponible"
+                                  : "ocupado"
                               }
                               onClick={async () =>
                                 slot.disponible &&
@@ -365,7 +375,13 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                                 ))
                               }
                             >
-                              {slot.disponible ? "Disponible" : "Ocupado"}
+                              {tipoUsuario !== "Profesor"
+                                ? slot.disponible
+                                  ? "Disponible"
+                                  : "ocupado"
+                                : slot.docenteAsignado==null
+                                ? "Diponible"
+                                : "ocupado"}
                             </td>
                           );
                         })}

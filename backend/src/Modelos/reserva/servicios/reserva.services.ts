@@ -44,13 +44,24 @@ export class ReservaService {
       comentario: dto.comentario,
       observacionesEntrega: dto.observacionesEntrega,
     });
-    
-    const capacidadNueva=calendario.capacidad - 1;
-    var disponible=true
-    if(capacidadNueva===0) disponible=false
+
+    const capacidadNueva = calendario.capacidad - 1;
+    var disponible = true;
+    var docente = false;
+    if (capacidadNueva === 0) disponible = false;
+
+    if (String(usuario.tipo) === 'Profesor') {
+      disponible = false;
+      docente = true;
+    }
+
     await this.calendarioRepository.update(
       { id: calendario.id },
-      { capacidad: capacidadNueva, disponibilidad: disponible},
+      {
+        capacidad: capacidadNueva,
+        disponibilidad: disponible,
+        docenteAsignado: docente,
+      },
     );
 
     if (calendario.capacidad === 0) {
@@ -133,6 +144,7 @@ export class ReservaService {
           reservaId: r.id,
           usuarioNombre: r.usuario?.nombre || 'Desconocido',
         })) || [],
+      docenteAsignado: c.docenteAsignado,
     }));
 
     return { disponibilidad };

@@ -110,15 +110,15 @@ function GestionReserva() {
               <Card.Header className="text-center">{reserva.id}</Card.Header>
               <Card.Body>
                 <Card.Text>
-                  Reserva: {reserva.espacio.nombre}
+                  Reserva: {reserva.calendario.espacio.nombre}
                   <br />
                   Nombre: {reserva.usuario.nombre}
                   <br />
-                  Fecha: {reserva.fecha}
+                  Fecha: {reserva.calendario.fecha}
                   <br />
-                  Inicio: {reserva.horaInicio}
+                  Inicio: {reserva.calendario.horaInicio}
                   <br />
-                  Fin: {reserva.horaFin}
+                  Fin: {reserva.calendario.horaFin}
                 </Card.Text>
                 <hr />
                 <Card.Text>Estado: {reserva.estado}</Card.Text>
