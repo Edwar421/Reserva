@@ -66,7 +66,7 @@ function ReservaMaterial() {
   return (
     <div className="layout-container">
       <Container fluid className="align-items-center m-0 p-0">
-        <Row className="width-100vw">
+        <Row>
           <Col xs={{ span: 8, offset: 2 }}>
             <Row className="p-5">
               <Col >
