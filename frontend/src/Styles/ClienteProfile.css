@@ -177,8 +177,8 @@
 .info-card {
   border-radius: 1.5rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  background: rgba(45, 55, 72, 0.8);
-  border: 1px solid rgba(75, 85, 99, 0.3);
+  background: #212529;
+  border: 1px solid rgba(216, 228, 245, 0.521);
 }
 
 .info-content {
@@ -207,7 +207,7 @@
 }
 
 .status-icon {
-  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  background: linear-gradient(135deg, #37343c, #404080);
 }
 
 .status-dot {
@@ -251,7 +251,7 @@
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  border-color: rgba(79, 70, 229, 0.3);
+  border-color: rgba(237, 236, 255, 0.3);
 }
 
 /* Responsive */

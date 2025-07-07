@@ -24,6 +24,7 @@ import { GeneralProvider } from "./Utils/GeneralContext";
 import ProtectedRoute from "./Utils/ProtectedRoute";
 import PublicRoute from "./Utils/PublicRoute";
 import Cliente from "./Components/ClienteProfile.tsx"
+import LaboristaContent from "./Components/LaboristaComponent.tsx"
 
 
 const router = createBrowserRouter(
@@ -36,8 +37,8 @@ const router = createBrowserRouter(
 
       <Route element={<ProtectedRoute />}>
         <Route path="/laborista" element={<Laborista />} >
-          <Route path="" element={<Cliente />} />
-          <Route path="usuario" element={<Cliente />} />
+          <Route path="" element={<LaboristaContent/>} />
+          <Route path="usuario" element={<LaboristaContent />} />
           <Route path="gestionMateriales" element={<GestionMateriales />} />
           <Route path="gestionReservas" element={<GestionReserva />} />
         </Route>

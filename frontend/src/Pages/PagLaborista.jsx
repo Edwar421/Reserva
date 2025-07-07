@@ -14,6 +14,7 @@ import FiltroReservas from "../Components/FiltroReservas";
 import CalendarioDisponibilidad from "../Components/CalendarioDisponibilidad";
 /* Estilos */
 import "../Styles/Catalogo.css";
+import { Outlet } from "react-router-dom";
 
 function PagLaborista() {
   const [espacioSeleccionado, setEspacioSeleccionado] = useState(null);
@@ -27,7 +28,7 @@ function PagLaborista() {
 
         <Row className="width-100vw">
         </Row>
-        
+        <Outlet/>
         <Footer />
       </Container>
     </>
