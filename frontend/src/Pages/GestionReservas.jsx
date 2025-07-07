@@ -6,7 +6,6 @@ import { GeneralProvider } from "../Utils/GeneralContext";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
 import ContenedorCartas from "../Components/ContenedorCartas";
-import "../Styles/Catalogo.css";
 
 function GestionReserva() {
   const [reservas, setReserva] = useState([]);

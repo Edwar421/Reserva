@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
   host: 'localhost', // o config.postgres.host si lo importas
   port: 5432,
   username: 'postgres',
-  password: '1234',
+  password: '1234567',
   database: 'reservas',
   schema: 'public',
   synchronize: false,

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../Styles/ClienteProfile.css";
 import { Navigate, useNavigate } from "react-router-dom";
 
+
 // Componentes de iconos SVG simples
 const UserIcon = () => (
   <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +125,7 @@ export default function UserProfile() {
                 </div>
                 <div className="welcome-text">
                   <h2 className="welcome-title">
-                    ¡Bienvenido,  {usuario ? usuario.nombre : "cargando..."}!
+                    ¡Bienvenido, {usuario ? usuario.nombre : "cargando..."}!
                   </h2>
                   <p className="welcome-subtitle">Nos alegra verte de nuevo</p>
                 </div>
@@ -132,14 +133,13 @@ export default function UserProfile() {
             </CardHeader>
             <CardContent className="welcome-content">
               <p className="welcome-description">
-                Desde aquí puedes gestionar tus reservas y acceder a todos
-                nuestros servicios.
+                Desde aquí puedes gestionar y modificar las reservas
               </p>
               <Button
-                onClick={() => navigate("/pagUsuario/reserva")}
+                onClick={() => navigate("/laborista/gestionMateriales")}
                 className="reservation-btn"
               >
-                <span>¿Quieres reservar?</span>
+                <span>Gestiona las reservas</span>
                 <ArrowRightIcon />
               </Button>
             </CardContent>

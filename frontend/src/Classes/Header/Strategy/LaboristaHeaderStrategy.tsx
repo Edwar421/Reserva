@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../../../Styles/NoAuthHeader.css";
 import {
   faShop,
   faUser,
@@ -37,13 +38,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
           className="bg-body-tertiary mb-5 border-bottomer ps-5"
         >
           <Navbar.Brand href="/laborista">
-            <img
-              src="logo.png"
-              width="35"
-              height="35"
-              className="d-inline-block align-top"
-            />
-            Reservas
+            Reservas UD
           </Navbar.Brand>
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-md`}
@@ -55,7 +50,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                 variant="pills"
                 className="justify-content-end flex-grow-1 pe-3"
               >
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link
                     as={Link}
                     to="/laborista"
@@ -65,7 +60,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                   </Nav.Link>
                 </Nav.Item>
 
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link
                     as={Link}
                     to="/laborista/gestionMateriales"
@@ -74,7 +69,7 @@ class LaboristaHeaderStrategy implements HeaderStrategy {
                     <FontAwesomeIcon icon={faStar} /> Gestión de materiales
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                <Nav.Item className="item">
                   <Nav.Link
                     as={Link}
                     to="/laborista/gestionReservas"
