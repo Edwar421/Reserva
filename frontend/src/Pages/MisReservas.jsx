@@ -6,7 +6,6 @@ import { GeneralProvider } from "../Utils/GeneralContext";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
 import ContenedorCartas from "../Components/ContenedorCartas";
-import "../Styles/Catalogo.css";
 import ContenedorReservas from "../Classes/MetodoFabrica/ContenedorReservas";
 
 function MisReservas() {

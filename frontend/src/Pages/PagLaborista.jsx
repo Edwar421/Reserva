@@ -13,7 +13,6 @@ import ContenedorCartas from "../Components/ContenedorCartas";
 import FiltroReservas from "../Components/FiltroReservas";
 import CalendarioDisponibilidad from "../Components/CalendarioDisponibilidad";
 /* Estilos */
-import "../Styles/Catalogo.css";
 import { Outlet } from "react-router-dom";
 
 function PagLaborista() {

@@ -7,8 +7,10 @@ import Header from "../Classes/Header/Header";
 import ThemeSwitcher from "../Components/ThemeSwitcher";
 import { GeneralProvider } from "../Utils/GeneralContext";
 import axios from "axios"; // Necesario para consultar la API
+import "../Styles/ReservaMaterial.css";
+import Select from "react-select";
 
-import "../Styles/Catalogo.css";
+
 
 function ReservaMaterial() {
   const [materiales, setMateriales] = useState([]);
@@ -62,117 +64,114 @@ function ReservaMaterial() {
   };
 
   return (
-    <Container fluid className="align-items-center m-0 p-0">
-      <Row className="width-100vw">
-        <Col xs={{ span: 8, offset: 2 }}>
-          <Row className="p-5">
-            <Col className="centered">
-              <img src="/logo.png" alt="Logo" fluid width="22%" />
-            </Col>
-            <Col>
-              <br />
-              <h1>Préstamo de Material</h1>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+    <div className="layout-container">
+      <Container fluid className="align-items-center m-0 p-0">
+        <Row className="width-100vw">
+          <Col xs={{ span: 8, offset: 2 }}>
+            <Row className="p-5">
+              <Col >
+              </Col>
+              <Col className="centered">
+                <h1 className="title">Préstamo de Material</h1>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
 
-      <Row className="px-5">
-        <Col md={{ span: 6, offset: 3 }}>
-          <h3 className="text-center mb-4">Selecciona un material</h3>
-          <select
-            className="form-control"
-            value={materialSeleccionado}
-            onChange={(e) => setMaterialSeleccionado(e.target.value)}
-          >
-            <option value="">-- Seleccionar material --</option>
-            {materiales.map((mat) => (
-              <option key={mat.id} value={mat.id}>
-                {mat.nombre}
-              </option>
-            ))}
-          </select>
+        <Row className="px-5">
+          <Col className="px-5" md={{ span: 6, offset: 3 }}>
+            <h3 className="text-center mb-4">Selecciona un material</h3>
+            <Select
+              options={materiales.map((mat) => ({
+                value: mat.id,
+                label: mat.nombre,
+              }))}
 
-          {materialSeleccionado && (
-            <div className="mt-4 text-center">
-              {(() => {
-                const material = materiales.find(
-                  (m) => m.id === parseInt(materialSeleccionado)
-                );
-                const hoy = new Date().toISOString().split("T")[0];
-                const fechaMax = new Date(hoy);
-                fechaMax.setDate(fechaMax.getDate() + 7);
-                const fechaMaxStr = fechaMax.toISOString().split("T")[0];
-                return material ? (
-                  material.cantidadDisponible < 1 ? (
-                    <p>
-                      No hay unidades disponibles, consulte en otro momento.
-                    </p>
-                  ) : (
-                    <>
+              placeholder="Seleccionar material"
+              onChange={(opcion) => setMaterialSeleccionado(opcion?.value || "")}
+              menuPlacement="bottom"
+              maxMenuHeight={200}     // <- Esto es lo importante
+              className="select"
+              classNamePrefix="selectMenu"
+            />
+            {materialSeleccionado && (
+              <div className="mt-4 text-center">
+                {(() => {
+                  const material = materiales.find(
+                    (m) => m.id === parseInt(materialSeleccionado)
+                  );
+                  const hoy = new Date().toISOString().split("T")[0];
+                  const fechaMax = new Date(hoy);
+                  fechaMax.setDate(fechaMax.getDate() + 7);
+                  const fechaMaxStr = fechaMax.toISOString().split("T")[0];
+                  return material ? (
+                    material.cantidadDisponible < 1 ? (
                       <p>
-                        Material seleccionado:{" "}
-                        <strong>{material.nombre}</strong> (
-                        {material.cantidadDisponible} unidades disponibles)
+                        No hay unidades disponibles, consulte en otro momento.
                       </p>
-                      Selecciona la cantidad que desas reservar:{" "}
-                      <input
-                        type="number"
-                        name="cantidad"
-                        min={1}
-                        max={material.cantidadDisponible}
-                        step={1}
-                        value={cantidadSeleccionada}
-                        onChange={(e) => {
-                          let value = parseInt(e.target.value, 10);
-                          if (isNaN(value)) value = "";
-                          else {
-                            if (value < 1) value = 1;
-                            if (value > material.cantidadDisponible)
-                              value = material.cantidadDisponible;
-                          }
-                          setCantidad(value);
-                        }}
-                      />
-                      <p>
-                        Fecha:{" "}
+                    ) : (
+                      <>
+                        <p>
+                          Material seleccionado:{" "}
+                          <strong>{material.nombre}</strong> (
+                          {material.cantidadDisponible} unidades disponibles)
+                        </p>
+                        Selecciona la cantidad que desas reservar:{" "}
                         <input
-                          type="date"
-                          value={fecha}
-                          min={hoy}
-                          max={fechaMaxStr}
-                          onChange={(e) => setFecha(e.target.value)}
-                          onKeyDown={(e) => e.preventDefault()}
+                          className="number"
+                          type="number"
+                          name="cantidad"
+                          min={1}
+                          max={material.cantidadDisponible}
+                          step={1}
+                          value={cantidadSeleccionada}
+                          onChange={(e) => {
+                            let value = parseInt(e.target.value, 10);
+                            if (isNaN(value)) value = "";
+                            else {
+                              if (value < 1) value = 1;
+                              if (value > material.cantidadDisponible)
+                                value = material.cantidadDisponible;
+                            }
+                            setCantidad(value);
+                          }}
                         />
-                      </p>
-                      <hr />
-                      <button
-                        className="btn btn-primary"
-                        onClick={handleConfirmarReservaMaterial}
-                      >
-                        Confirmar Préstamo
-                      </button>
-                    </>
-                  )
-                ) : (
-                  <p>Material no encontrado.</p>
-                );
-              })()}
-            </div>
-          )}
-        </Col>
-      </Row>
+                        <p>
+                          Fecha:{" "}
+                          <input
+                          className="dateMaterial"
+                            type="date"
+                            value={fecha}
+                            min={hoy}
+                            max={fechaMaxStr}
+                            onChange={(e) => setFecha(e.target.value)}
+                            onKeyDown={(e) => e.preventDefault()}
+                          />
+                        </p>
+                        <hr />
+                        <button
+                          className="btn btn-primary"
+                          onClick={handleConfirmarReservaMaterial}
+                        >
+                          Confirmar Préstamo
+                        </button>
+                      </>
+                    )
+                  ) : (
+                    <p>Material no encontrado.</p>
+                  );
+                })()}
+              </div>
+            )}
+          </Col>
+        </Row>
 
-      <GeneralProvider>{/* contexto general si aplica */}</GeneralProvider>
+        <GeneralProvider>{/* contexto general si aplica */}</GeneralProvider>
 
-      <ThemeSwitcher />
+        <ThemeSwitcher />
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-    </Container>
+      </Container>
+    </div>
   );
 }
 

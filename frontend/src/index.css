@@ -3,6 +3,7 @@
 #root {
   margin: 0;
   font-family: IBM Plex Sans;
+  height: 100%;
 }
 
 .content {
