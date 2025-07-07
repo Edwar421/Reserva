@@ -17,14 +17,17 @@ interface Props {
   nombreEspacio: string;
 }
 
+interface ReservaInfo {
+  id: number;
+  usuarioNombre: string;
+  email: string;
+}
+
 interface DisponibilidadSlot {
-  hora: string;
+  horaInicio: string;
   horaFin: string;
   disponible: boolean;
-  reserva?: {
-    id: number;
-    usuarioNombre: string;
-  };
+  reservas?: ReservaInfo[];
   calendarioId: number;
 }
 
@@ -126,7 +129,6 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setLoading(false);
-      alert(disponibilidadSemana.length)
     }
   };
 
@@ -136,7 +138,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
     }
   }, [idEspacio, semanaActual]);
 
-  const handleReservarHorario = (
+  const handleReservarHorario = async (
     fecha: string,
     dia: string,
     horaInicio: string,
@@ -153,26 +155,29 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
       calendarioId,
     });
     setShowModal(true);
+    return true;
   };
   //Calendario
 
   const [capacidadEspacio, setCapacidad] = useState("");
   const [idCalendarioCreado, setIdCalendario] = useState(null);
-  const obtenerCapacidaEspacio = async (id) => {
+  const obtenerCapacidaEspacio = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/espacios/${id}`);
+      const response = await fetch(
+        `http://localhost:3000/espacios/${idEspacio}`
+      );
       if (!response.ok) throw new Error("Error el epacio");
       const json = await response.json();
       const espacio = json;
-      setCapacidad(espacio.capacidad);
+      return espacio.capacidad;
     } catch (error) {
       console.error("Error al obtener la capacidad del espacio: ", error);
     }
   };
 
-  const handleCrearCalendario = async (fecha, horaInicio, horaFin, espacioId) => {
+  const handleCrearCalendario = async (fecha, horaInicio, horaFin) => {
     try {
-      obtenerCapacidaEspacio(espacioId);
+      const cantidad = await obtenerCapacidaEspacio();
       const response = await fetch("http://localhost:3000/calendario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -180,9 +185,9 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
           fecha: fecha,
           horaInicio: horaInicio,
           horaFin: horaFin,
-          capacidad: capacidadEspacio,
+          capacidad: cantidad,
           disponibilidad: true,
-          espacioId: espacioId,
+          espacioId: idEspacio,
         }),
       });
 
@@ -190,6 +195,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
         const data = await response.json();
         const idCalendario = data.id;
         setIdCalendario(idCalendario);
+        return idCalendario;
         //await cargarDisponibilidadSemana();
       } else {
         const error = await response.json();
@@ -305,66 +311,61 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                         </td>
                         {disponibilidadSemana.map((dia) => {
                           const slot = dia.disponibilidad.find(
-                            (s) => s.hora === hora
+                            (s) => s.horaInicio === hora
                           );
+
+                          const slotDateTime = new Date(`${dia.fecha}T${hora}`);
+                          const ahora = new Date();
+                          const esPasado = slotDateTime < ahora;
+                          var idcale;
+                          if (esPasado) {
+                            return <td>No disponible</td>;
+                          }
+
                           if (!slot) {
                             return (
                               <td
                                 key={`${dia.fecha}-${hora}`}
                                 className="disponible"
                                 onClick={async () => {
-                                  handleCrearCalendario(
+                                  const idCalendario =await handleCrearCalendario(
                                     dia.fecha,
                                     hora,
-                                    horaFin,
-                                    idEspacio
-                                  )
-                                  handleReservarHorario(
+                                    horaFin
+                                  );
+                                  await handleReservarHorario(
                                     dia.fecha,
                                     dia.dia,
                                     hora,
                                     horaFin,
-                                    Number(idCalendarioCreado)
+                                    Number(idCalendario)
                                   );
                                 }}
                               >
-                                Disponible
+                                Libre
                               </td>
                             );
                           }
-                          alert(slot)
-                          const slotDateTime = new Date(`${dia.fecha}T${hora}`);
-                          const ahora = new Date();
-                          const esPasado = slotDateTime < ahora;
+
                           const idCalendario = slot.calendarioId;
                           return (
                             <td
                               key={`${dia.fecha}-${hora}`}
                               className={
-                                esPasado
-                                  ? "pasado"
-                                  : slot.disponible
-                                  ? "disponible"
-                                  : "ocupado"
+                                slot.disponible ? "disponible" : "ocupado"
                               }
-                              onClick={() =>
-                                !esPasado &&
+                              onClick={async () =>
                                 slot.disponible &&
-                                handleReservarHorario(
+                                (await handleReservarHorario(
                                   dia.fecha,
                                   dia.dia,
                                   hora,
                                   horaFin,
                                   idCalendario
-                                )
+                                ))
                               }
                             >
-                              slot.idCalendario
-                              {esPasado
-                                ? "No disponible"
-                                : slot.disponible
-                                ? "Libre"
-                                : slot.reserva?.usuarioNombre || "Ocupado"}
+                              {slot.disponible ? "Disponible" : "Ocupado"}
                             </td>
                           );
                         })}

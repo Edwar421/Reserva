@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Reserva, EstadoReserva } from '../../../database/Entidades/reserva.entity';
+import {
+  Reserva,
+  EstadoReserva,
+} from '../../../database/Entidades/reserva.entity';
 import { CreateReservaDto } from '../dto/create.dto';
 import { UpdateReservaDto } from '../dto/update.dto';
 import { Calendario } from '../../../database/Entidades/calendario.entity';
@@ -26,6 +29,8 @@ export class ReservaService {
     });
     if (!calendario) throw new NotFoundException('Calendario no encontrado');
 
+    if (calendario.capacidad < 1) throw new NotFoundException('No hay cupos');
+
     const usuario = await this.usuarioRepository.findOne({
       where: { email: dto.usuarioId },
     });
@@ -39,6 +44,21 @@ export class ReservaService {
       comentario: dto.comentario,
       observacionesEntrega: dto.observacionesEntrega,
     });
+    
+    const capacidadNueva=calendario.capacidad - 1;
+    var disponible=true
+    if(capacidadNueva===0) disponible=false
+    await this.calendarioRepository.update(
+      { id: calendario.id },
+      { capacidad: capacidadNueva, disponibilidad: disponible},
+    );
+
+    if (calendario.capacidad === 0) {
+      await this.calendarioRepository.update(
+        { id: calendario.id },
+        { disponibilidad: false },
+      );
+    }
 
     return this.reservaRepository.save(reserva);
   }
@@ -86,7 +106,8 @@ export class ReservaService {
     reserva.estado = dto.estado ?? reserva.estado;
     reserva.calificacion = dto.calificacion ?? reserva.calificacion;
     reserva.comentario = dto.comentario ?? reserva.comentario;
-    reserva.observacionesEntrega = dto.observacionesEntrega ?? reserva.observacionesEntrega;
+    reserva.observacionesEntrega =
+      dto.observacionesEntrega ?? reserva.observacionesEntrega;
 
     return this.reservaRepository.save(reserva);
   }
@@ -107,10 +128,11 @@ export class ReservaService {
       horaFin: c.horaFin,
       disponible: c.disponibilidad,
       capacidad: c.capacidad,
-      reservas: c.reservas?.map((r) => ({
-        reservaId: r.id,
-        usuarioNombre: r.usuario?.nombre || 'Desconocido',
-      })) || [],
+      reservas:
+        c.reservas?.map((r) => ({
+          reservaId: r.id,
+          usuarioNombre: r.usuario?.nombre || 'Desconocido',
+        })) || [],
     }));
 
     return { disponibilidad };

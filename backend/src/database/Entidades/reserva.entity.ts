@@ -30,7 +30,7 @@ export class Reserva {
   @Column({
     type: 'enum',
     enum: EstadoReserva,
-    default: EstadoReserva.ACTIVA
+    default: EstadoReserva.PENDIENTE
   })
   estado: EstadoReserva;
 

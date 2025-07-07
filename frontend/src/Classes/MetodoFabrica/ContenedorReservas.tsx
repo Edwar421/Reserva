@@ -120,15 +120,15 @@ class ContenedorReservas extends Contenedor {
               >
                 <div onClick={() => handleShow(reserva)}>
                   <ComponenteReserva
-                    nombre={reserva.espacio.nombre}
-                    tipo={reserva.espacio.tipo}
-                    capacidad={reserva.espacio.capacidad}
-                    descripcion={reserva.espacio.descripcion}
-                    cantidad={reserva.cantidad}
+                    nombre={reserva.calendario.espacio.nombre}
+                    tipo={reserva.calendario.espacio.tipo}
+                    capacidad={reserva.calendario.espacio.capacidad}
+                    descripcion={reserva.calendario.espacio.descripcion}
+                    cantidad={reserva.calendario.capacidad}
                     disponible={reserva.estado}
-                    fecha={reserva.fecha}
-                    horaInicio={reserva.horaInicio}
-                    horaFin={reserva.horaFin}
+                    fecha={reserva.calendario.fecha}
+                    horaInicio={reserva.calendario.horaInicio}
+                    horaFin={reserva.calendario.horaFin}
                   />
                 </div>
                 {reserva.estado === "pendiente" && (
@@ -173,8 +173,8 @@ class ContenedorReservas extends Contenedor {
           <Modal.Body>
             <p>
               ¿Cómo calificarías el espacio{" "}
-              <strong>{reserva?.espacio?.nombre || "Desconocido"}</strong>-
-              <strong>{reserva?.espacio?.tipo || "Desconocido"}</strong>?
+              <strong>{reserva?.calendario?.espacio?.nombre || "Desconocido"}</strong>-
+              <strong>{reserva?.calendario?.espacio?.tipo || "Desconocido"}</strong>?
             </p>
 
             <div className="mb-3">
@@ -247,8 +247,8 @@ class ContenedorReservas extends Contenedor {
           <Modal.Body>
             <p>
               Espacio:{" "}
-              <strong>{reserva?.espacio?.nombre || "Desconocido"}</strong> -
-              <strong>{reserva?.espacio?.tipo || "Desconocido"}</strong>
+              <strong>{reserva?.calendario?.espacio?.nombre || "Desconocido"}</strong> -
+              <strong>{reserva?.calendario?.espacio?.tipo || "Desconocido"}</strong>
             </p>
             <p>Calificación: {reserva?.calificacion || "No calificado"}</p>
             <p>
