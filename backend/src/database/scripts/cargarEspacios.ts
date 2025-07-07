@@ -47,9 +47,11 @@ async function cargarEspaciosDesdeArchivo() {
         case 'Laboratorio de Física':
           tipoEspacio = TipoEspacio.LAB_FISICA;
           break;
+        case 'Auditorio':
+          tipoEspacio = TipoEspacio.AUDITORIO;
         default:
           console.warn(`Tipo de espacio no reconocido: ${tipoLimpio}, usando Aula por defecto`);
-          tipoEspacio = TipoEspacio.AULA;
+          tipoEspacio = TipoEspacio.AUDITORIO;
       }
       
       // Crear el nuevo espacio

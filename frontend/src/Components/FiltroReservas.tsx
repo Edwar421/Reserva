@@ -1,14 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
-import { useEspacios } from '../hooks/useEspacios';
-import { FiltrosReserva } from '../types/reserva.types';
+import React, { useState, useMemo, useEffect } from "react";
+import { Form, Row, Col, Button } from "react-bootstrap";
+import { useEspacios } from "../hooks/useEspacios";
+import { FiltrosReserva } from "../types/reserva.types";
 
 interface Props {
   onSelectEspacio: (espacioId: string | null) => void;
   onFiltrosChange?: (filtros: FiltrosReserva) => void;
 }
 
-const FiltroReservas: React.FC<Props> = ({ onSelectEspacio, onFiltrosChange }) => {
+const FiltroReservas: React.FC<Props> = ({
+  onSelectEspacio,
+  onFiltrosChange,
+}) => {
+  const [tipoUsuairo, setTipoUsuario] = useState("");
+  const email = localStorage.getItem("email");
   // Estado de filtros locales
   const [filtros, setFiltros] = useState<FiltrosReserva>({});
 
@@ -17,8 +22,8 @@ const FiltroReservas: React.FC<Props> = ({ onSelectEspacio, onFiltrosChange }) =
 
   // Aplicar filtro en el cliente según el tipo de espacio seleccionado
   const espaciosFiltrados = useMemo(() => {
-    if (!filtros.tipoEspacio) return espacios;
-    return espacios.filter(espacio => espacio.tipo === filtros.tipoEspacio);
+    if (!filtros.tipoEspacio) if (tipoUsuairo == "Profesor") return espacios;
+    return espacios.filter((espacio) => espacio.tipo === filtros.tipoEspacio);
   }, [espacios, filtros.tipoEspacio]);
 
   // Manejo de cambio en filtros
@@ -36,6 +41,26 @@ const FiltroReservas: React.FC<Props> = ({ onSelectEspacio, onFiltrosChange }) =
     onFiltrosChange?.({});
   };
 
+  //Mostra auditorio al profesor unicamente
+
+  const obtenerUsuario = async (email) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/usuario/consultarEmail/${email}`
+      );
+      if (!response.ok) throw new Error("Error al obtener usuario");
+      const json = await response.json();
+      const usuario = json;
+      setTipoUsuario(usuario.tipo);
+    } catch (error) {
+      console.error("Error al obtener usuario:", error);
+    }
+  };
+
+  useEffect(() => {
+    obtenerUsuario(email);
+  }, []);
+
   return (
     <Form className="mb-4 p-3 border rounded">
       {/* Filtro por tipo de espacio */}
@@ -44,13 +69,20 @@ const FiltroReservas: React.FC<Props> = ({ onSelectEspacio, onFiltrosChange }) =
           <Form.Group>
             <Form.Label>Tipo de Espacio</Form.Label>
             <Form.Select
-              value={filtros.tipoEspacio || ''}
-              onChange={(e) => handleFiltroChange('tipoEspacio', e.target.value || undefined)}
+              value={filtros.tipoEspacio || ""}
+              onChange={(e) =>
+                handleFiltroChange("tipoEspacio", e.target.value || undefined)
+              }
             >
               <option value="">Todos los tipos</option>
               <option value="Aula">Aula</option>
-              <option value="Laboratorio de Computación">Lab. Computación</option>
+              <option value="Laboratorio de Computación">
+                Lab. Computación
+              </option>
               <option value="Laboratorio de Física">Lab. Física</option>
+              {tipoUsuairo === "Profesor" && (
+                <option value="Auditorio">Auditorio</option>
+              )}
             </Form.Select>
           </Form.Group>
         </Col>
@@ -68,7 +100,8 @@ const FiltroReservas: React.FC<Props> = ({ onSelectEspacio, onFiltrosChange }) =
               <option value="">Seleccione un espacio</option>
               {espaciosFiltrados.map((espacio) => (
                 <option key={espacio.id} value={espacio.id}>
-                  {espacio.nombre} - {espacio.tipo} (Capacidad: {espacio.capacidad})
+                  {espacio.nombre} - {espacio.tipo} (Capacidad:{" "}
+                  {espacio.capacidad})
                 </option>
               ))}
             </Form.Select>
@@ -77,7 +110,11 @@ const FiltroReservas: React.FC<Props> = ({ onSelectEspacio, onFiltrosChange }) =
       </Row>
 
       {/* Botón para limpiar */}
-      <Button variant="outline-secondary" onClick={limpiarFiltros} disabled={loading}>
+      <Button
+        variant="outline-secondary"
+        onClick={limpiarFiltros}
+        disabled={loading}
+      >
         Limpiar Filtros
       </Button>
 

@@ -26,7 +26,7 @@ function GestionMateriales() {
   //Actualizar el estado de un material
   const [mostrarModal, setMostrarModal] = useState(false);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
-  const [nuevoEstado, setNuevoEstado] = useState("Pendiente");
+  const [nuevoEstado, setNuevoEstado] = useState("");
 
   //Filtro
   const [filtroEmail, setFiltroEmail] = useState("");
@@ -125,32 +125,32 @@ function GestionMateriales() {
                 <Card.Text>Estado: {material.estado}</Card.Text>
               </Card.Body>
               <div className="text-center" style={{ marginBottom: "10px" }}>
-                {material.estado!=="Devuelto" &&(
-                <Button
-                  variant="primary"
-                  style={{ width: "150px" }}
-                  className="actualizarEstado"
-                  onClick={() => {
-                    setReservaSeleccionada(material);
-                    setNuevoEstado(material.estado); // inicia con el estado actual
-                    setMostrarModal(true);
-                  }}
-                >
-                  Actualizar estado
-                </Button>
-              )}
-              {material.estado==="Devuelto" &&(
-                <Button
-                  variant="secondary"
-                  style={{ width: "150px" }}
-                  className="observaciones"
-                  onClick={() => {
-                    setReservaSeleccionada(material);
-                  }}
-                >
-                  Observaciones
-                </Button>
-              )}
+                {material.estado !== "Devuelto" && (
+                  <Button
+                    variant="primary"
+                    style={{ width: "150px" }}
+                    className="actualizarEstado"
+                    onClick={() => {
+                      setReservaSeleccionada(material);
+                      setNuevoEstado(material.estado); // inicia con el estado actual
+                      setMostrarModal(true);
+                    }}
+                  >
+                    Actualizar estado
+                  </Button>
+                )}
+                {material.estado === "Devuelto" && (
+                  <Button
+                    variant="secondary"
+                    style={{ width: "150px" }}
+                    className="observaciones"
+                    onClick={() => {
+                      setReservaSeleccionada(material);
+                    }}
+                  >
+                    Observaciones
+                  </Button>
+                )}
               </div>
             </Card>
           ))}
@@ -171,6 +171,7 @@ function GestionMateriales() {
                 value={nuevoEstado}
                 onChange={(e) => setNuevoEstado(e.target.value)}
               >
+                <option value="">Seleccione el estado</option>
                 <option value="Entregado">Entregado</option>
                 <option value="Devuelto">Devuelto</option>
               </Form.Select>
@@ -196,11 +197,13 @@ function GestionMateriales() {
                         }
                       );
                       if (!response.ok)
-                        throw new Error("Error al actualizar estado");
+                        alert("Error al actualizar el estado: "+response.error)
                       await obtenerMateriales(); // recarga la lista
                       setMostrarModal(false);
+                      alert("Estado actualizado correctamente")
                     } catch (error) {
                       console.error("Error actualizando estado:", error);
+                      alert("Error al actualizar el estado: "+error)
                     }
                   }}
                 >

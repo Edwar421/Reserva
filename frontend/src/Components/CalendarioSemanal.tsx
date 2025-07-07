@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Badge, Button, Alert, Spinner, Table } from 'react-bootstrap';
-import ConfirmacionReserva from './ConfirmacionReserva';
-import '../Styles/Calendario.css'; // Asegúrate de tener estilos para la tabla
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  Row,
+  Col,
+  Badge,
+  Button,
+  Alert,
+  Spinner,
+  Table,
+} from "react-bootstrap";
+import ConfirmacionReserva from "./ConfirmacionReserva";
+import "../Styles/Calendario.css"; // Asegúrate de tener estilos para la tabla
 
 interface Props {
   idEspacio: number;
@@ -16,6 +25,7 @@ interface DisponibilidadSlot {
     id: number;
     usuarioNombre: string;
   };
+  calendarioId: number;
 }
 
 interface DisponibilidadDia {
@@ -37,19 +47,38 @@ interface ReservaSeleccionada {
   dia: string;
   horaInicio: string;
   horaFin: string;
+  calendarioId: number;
 }
 
 const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
   const [semanaActual, setSemanaActual] = useState(0);
-  const [disponibilidadSemana, setDisponibilidadSemana] = useState<DisponibilidadDia[]>([]);
+  const [disponibilidadSemana, setDisponibilidadSemana] = useState<
+    DisponibilidadDia[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [reservaSeleccionada, setReservaSeleccionada] = useState<ReservaSeleccionada | null>(null);
+  const [reservaSeleccionada, setReservaSeleccionada] =
+    useState<ReservaSeleccionada | null>(null);
 
-  const horariosBase = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+  const horariosBase = [
+    "06:00",
+    "08:00",
+    "10:00",
+    "12:00",
+    "14:00",
+    "16:00",
+    "18:00",
+  ];
 
-  const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const diasSemana = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ];
 
   const obtenerFechasSemana = (semanaOffset: number = 0): FechaSemana[] => {
     const hoy = new Date();
@@ -64,7 +93,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
       const fecha = new Date(inicioSemana);
       fecha.setDate(inicioSemana.getDate() + i);
       fechasSemana.push({
-        fecha: fecha.toISOString().split('T')[0],
+        fecha: fecha.toISOString().split("T")[0],
         dia: diasSemana[i],
         fechaCompleta: fecha,
       });
@@ -77,22 +106,27 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
       setLoading(true);
       setError(null);
       const fechasSemana = obtenerFechasSemana(semanaActual);
-      const disponibilidadPromesas = fechasSemana.map(async ({ fecha, dia }) => {
-        const response = await fetch(`http://localhost:3000/reservas/disponibilidad/${idEspacio}?fecha=${fecha}`);
-        if (!response.ok) throw new Error('Error al cargar disponibilidad');
-        const data = await response.json();
-        return {
-          fecha,
-          dia,
-          disponibilidad: data.disponibilidad,
-        };
-      });
+      const disponibilidadPromesas = fechasSemana.map(
+        async ({ fecha, dia }) => {
+          const response = await fetch(
+            `http://localhost:3000/reservas/disponibilidad/${idEspacio}?fecha=${fecha}`
+          );
+          if (!response.ok) throw new Error("Error al cargar disponibilidad");
+          const data = await response.json();
+          return {
+            fecha,
+            dia,
+            disponibilidad: data.disponibilidad,
+          };
+        }
+      );
       const resultados = await Promise.all(disponibilidadPromesas);
       setDisponibilidadSemana(resultados);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error desconocido');
+      setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setLoading(false);
+      alert(disponibilidadSemana.length)
     }
   };
 
@@ -102,7 +136,13 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
     }
   }, [idEspacio, semanaActual]);
 
-  const handleReservarHorario = (fecha: string, dia: string, horaInicio: string, horaFin: string) => {
+  const handleReservarHorario = (
+    fecha: string,
+    dia: string,
+    horaInicio: string,
+    horaFin: string,
+    calendarioId: number
+  ) => {
     setReservaSeleccionada({
       espacioId: idEspacio,
       nombreEspacio,
@@ -110,21 +150,64 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
       dia,
       horaInicio,
       horaFin,
+      calendarioId,
     });
     setShowModal(true);
+  };
+  //Calendario
+
+  const [capacidadEspacio, setCapacidad] = useState("");
+  const [idCalendarioCreado, setIdCalendario] = useState(null);
+  const obtenerCapacidaEspacio = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/espacios/${id}`);
+      if (!response.ok) throw new Error("Error el epacio");
+      const json = await response.json();
+      const espacio = json;
+      setCapacidad(espacio.capacidad);
+    } catch (error) {
+      console.error("Error al obtener la capacidad del espacio: ", error);
+    }
+  };
+
+  const handleCrearCalendario = async (fecha, horaInicio, horaFin, espacioId) => {
+    try {
+      obtenerCapacidaEspacio(espacioId);
+      const response = await fetch("http://localhost:3000/calendario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fecha: fecha,
+          horaInicio: horaInicio,
+          horaFin: horaFin,
+          capacidad: capacidadEspacio,
+          disponibilidad: true,
+          espacioId: espacioId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const idCalendario = data.id;
+        setIdCalendario(idCalendario);
+        //await cargarDisponibilidadSemana();
+      } else {
+        const error = await response.json();
+        alert(`Error calendario: ${error.error}`);
+      }
+    } catch (err) {
+      alert("Error al crear el calendario");
+    }
   };
 
   const handleConfirmarReserva = async () => {
     if (!reservaSeleccionada) return;
     try {
-      const response = await fetch('http://localhost:3000/reservas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/reservas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          espacioId: reservaSeleccionada.espacioId,
-          fecha: reservaSeleccionada.fecha,
-          horaInicio: reservaSeleccionada.horaInicio,
-          horaFin: reservaSeleccionada.horaFin,
+          calendarioId: reservaSeleccionada.calendarioId,
           usuarioId: localStorage.getItem("email"),
         }),
       });
@@ -133,13 +216,13 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
         setShowModal(false);
         setReservaSeleccionada(null);
         await cargarDisponibilidadSemana();
-        alert('Reserva creada exitosamente');
+        alert("Reserva creada exitosamente");
       } else {
         const error = await response.json();
         alert(`Error: ${error.error}`);
       }
     } catch (err) {
-      alert('Error al crear la reserva');
+      alert("Error al crear la reserva");
     }
   };
 
@@ -149,14 +232,14 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
 
   const formatearRangoSemana = () => {
     const fechas = obtenerFechasSemana(semanaActual);
-    const inicio = fechas[0].fechaCompleta.toLocaleDateString('es-ES', {
-      day: 'numeric',
-      month: 'long',
+    const inicio = fechas[0].fechaCompleta.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
     });
-    const fin = fechas[5].fechaCompleta.toLocaleDateString('es-ES', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
+    const fin = fechas[5].fechaCompleta.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     });
     return `${inicio} - ${fin}`;
   };
@@ -183,7 +266,11 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
             >
               ← Semana Anterior
             </Button>
-            <Button variant="outline-primary" size="sm" onClick={() => cambiarSemana(1)}>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => cambiarSemana(1)}
+            >
               Semana Siguiente →
             </Button>
           </div>
@@ -195,7 +282,7 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
               <Spinner animation="border" />
               <p>Cargando disponibilidad semanal...</p>
             </div>
-          ) : disponibilidadSemana.length > 0 ? (
+          ) : (
             <div className="table-responsive">
               <Table bordered hover size="sm" className="tabla-horario">
                 <thead className="table-light">
@@ -211,49 +298,82 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
                     const horaFin = calcularHoraFin(hora);
                     return (
                       <tr key={hora}>
-                        <td><strong>{hora} - {horaFin}</strong></td>
+                        <td>
+                          <strong>
+                            {hora} - {horaFin}
+                          </strong>
+                        </td>
                         {disponibilidadSemana.map((dia) => {
-                          const slot = dia.disponibilidad.find((s) => s.hora === hora);
+                          const slot = dia.disponibilidad.find(
+                            (s) => s.hora === hora
+                          );
                           if (!slot) {
-                            return <td key={`${dia.fecha}-${hora}`} className="no-disponible">—</td>;
+                            return (
+                              <td
+                                key={`${dia.fecha}-${hora}`}
+                                className="disponible"
+                                onClick={async () => {
+                                  handleCrearCalendario(
+                                    dia.fecha,
+                                    hora,
+                                    horaFin,
+                                    idEspacio
+                                  )
+                                  handleReservarHorario(
+                                    dia.fecha,
+                                    dia.dia,
+                                    hora,
+                                    horaFin,
+                                    Number(idCalendarioCreado)
+                                  );
+                                }}
+                              >
+                                Disponible
+                              </td>
+                            );
                           }
+                          alert(slot)
                           const slotDateTime = new Date(`${dia.fecha}T${hora}`);
                           const ahora = new Date();
                           const esPasado = slotDateTime < ahora;
-
+                          const idCalendario = slot.calendarioId;
                           return (
                             <td
                               key={`${dia.fecha}-${hora}`}
                               className={
                                 esPasado
-                                  ? 'pasado'
+                                  ? "pasado"
                                   : slot.disponible
-                                    ? 'disponible'
-                                    : 'ocupado'
+                                  ? "disponible"
+                                  : "ocupado"
                               }
                               onClick={() =>
-                                !esPasado && slot.disponible &&
-                                handleReservarHorario(dia.fecha, dia.dia, hora, horaFin)
+                                !esPasado &&
+                                slot.disponible &&
+                                handleReservarHorario(
+                                  dia.fecha,
+                                  dia.dia,
+                                  hora,
+                                  horaFin,
+                                  idCalendario
+                                )
                               }
                             >
+                              slot.idCalendario
                               {esPasado
-                                ? 'No disponible'
+                                ? "No disponible"
                                 : slot.disponible
-                                  ? 'Libre'
-                                  : slot.reserva?.usuarioNombre || 'Ocupado'}
+                                ? "Libre"
+                                : slot.reserva?.usuarioNombre || "Ocupado"}
                             </td>
                           );
-
                         })}
                       </tr>
                     );
                   })}
                 </tbody>
               </Table>
-
             </div>
-          ) : (
-            <Alert variant="info">No hay datos de disponibilidad para mostrar</Alert>
           )}
         </Card.Body>
       </Card>
@@ -269,9 +389,11 @@ const CalendarioSemanal: React.FC<Props> = ({ idEspacio, nombreEspacio }) => {
 };
 
 function calcularHoraFin(horaInicio: string): string {
-  const [horas, minutos] = horaInicio.split(':').map(Number);
+  const [horas, minutos] = horaInicio.split(":").map(Number);
   const nuevaHora = horas + 2;
-  return `${nuevaHora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+  return `${nuevaHora.toString().padStart(2, "0")}:${minutos
+    .toString()
+    .padStart(2, "0")}`;
 }
 
 export default CalendarioSemanal;

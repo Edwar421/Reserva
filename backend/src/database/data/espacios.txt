@@ -49,3 +49,5 @@ Laboratorio 604;Laboratorio de Física;25;Lab. de física con equipo
 Laboratorio 605;Laboratorio de Física;25;Lab. de física con equipo
 Laboratorio 606;Laboratorio de Física;25;Lab. de física con equipo
 Laboratorio 607;Laboratorio de Física;25;Lab. de física con equipo
+Auditorio 1;Auditorio;100;Auditorio General
+Auditorio 2;Auditorio;150;Auditorio Principal
