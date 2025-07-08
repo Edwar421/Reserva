@@ -6,6 +6,8 @@ import { GeneralProvider } from "../Utils/GeneralContext";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
 import ContenedorCartas from "../Components/ContenedorCartas";
+import "../Styles/Gestion.css";
+
 
 function GestionMateriales() {
   const [materiales, setMateriales] = useState([]);
@@ -159,29 +161,32 @@ function GestionMateriales() {
         <br />
         <br />
         <br />
-        /* Ventana emergente para actualizar el estado */
+      
         {mostrarModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h5>
+          <div className="modalOverlay">
+            <div className="modalContent">
+              <h5 className="titleUp text-center">
                 Actualizar estado para la reserva #{reservaSeleccionada?.id}
               </h5>
               <Form.Select
                 value={nuevoEstado}
+                className="selectUp"
                 onChange={(e) => setNuevoEstado(e.target.value)}
               >
                 <option value="">Seleccione el estado</option>
                 <option value="Entregado">Entregado</option>
                 <option value="Devuelto">Devuelto</option>
               </Form.Select>
-              <div className="mt-3 d-flex justify-content-between">
+              <div className="mt-3 d-flex justify-content-evenly">
                 <Button
                   variant="secondary"
+                  style= {{boxShadow:"0 0 8px rgba(78, 77, 77, 0.51)"}}
                   onClick={() => setMostrarModal(false)}
                 >
                   Cancelar
                 </Button>
                 <Button
+                  style= {{boxShadow:"0 0 8px rgba(4, 122, 18, 0.51)"}}
                   variant="success"
                   onClick={async () => {
                     try {

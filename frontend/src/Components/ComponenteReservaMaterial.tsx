@@ -21,6 +21,15 @@ function ComponenteReservaMaterial({
       ? "danger"
       : "primary";
 
+  const shadowColors = {
+    success: "0 0 8px rgba(25, 135, 84, 0.98)",   
+    danger: "0 0 8px rgba(220, 53, 69, 0.98)",    
+    primary: "0 0 8px rgba(13, 110, 253, 0.98)"   
+
+    };
+
+  const boxShadowColor = shadowColors[badgeColor];
+
   return (
     <Col className="text-center centered">
       <Card
@@ -40,7 +49,7 @@ function ComponenteReservaMaterial({
                 <br />
               </>
             )}
-            <Badge bg={badgeColor} style={{textTransform:"uppercase", boxShadow: "0 0 8px rgba(235, 8, 8, 0.98)", marginTop:"3px"}}>{estado}</Badge>
+            <Badge bg={badgeColor} style={{textTransform:"uppercase", boxShadow: boxShadowColor, marginTop:"3px"}}>{estado}</Badge>
             <hr />
               <small>Horario</small>
               <br />

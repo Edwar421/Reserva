@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Alert, Row, Col } from 'react-bootstrap';
+import "../Styles/Gestion.css";
 
 interface ReservaSeleccionada {
   espacioId: number;
@@ -45,7 +46,7 @@ const ConfirmacionReserva: React.FC<Props> = ({ show, onHide, reserva, onConfirm
         <Modal.Title>
           <i className="bi bi-calendar-check me-2"></i>Confirmar Reserva
         </Modal.Title>
-      </Modal.Header>
+      </Modal.Header> 
 
       <Modal.Body>
         {showConfirmAlert && (
@@ -59,11 +60,11 @@ const ConfirmacionReserva: React.FC<Props> = ({ show, onHide, reserva, onConfirm
           </Alert>
         )}
 
-        <div className="reservation-details">
+        <div className="reservationDetails">
           <Row className="mb-3">
             <Col sm={4}><strong>Espacio:</strong></Col>
             <Col sm={8}>
-              <span className="text-primary fw-bold">{reserva.nombreEspacio}</span>
+              <span className="fw-bold">{reserva.nombreEspacio}</span>
             </Col>
           </Row>
           <Row className="mb-3">
@@ -73,7 +74,7 @@ const ConfirmacionReserva: React.FC<Props> = ({ show, onHide, reserva, onConfirm
           <Row className="mb-3">
             <Col sm={4}><strong>Horario:</strong></Col>
             <Col sm={8}>
-              <span className="badge bg-success fs-6">
+              <span className="blockReserv badge bg-success fs-6">
                 {reserva.horaInicio} - {reserva.horaFin}
               </span>
             </Col>
@@ -101,10 +102,10 @@ const ConfirmacionReserva: React.FC<Props> = ({ show, onHide, reserva, onConfirm
 
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={onHide}>
-          <i className="bi bi-x-circle me-1"></i> Cancelar
+           Cancelar
         </Button>
         <Button variant="primary" onClick={onConfirmar}>
-          <i className="bi bi-check-circle me-1"></i> Confirmar Reserva
+           Confirmar Reserva
         </Button>
       </Modal.Footer>
     </Modal>
