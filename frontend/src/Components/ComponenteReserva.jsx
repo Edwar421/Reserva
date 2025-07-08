@@ -24,19 +24,26 @@ function ComponenteReserva({
   return (
     <Col className="text-center centered">
       <Card
-        style={{ width: "200px", height: "auto", margin: "auto" }}
+        style={{ width: "250px", height: "auto", margin: "0 auto 40px" }}
         className={`custom-card ${!disponible ? "opacity-75" : ""}`}
       >
         <Card.Header className="text-center">
           <i className="fas fa-calendar-alt fa-2x text-primary"></i>
         </Card.Header>
         <Card.Body>
-          <Card.Text>
+          <Card.Text style={{}} >
             <strong>{nombre}</strong>
             <br />
             {tipo && (
               <>
-                <Badge bg="info" className="me-2">
+                <Badge 
+                  bg="info" 
+                  style={{ textTransform: "uppercase",  
+                    boxShadow: "0 0 8px rgba(52, 190, 211, 0.5)", 
+                    marginBottom:"10px",
+                    transform: "translateX(2%)"
+                  }} 
+                  className="me-2">
                   {tipo}
                 </Badge>
                 <br />
@@ -56,7 +63,7 @@ function ComponenteReserva({
             )}
             {descripcion && <small className="text-muted">{descripcion}</small>}
             <br />
-            <Badge bg={badgeColor}>{estado}</Badge>
+            <Badge bg={badgeColor} style={{ textTransform: "uppercase", boxShadow: "0 0 8px rgba(52, 211, 57, 0.5)"}}>{estado}</Badge>
             <hr />
             
               <small>Horario</small>

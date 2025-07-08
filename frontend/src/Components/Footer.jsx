@@ -1,6 +1,7 @@
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
 import "../Styles/Footer.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +22,9 @@ const Footer = () => {
           data-testid="Footer"
         >
           <Row>
-            <Col xs lg={4}></Col>
+            <Col xs lg={4}>
+              <Image className="logoFooter" src="/logo.png" fluid width="22%" />
+            </Col>
             <Col className="text-center">
               <a href="https://www.instagram.com/udistrital_oficial/" className="btn">
                 Nosotros

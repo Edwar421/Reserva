@@ -3,6 +3,7 @@ import { Button, Col, Row, Modal } from "react-bootstrap";
 import Contenedor from "./Contenedor";
 import ComponenteReserva from "../../Components/ComponenteReserva";
 import { useGeneral } from "../../Utils/GeneralContext";
+import "/src/Styles/Contenedor.css";
 
 class ContenedorReservas extends Contenedor {
   render(): JSX.Element {
@@ -99,8 +100,8 @@ class ContenedorReservas extends Contenedor {
 
     return (
       <>
-        <div className="align-self-start ps-5 pt-5 mb-5">
-          <h1 data-testid="Espacios para reservar">Tus espacios reservados:</h1>
+        <div className="align-self-start ps-5 pt-5 mb-3">
+          <h3 data-testid="Espacios para reservar">Tus espacios reservados:</h3>
         </div>
         <Row
           className="align-items-center"
@@ -162,7 +163,7 @@ class ContenedorReservas extends Contenedor {
               </Col>
             ))
           ) : (
-            <p className="h2">No tienes espacios reservados</p>
+            <p className="h4 sub">No tienes espacios reservados</p>
           )}
         </Row>
 

@@ -1,0 +1,11 @@
+.sub{
+    text-align: justify;
+    text-indent: 7%;
+    opacity: 0.35;
+}
+
+.sub:hover{
+    transform: translateY(-5%);
+    opacity: 0.8;
+
+}

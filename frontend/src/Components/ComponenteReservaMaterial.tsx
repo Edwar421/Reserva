@@ -1,6 +1,9 @@
 import React from "react";
 import { Col, Card, Badge } from "react-bootstrap";
 
+import "../Styles/Card.css";
+
+
 function ComponenteReservaMaterial({
   nombre,
   cantidad,
@@ -21,15 +24,15 @@ function ComponenteReservaMaterial({
   return (
     <Col className="text-center centered">
       <Card
-        style={{ width: "200px", height: "auto", margin: "auto" }}
+        style={{ width: "250px", height: "auto", margin: "0 auto 20px" }}
         className={`custom-card ${!true ? "opacity-75" : ""}`}
       >
         <Card.Header className="text-center">
           <i className="fas fa-calendar-alt fa-2x text-primary"></i>
         </Card.Header>
-        <Card.Body>
+        <Card.Body >
           <Card.Text>
-            <strong>{nombre}</strong>
+            <span className="trunk"><strong>{nombre}</strong></span>
             <br />
             {cantidad && (
               <>
@@ -37,7 +40,7 @@ function ComponenteReservaMaterial({
                 <br />
               </>
             )}
-            <Badge bg={badgeColor}>{estado}</Badge>
+            <Badge bg={badgeColor} style={{textTransform:"uppercase", boxShadow: "0 0 8px rgba(235, 8, 8, 0.98)", marginTop:"3px"}}>{estado}</Badge>
             <hr />
               <small>Horario</small>
               <br />
@@ -48,7 +51,6 @@ function ComponenteReservaMaterial({
                {fechaLimite && 
                     <small className="text-muted">Fecha limite: {new Date(fechaLimite).toLocaleDateString()}</small>
                 }
-              <br />
           </Card.Text>
         </Card.Body>
       </Card>

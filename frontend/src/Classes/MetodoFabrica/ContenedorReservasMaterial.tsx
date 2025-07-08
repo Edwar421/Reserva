@@ -123,7 +123,7 @@ class ContenedorReservasMaterial extends Contenedor {
         {data.estado === "Pendiente" && (
           <Button
             variant="danger"
-            className="mt-2"
+            className="mb-4 mt-1"
             onClick={() => handleDelete(data)}
           >
             Eliminar
@@ -132,7 +132,7 @@ class ContenedorReservasMaterial extends Contenedor {
         {data.estado === "Devuelto" && data.calificacion===null && (
           <Button
             variant="primary"
-            className="mt-2"
+            className="mb-4 mt-1"
             onClick={() => handleShowCalificar(data)}
           >
             Calificar
@@ -141,7 +141,7 @@ class ContenedorReservasMaterial extends Contenedor {
         {data.calificacion!==null && (
           <Button
             variant="secondary"
-            className="mt-2"
+            className="mb-4 mt-1"
             onClick={() => handleShowCalificacion(data)}
           >
             Mostrar calificación
@@ -152,10 +152,10 @@ class ContenedorReservasMaterial extends Contenedor {
 
     return (
       <>
-        <div className="align-self-start ps-5 pt-5 mb-5">
-          <h1 data-testid="Materiales para reservar">
+        <div className="align-self-start ps-5 pt-4 mb-3">
+          <h3 data-testid="Materiales para reservar">
             Tus Materiales Reservados:
-          </h1>
+          </h3>
         </div>
         <Row
           className="align-items-center"
@@ -166,7 +166,7 @@ class ContenedorReservasMaterial extends Contenedor {
           {materiales.length > 0 ? (
             Cartas
           ) : (
-            <p className="h2">No hay materiales disponibles</p>
+            <p className="h4 sub">No hay materiales disponibles</p>
           )}
         </Row>
 

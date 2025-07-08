@@ -1,0 +1,8 @@
+.profileM-divider{
+  width: 12rem;
+  height: 0.25rem;
+  background: white;
+  margin: 5px auto 0;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(226, 225, 245, 0.3);
+}
