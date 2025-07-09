@@ -102,9 +102,9 @@ function Registro() {
           {alertText}
         </Alert>
 
-        <Form onSubmit={clientSubmit}>
+        <Form style={{ width: "40%" }} onSubmit={clientSubmit}>
           <Form.Group className="mb-4 mt-4" controlId="formLogo">
-            <Image className="logoCentral" src="/logo.png" fluid width="25%" />
+            <Image className="logoCentral" src="/logo.png" fluid width="40%" />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formTipoUsuario">
@@ -171,6 +171,7 @@ function Registro() {
           )}
 
           <Button
+            className="mt-3"
             variant="primary"
             type="submit"
             disabled={
@@ -193,6 +194,7 @@ function Registro() {
           </Link>
         </Form.Group>
       </div>
+      <br />
     </>
   );
 }

@@ -171,8 +171,6 @@ function ReservaMaterial() {
 
       <GeneralProvider>{/* contexto general si aplica */}</GeneralProvider>
 
-      <ThemeSwitcher />
-
     </Container>
 
   );
