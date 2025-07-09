@@ -10,6 +10,7 @@ import {
   faCartShopping,
   faSignOut,
   faStar,
+  faArrowPointer,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import HeaderStrategy from "./HeaderStrategy";
@@ -77,7 +78,7 @@ class ClienteHeaderStrategy implements HeaderStrategy {
                     to="/pagUsuario/externo"
                     active={location.pathname === "/"}
                   >
-                    <FontAwesomeIcon icon={faStar} /> Recursos externos
+                    <FontAwesomeIcon icon={faArrowPointer} /> Recursos externos
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item className="item">
