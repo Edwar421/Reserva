@@ -29,6 +29,12 @@
     font-weight: 600;
 }
 
+.titleUpCom {
+    color: black;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
 .selectUp {
     margin-bottom: 7px;
     padding: 10px;

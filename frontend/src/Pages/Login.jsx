@@ -36,7 +36,7 @@ function Login() {
   const [showAlert, setShowAlert] = useState(fachada.getMostrarAlerta());
   const [alertState, setAlertState] = useState(fachada.getEstadoDeAlerta());
 
-  
+
 
   const loadUsuario = async () => {
     try {
@@ -139,6 +139,7 @@ function Login() {
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Control
+              style={{ width: "325px" }}
               type="email"
               name="email"
               placeholder="Correo electrónico"
@@ -149,8 +150,9 @@ function Login() {
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-4" controlId="formBasicPassword">
             <Form.Control
+              style={{ width: "325px" }}
               type="password"
               placeholder="Contraseña"
               name="password"
@@ -184,6 +186,7 @@ function Login() {
         </Form.Group>
       </div>
       <ThemeSwitcher />
+      <br/>
     </>
   );
 }

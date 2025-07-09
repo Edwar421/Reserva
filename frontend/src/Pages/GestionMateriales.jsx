@@ -236,11 +236,10 @@ function GestionMateriales() {
         {mostrarModalObs && (
           <div className="modalOverlay">
             <div className="modalContent">
-              <h5 className="titleUp text-center">
-                Agregar/Editar observación para reserva #{reservaSeleccionada?.id}
+              <h5 className="titleUpCom text-center">
+                Observaciones para la reserva #{reservaSeleccionada?.id}
               </h5>
               <Form.Group className="mt-3">
-                <Form.Label>Observaciones de entrega</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={4}
@@ -280,6 +279,10 @@ function GestionMateriales() {
             </div>
           </div>
         )}
+        <br />
+        <br />
+        <br />
+       
       </Container>
     </>
   );
