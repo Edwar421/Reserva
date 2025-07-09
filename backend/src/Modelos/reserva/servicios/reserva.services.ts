@@ -39,7 +39,7 @@ export class ReservaService {
     const reserva = this.reservaRepository.create({
       calendario,
       usuario,
-      estado: dto.estado ?? EstadoReserva.ACTIVA,
+      estado: dto.estado ?? EstadoReserva.PENDIENTE,
       calificacion: dto.calificacion,
       comentario: dto.comentario,
       observacionesEntrega: dto.observacionesEntrega,

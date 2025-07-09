@@ -25,7 +25,7 @@ import ProtectedRoute from "./Utils/ProtectedRoute";
 import PublicRoute from "./Utils/PublicRoute";
 import Cliente from "./Components/ClienteProfile.tsx"
 import LaboristaContent from "./Components/LaboristaComponent.tsx"
-
+import Externo from "./Pages/Externo.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -48,6 +48,7 @@ const router = createBrowserRouter(
           <Route path="reserva" element={<Reserva />} />
           <Route path="reservaMaterial" element={<ReservaMaterial />} />
           <Route path="misReservas" element={<MisReservas />} />
+          <Route path="externo" element={<Externo />} />
         </Route>
       </Route>
     </>

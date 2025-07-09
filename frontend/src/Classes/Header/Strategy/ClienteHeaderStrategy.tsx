@@ -74,6 +74,15 @@ class ClienteHeaderStrategy implements HeaderStrategy {
                 <Nav.Item className="item">
                   <Nav.Link
                     as={Link}
+                    to="/pagUsuario/externo"
+                    active={location.pathname === "/"}
+                  >
+                    <FontAwesomeIcon icon={faStar} /> Recursos externos
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item className="item">
+                  <Nav.Link
+                    as={Link}
                     to="/pagUsuario/misReservas"
                     active={location.pathname === "/"}
                   >
