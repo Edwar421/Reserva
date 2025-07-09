@@ -8,7 +8,6 @@ import Header from "../Classes/Header/Header";
 import ContenedorCartas from "../Components/ContenedorCartas";
 import "../Styles/Gestion.css";
 
-
 function GestionMateriales() {
   const [materiales, setMateriales] = useState([]);
 
@@ -24,12 +23,16 @@ function GestionMateriales() {
     }
   };
 
-  //Actualizar el estado de un material
+  // Estados para “Actualizar estado”
   const [mostrarModal, setMostrarModal] = useState(false);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
   const [nuevoEstado, setNuevoEstado] = useState("");
 
-  //Filtro
+  // Estados para “Observaciones”
+  const [mostrarModalObs, setMostrarModalObs] = useState(false);
+  const [textoObs, setTextoObs] = useState("");
+
+  // Filtros
   const [filtroEmail, setFiltroEmail] = useState("");
   const [filtroId, setFiltroId] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
@@ -61,6 +64,7 @@ function GestionMateriales() {
             </Row>
           </Col>
         </Row>
+
         <Form className="formGM border rounded">
           <Row>
             <Col md={4}>
@@ -108,6 +112,7 @@ function GestionMateriales() {
             </Col>
           </Row>
         </Form>
+
         <Col className="materiales-lista centered">
           {materialesFiltrados.map((material, index) => (
             <Card
@@ -118,17 +123,29 @@ function GestionMateriales() {
               <Card.Header className="text-center">{material.id}</Card.Header>
               <Card.Body className="pb-4">
                 <Card.Text>
-                  <span className="trunkGM"><strong>Material: </strong>{material.material.nombre}</span>
+                  <span className="trunkGM">
+                    <strong>Material: </strong>
+                    {material.material.nombre}
+                  </span>
+                  <br />
                   <strong>Nombre: </strong> {material.usuario.nombre}
                   <br />
                   <strong>Fecha: </strong> {material.fecha}
                   <br />
                   <strong>Inicio: </strong> {material.horaInicio}
                   <br />
-                  <strong>Fin: </strong>{material.horaFin}
+                  <strong>Fin: </strong> {material.horaFin}
+                  <br />
+                  <strong>Observaciones: </strong>
+                  {material.observacionesEntrega}
                 </Card.Text>
                 <hr />
-                <Card.Text><strong>Estado: </strong><span style={{ textTransform: "uppercase", letterSpacing: "2px" }}> {material.estado}</span></Card.Text>
+                <Card.Text>
+                  <strong>Estado: </strong>
+                  <span style={{ textTransform: "uppercase", letterSpacing: "2px" }}>
+                    {material.estado}
+                  </span>
+                </Card.Text>
               </Card.Body>
               <div className="text-center" style={{ paddingBottom: "20px" }}>
                 {material.estado !== "Devuelto" && (
@@ -138,7 +155,7 @@ function GestionMateriales() {
                     className="actualizarEstado"
                     onClick={() => {
                       setReservaSeleccionada(material);
-                      setNuevoEstado(material.estado); // inicia con el estado actual
+                      setNuevoEstado(material.estado);
                       setMostrarModal(true);
                     }}
                   >
@@ -152,6 +169,8 @@ function GestionMateriales() {
                     className="observaciones"
                     onClick={() => {
                       setReservaSeleccionada(material);
+                      setTextoObs(material.observacionesEntrega || "");
+                      setMostrarModalObs(true);
                     }}
                   >
                     Observaciones
@@ -161,12 +180,8 @@ function GestionMateriales() {
             </Card>
           ))}
         </Col>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
 
+        {/* Modal: Actualizar Estado */}
         {mostrarModal && (
           <div className="modalOverlay">
             <div className="modalContent">
@@ -183,15 +198,10 @@ function GestionMateriales() {
                 <option value="Devuelto">Devuelto</option>
               </Form.Select>
               <div className="mt-3 d-flex justify-content-evenly">
-                <Button
-                  variant="secondary"
-                  style={{ boxShadow: "0 0 8px rgba(78, 77, 77, 0.51)" }}
-                  onClick={() => setMostrarModal(false)}
-                >
+                <Button variant="secondary" onClick={() => setMostrarModal(false)}>
                   Cancelar
                 </Button>
                 <Button
-                  style={{ boxShadow: "0 0 8px rgba(4, 122, 18, 0.51)" }}
                   variant="success"
                   onClick={async () => {
                     try {
@@ -205,18 +215,66 @@ function GestionMateriales() {
                           body: JSON.stringify({ estado: nuevoEstado }),
                         }
                       );
-                      if (!response.ok)
-                        alert("Error al actualizar el estado: " + response.error)
-                      await obtenerMateriales(); // recarga la lista
+                      if (!response.ok) throw new Error("Error al actualizar el estado");
+                      await obtenerMateriales();
                       setMostrarModal(false);
-                      alert("Estado actualizado correctamente")
+                      alert("Estado actualizado correctamente");
                     } catch (error) {
                       console.error("Error actualizando estado:", error);
-                      alert("Error al actualizar el estado: " + error)
+                      alert("Error al actualizar el estado: " + error);
                     }
                   }}
                 >
                   Actualizar
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal: Observaciones */}
+        {mostrarModalObs && (
+          <div className="modalOverlay">
+            <div className="modalContent">
+              <h5 className="titleUp text-center">
+                Agregar/Editar observación para reserva #{reservaSeleccionada?.id}
+              </h5>
+              <Form.Group className="mt-3">
+                <Form.Label>Observaciones de entrega</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={4}
+                  value={textoObs}
+                  onChange={(e) => setTextoObs(e.target.value)}
+                />
+              </Form.Group>
+              <div className="mt-3 d-flex justify-content-evenly">
+                <Button variant="secondary" onClick={() => setMostrarModalObs(false)}>
+                  Cancelar
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(
+                        `http://localhost:3000/reservas-material/observaciones/${reservaSeleccionada.id}`,
+                        {
+                          method: "PATCH",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ observacionesEntrega: textoObs }),
+                        }
+                      );
+                      if (!res.ok) throw new Error("Error al guardar observación");
+                      await obtenerMateriales();
+                      setMostrarModalObs(false);
+                      alert("Observación guardada correctamente");
+                    } catch (err) {
+                      console.error("Error guardando observación:", err);
+                      alert("Error guardando observación: " + err);
+                    }
+                  }}
+                >
+                  Guardar
                 </Button>
               </div>
             </div>
