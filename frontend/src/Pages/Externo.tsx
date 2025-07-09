@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Col, Card, Badge, Container, Row } from "react-bootstrap";
 
 const Externo: React.FC = () => {
-  const [username, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  const username= "20212020035";
+  const password= "gyuheejo";
   const handleLogin = async () => {
-    setEmail("20212020035");
-    setPassword("gyuheejo");
     try {
       const response = await fetch(
         "https://backendseminario-7czj.onrender.com/api/auth/login",
@@ -59,6 +57,7 @@ const Externo: React.FC = () => {
       );
 
       if (!response.ok) {
+        obtenerRecursos();
         throw new Error("Error al obtener los recursos");
       }
 
@@ -76,9 +75,19 @@ const Externo: React.FC = () => {
       console.error("Error:", error);
     }
   };
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  const obtenerRecursos = async () => {
+    await sleep(5000);
+    await handleLogin();
+    await fetchRecursos();
+  };
   useEffect(() => {
     const ejecutar = async () => {
-      await handleLogin();
+      if (!localStorage.getItem("token")) await handleLogin();
       await fetchRecursos();
     };
 
