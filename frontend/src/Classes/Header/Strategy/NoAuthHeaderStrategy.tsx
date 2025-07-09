@@ -40,9 +40,10 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
           <Offcanvas.Body>
             <Nav
               variant="pills"
-              className="justify-content-end flex-grow-1 pe-3"
+              className="justify-content-end flex-grow-1 pe-4"
             >
               <NavDropdown
+                style={{width: "10.5%"}}
                 title={
                   <span className="space">
                     <FontAwesomeIcon className="iconUser" icon={faUser} /> Registrate
@@ -51,18 +52,20 @@ class NoAuthHeaderStrategy implements HeaderStrategy {
                 id={`offcanvasNavbarDropdown-expand-md`}
               >
                 <NavDropdown.Item
+                  style={{fontSize:"14px"}}
                   as={Link}
                   to="/"
                   active={location.pathname === "/"}
                 >
-                  <FontAwesomeIcon icon={faSignIn} /> Inicia sesión
+                  <FontAwesomeIcon className="space" icon={faSignIn} /> Inicia sesión
                 </NavDropdown.Item>
                 <NavDropdown.Item
+                  style={{fontSize:"14px"}}
                   as={Link}
                   to="/registro"
                   active={location.pathname === "/registro"}
                 >
-                  <FontAwesomeIcon icon={faUsers} /> Registrate 
+                  <FontAwesomeIcon className="space" icon={faUsers} /> Registrate 
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
