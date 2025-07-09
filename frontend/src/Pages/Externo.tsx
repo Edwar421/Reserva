@@ -40,7 +40,7 @@ const Externo: React.FC = () => {
     }
   };
 
-  const [recursos, setRecursos] = useState([]);
+  const [recursos, setRecursos] = useState<any>([]);
   const [recursosObtenidos, setRecursosObtenidos] = useState(false);
   const fetchRecursos = async () => {
     try {
@@ -95,13 +95,16 @@ const Externo: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: "100%", padding: "40px 40px" }}>
-      <h1>Recuersos externos</h1>
+    <div style={{ maxWidth: "100%", padding: "40px 40px", minHeight: "70vh" }}>
+      <h1 className="text-center">Recuersos externos</h1>
       {mensaje && (
         <div
           style={{
-            marginTop: "20px",
+            display: "block",
+            margin: "20px auto 0",
+            boxShadow: "0 0 12px rgba(66, 185, 26, 0.73) ",
             padding: "10px",
+            width: "50%",
             background: mensaje.startsWith("✅") ? "#d4edda" : "#f8d7da",
             color: mensaje.startsWith("✅") ? "#155724" : "#721c24",
             border: "1px solid",
@@ -113,9 +116,9 @@ const Externo: React.FC = () => {
         </div>
       )}
       {recursosObtenidos && (
-        <div style={{ padding: "50px", maxWidth: "100%" }}>
-          <h2>Recursos Disponibles</h2>
-          <div style={{ maxWidth: "90%" }}>
+        <div style={{margin: "30px 0", maxWidth: "100%" }}>
+          <h3 style={{marginBottom:"30px", textIndent:"7px"}}>Recursos Disponibles</h3>
+          <div style={{ maxWidth: "90%", display:"block", margin: "auto" }}>
             <Row className="g-4">
               {recursos.map((recurso) => (
                 <Col
@@ -125,7 +128,7 @@ const Externo: React.FC = () => {
                   md={6}
                   lg={4}
                   xl={3}
-                  className="d-flex justify-content-center"
+                  className="d-flex justify-Content-around"
                 >
                   <Card
                     style={{
