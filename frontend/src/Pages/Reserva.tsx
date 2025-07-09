@@ -62,8 +62,6 @@ const ReservaPage: React.FC = () => {
             )}
           </Col>
         </Row>
-
-        <ThemeSwitcher />
         <br />
         <br />
 
