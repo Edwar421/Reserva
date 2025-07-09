@@ -4,6 +4,7 @@
   margin: 0;
   font-family: IBM Plex Sans;
   height: 100%;
+
 }
 
 .content {
@@ -15,20 +16,20 @@
   min-height: 70vh;
 }
 
-.border-bottomer{
+.border-bottomer {
   border-bottom: rgba(255, 255, 255, 0.634) 1px solid;
 }
 
-.border-toper{
-  border-top: white 1px solid ;
+.border-toper {
+  border-top: white 1px solid;
 }
 
-.bottom-fixed{
+.bottom-fixed {
   position: fixed;
   bottom: 0;
   width: 100vw;
 }
 
-.hidden{
+.hidden {
   display: none;
 }

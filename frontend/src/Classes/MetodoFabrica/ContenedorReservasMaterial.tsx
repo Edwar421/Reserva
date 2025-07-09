@@ -158,7 +158,7 @@ class ContenedorReservasMaterial extends Contenedor {
           </h3>
         </div>
         <Row
-          className="align-items-center"
+          className="align-items-flex-start"
           onClick={() => {
             setTipoReserva("material");
           }}

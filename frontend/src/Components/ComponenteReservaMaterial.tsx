@@ -33,7 +33,7 @@ function ComponenteReservaMaterial({
   return (
     <Col className="text-center centered">
       <Card
-        style={{ width: "250px", height: "auto", margin: "0 auto 20px" }}
+        style={{ width: "250px", height: "auto", margin: "0 auto 20px"}}
         className={`custom-card ${!true ? "opacity-75" : ""}`}
       >
         <Card.Header className="text-center">

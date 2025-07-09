@@ -64,22 +64,23 @@ function ReservaMaterial() {
   };
 
   return (
-    <div className="layout-container">
-      <Container fluid className="align-items-center m-0 p-0">
-        <Row>
-          <Col xs={{ span: 8, offset: 2 }}>
-            <Row className="p-5">
-              <Col >
-              </Col>
-              <Col className="centered">
-                <h1 className="title">Préstamo de Material</h1>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+    <Container fluid className="align-items-center m-0 p-0">
+      <Row>
+        <Col xs={{ span: 8, offset: 2 }}>
+          <Row className="pt-5 pb-3">
+            <Col >
+            </Col>
+            <Col className="centered">
+              <h1 className="title">Préstamo de Material</h1>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
 
-        <Row className="px-5">
-          <Col className="px-5" md={{ span: 6, offset: 3 }}>
+      <Row className="px-5">
+
+        <Col className="px-5" md={{ span: 6, offset: 3 }}>
+          <div className="layout-container" >
             <h3 className="text-center mb-4">Selecciona un material</h3>
             <Select
               options={materiales.map((mat) => ({
@@ -139,7 +140,7 @@ function ReservaMaterial() {
                         <p>
                           Fecha:{" "}
                           <input
-                          className="dateMaterial"
+                            className="dateMaterial"
                             type="date"
                             value={fecha}
                             min={hoy}
@@ -163,15 +164,17 @@ function ReservaMaterial() {
                 })()}
               </div>
             )}
-          </Col>
-        </Row>
+          </div >
+        </Col>
 
-        <GeneralProvider>{/* contexto general si aplica */}</GeneralProvider>
+      </Row>
 
-        <ThemeSwitcher />
+      <GeneralProvider>{/* contexto general si aplica */}</GeneralProvider>
 
-      </Container>
-    </div>
+      <ThemeSwitcher />
+
+    </Container>
+
   );
 }
 

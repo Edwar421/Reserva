@@ -4,13 +4,14 @@
 }
 
 .title{
-  transform: translateX(-43%);
+  transform: translateX(-40%);
 }
 
 .layout-container{
   display: flex;
   flex-direction: column;
-  min-height: 75vh;
+  min-height: 70vh;
+
 }
 
 .select{
@@ -37,4 +38,5 @@
 .p-5{
   padding: 40px 0 20px !important;
 }
+
 
