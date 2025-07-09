@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Card, Badge, Container, Row } from "react-bootstrap";
 
 const Externo: React.FC = () => {
@@ -76,18 +76,18 @@ const Externo: React.FC = () => {
       console.error("Error:", error);
     }
   };
+  useEffect(() => {
+    const ejecutar = async () => {
+      await handleLogin();
+      await fetchRecursos();
+    };
 
-  const accederRecursos = async () => {
-    await handleLogin();
-    await fetchRecursos();
-  };
+    ejecutar();
+  }, []);
 
   return (
     <div style={{ maxWidth: "100%", padding: "40px 40px" }}>
       <h1>Recuersos externos</h1>
-      <button onClick={accederRecursos} style={{ padding: "10px 20px" }}>
-        Click para acceder a recursos externos
-      </button>
       {mensaje && (
         <div
           style={{
