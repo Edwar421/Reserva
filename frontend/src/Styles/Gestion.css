@@ -1,46 +1,89 @@
 .d-block {
-    display: block!important;
+    display: block !important;
 }
 
 .modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
 
 .modalContent {
-  background: rgba(255, 255, 255, 0.885);
-  padding: 2.2rem;
-  border-radius: 10px;
-  width: 400px;
+    background: rgba(255, 255, 255, 0.885);
+    padding: 2.2rem;
+    border-radius: 10px;
+    width: 400px;
 }
 
-.titleUp{
+.titleUp {
     color: black;
     margin-bottom: 15px;
     font-size: 1.2rem;
     font-weight: 600;
 }
 
-.selectUp{
+.selectUp {
     margin-bottom: 7px;
     padding: 10px;
 }
 
-.blockReserv{
+.blockReserv {
     text-indent: 0;
     box-shadow: 0 0 8px rgba(10, 102, 9, 0.442);
 
 }
 
-.reservationDetails{
+.reservationDetails {
     text-indent: 15px;
+}
 
+.profileG-divider {
+    width: 20rem;
+    height: 0.25rem;
+    background: white;
+    margin: 5px auto 0;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(226, 225, 245, 0.3);
+
+}
+
+.formGM {
+    margin: 20px;
+    background: #212529;
+    padding: 2rem;
+
+}
+
+.placeH::placeholder {
+    color: black;
+    opacity: 0.5;
+}
+
+.materiales-lista {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.trunkGM {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0 !important;
+}
+
+.trunkGM:hover {
+    overflow: auto;
+    white-space: initial;
 }

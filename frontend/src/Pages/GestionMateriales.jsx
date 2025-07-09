@@ -53,19 +53,22 @@ function GestionMateriales() {
       <Container fluid className="align-items-center m-0 p-0">
         <Row className="width-100vw">
           <Col xs={{ span: 8, offset: 2 }}>
-            <Row width="100%" className="p-5">
+            <Row width="100%" className="p-4 mb-2">
               <Col>
-                <h1>Gestión de materiales</h1>
+                <h1 className="text-center">Gestión de materiales</h1>
+                <div className="profileG-divider"></div>
               </Col>
             </Row>
           </Col>
         </Row>
-        <Form className="m-4 p-3 border rounded bg-light">
+        <Form className="formGM border rounded">
           <Row>
             <Col md={4}>
               <Form.Group controlId="filtroEmail">
                 <Form.Label>Email del usuario</Form.Label>
                 <Form.Control
+                  className="placeH"
+                  style={{ background: "white", color: "black" }}
                   type="text"
                   placeholder="ej. usuario@email.com"
                   value={filtroEmail}
@@ -78,6 +81,8 @@ function GestionMateriales() {
               <Form.Group controlId="filtroId">
                 <Form.Label>ID de reserva</Form.Label>
                 <Form.Control
+                  className="placeH"
+                  style={{ background: "white", color: "black" }}
                   type="text"
                   placeholder="ej. 5"
                   value={filtroId}
@@ -90,6 +95,7 @@ function GestionMateriales() {
               <Form.Group controlId="filtroEstado">
                 <Form.Label>Estado</Form.Label>
                 <Form.Select
+                  style={{ background: "white", color: "black" }}
                   value={filtroEstado}
                   onChange={(e) => setFiltroEstado(e.target.value)}
                 >
@@ -105,31 +111,30 @@ function GestionMateriales() {
         <Col className="materiales-lista centered">
           {materialesFiltrados.map((material, index) => (
             <Card
-              style={{ width: "250px", margin: "10px" }}
+              style={{ width: "275px", margin: "30px 20px" }}
               key={index}
-              className="mb-3"
+              className="mb-1"
             >
               <Card.Header className="text-center">{material.id}</Card.Header>
-              <Card.Body>
+              <Card.Body className="pb-4">
                 <Card.Text>
-                  Material: {material.material.nombre}
+                  <span className="trunkGM"><strong>Material: </strong>{material.material.nombre}</span>
+                  <strong>Nombre: </strong> {material.usuario.nombre}
                   <br />
-                  Nombre: {material.usuario.nombre}
+                  <strong>Fecha: </strong> {material.fecha}
                   <br />
-                  Fecha: {material.fecha}
+                  <strong>Inicio: </strong> {material.horaInicio}
                   <br />
-                  Inicio: {material.horaInicio}
-                  <br />
-                  Fin: {material.horaFin}
+                  <strong>Fin: </strong>{material.horaFin}
                 </Card.Text>
                 <hr />
-                <Card.Text>Estado: {material.estado}</Card.Text>
+                <Card.Text><strong>Estado: </strong><span style={{ textTransform: "uppercase", letterSpacing: "2px" }}> {material.estado}</span></Card.Text>
               </Card.Body>
-              <div className="text-center" style={{ marginBottom: "10px" }}>
+              <div className="text-center" style={{ paddingBottom: "20px" }}>
                 {material.estado !== "Devuelto" && (
                   <Button
                     variant="primary"
-                    style={{ width: "150px" }}
+                    style={{ width: "200px", boxShadow: "0 0 12px rgba(36, 63, 198, 0.51)" }}
                     className="actualizarEstado"
                     onClick={() => {
                       setReservaSeleccionada(material);
@@ -143,7 +148,7 @@ function GestionMateriales() {
                 {material.estado === "Devuelto" && (
                   <Button
                     variant="secondary"
-                    style={{ width: "150px" }}
+                    style={{ width: "200px", boxShadow: "0 0 12px rgba(94, 95, 97, 0.53)" }}
                     className="observaciones"
                     onClick={() => {
                       setReservaSeleccionada(material);
@@ -161,7 +166,7 @@ function GestionMateriales() {
         <br />
         <br />
         <br />
-      
+
         {mostrarModal && (
           <div className="modalOverlay">
             <div className="modalContent">
@@ -180,13 +185,13 @@ function GestionMateriales() {
               <div className="mt-3 d-flex justify-content-evenly">
                 <Button
                   variant="secondary"
-                  style= {{boxShadow:"0 0 8px rgba(78, 77, 77, 0.51)"}}
+                  style={{ boxShadow: "0 0 8px rgba(78, 77, 77, 0.51)" }}
                   onClick={() => setMostrarModal(false)}
                 >
                   Cancelar
                 </Button>
                 <Button
-                  style= {{boxShadow:"0 0 8px rgba(4, 122, 18, 0.51)"}}
+                  style={{ boxShadow: "0 0 8px rgba(4, 122, 18, 0.51)" }}
                   variant="success"
                   onClick={async () => {
                     try {
@@ -201,13 +206,13 @@ function GestionMateriales() {
                         }
                       );
                       if (!response.ok)
-                        alert("Error al actualizar el estado: "+response.error)
+                        alert("Error al actualizar el estado: " + response.error)
                       await obtenerMateriales(); // recarga la lista
                       setMostrarModal(false);
                       alert("Estado actualizado correctamente")
                     } catch (error) {
                       console.error("Error actualizando estado:", error);
-                      alert("Error al actualizar el estado: "+error)
+                      alert("Error al actualizar el estado: " + error)
                     }
                   }}
                 >

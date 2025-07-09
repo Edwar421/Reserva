@@ -6,6 +6,8 @@ import { GeneralProvider } from "../Utils/GeneralContext";
 import Footer from "../Components/Footer";
 import Header from "../Classes/Header/Header";
 import ContenedorCartas from "../Components/ContenedorCartas";
+import "../Styles/Gestion.css";
+
 
 function GestionReserva() {
   const [reservas, setReserva] = useState([]);
@@ -51,19 +53,22 @@ function GestionReserva() {
       <Container fluid className="align-items-center m-0 p-0">
         <Row className="width-100vw">
           <Col xs={{ span: 8, offset: 2 }}>
-            <Row width="100%" className="p-5">
+            <Row width="100%" className="p-4 mb-2">
               <Col>
-                <h1>Gestión de Reservas</h1>
+                <h1 className="text-center">Gestión de Reservas</h1>
+                <div className="profileG-divider"></div>
               </Col>
             </Row>
           </Col>
         </Row>
-        <Form className="m-4 p-3 border rounded bg-light">
+        <Form className="formGM border rounded">
           <Row>
             <Col md={4}>
               <Form.Group controlId="filtroEmail">
                 <Form.Label>Email del usuario</Form.Label>
                 <Form.Control
+                  className="placeH"
+                  style={{ background: "white", color: "black" }}
                   type="text"
                   placeholder="ej. usuario@email.com"
                   value={filtroEmail}
@@ -76,6 +81,8 @@ function GestionReserva() {
               <Form.Group controlId="filtroId">
                 <Form.Label>ID de reserva</Form.Label>
                 <Form.Control
+                  className="placeH"
+                  style={{ background: "white", color: "black" }}
                   type="text"
                   placeholder="ej. 5"
                   value={filtroId}
@@ -88,6 +95,7 @@ function GestionReserva() {
               <Form.Group controlId="filtroEstado">
                 <Form.Label>Estado</Form.Label>
                 <Form.Select
+                  style={{ background: "white", color: "black" }}
                   value={filtroEstado}
                   onChange={(e) => setFiltroEstado(e.target.value)}
                 >
@@ -103,41 +111,41 @@ function GestionReserva() {
         <Col className="materiales-lista centered ">
           {reservasFiltradas.map((reserva, index) => (
             <Card
-              style={{ width: "250px", margin: "10px" }}
+              style={{ width: "275px", margin: "30px 20px"}}
               key={index}
               className="mb-3"
             >
               <Card.Header className="text-center">{reserva.id}</Card.Header>
               <Card.Body>
                 <Card.Text>
-                  Reserva: {reserva.calendario.espacio.nombre}
+                  <strong>Reserva: </strong> {reserva.calendario.espacio.nombre}
                   <br />
-                  Nombre: {reserva.usuario.nombre}
+                  <strong>Nombre: </strong> {reserva.usuario.nombre}
                   <br />
-                  Fecha: {reserva.calendario.fecha}
+                  <strong>Fecha: </strong> {reserva.calendario.fecha}
                   <br />
-                  Inicio: {reserva.calendario.horaInicio}
+                  <strong>Inicio: </strong> {reserva.calendario.horaInicio}
                   <br />
-                  Fin: {reserva.calendario.horaFin}
+                  <strong>Fin: </strong> {reserva.calendario.horaFin}
                 </Card.Text>
                 <hr />
-                <Card.Text>Estado: {reserva.estado}</Card.Text>
+                <Card.Text><strong>Estado: </strong> <span style={{textTransform:"uppercase", letterSpacing:"2px"}}>{reserva.estado}</span></Card.Text>
               </Card.Body>
-              
+
               <div className="text-center" style={{ marginBottom: "10px" }}>
-                {reserva.estado==="completada"&&(
-                <Button
-                  variant="primary"
-                  style={{ width: "150px" }}
-                  className="oservaciones"
-                  onClick={() => {
-                    setReservaSeleccionada(reserva);
-                    setMostrarModal(true);
-                  }}
-                >
-                  Observaciones
-                </Button>
-              )}
+                {reserva.estado === "completada" && (
+                  <Button
+                    variant="primary"
+                    style={{ width: "150px" }}
+                    className="oservaciones"
+                    onClick={() => {
+                      setReservaSeleccionada(reserva);
+                      setMostrarModal(true);
+                    }}
+                  >
+                    Observaciones
+                  </Button>
+                )}
               </div>
             </Card>
           ))}
@@ -147,7 +155,7 @@ function GestionReserva() {
         <br />
         <br />
         <br />
-        
+
       </Container>
     </>
   );
