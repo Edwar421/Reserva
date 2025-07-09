@@ -185,6 +185,7 @@ function Login() {
           </Link>
         </Form.Group>
       </div>
+      <ThemeSwitcher/>
       <br/>
     </>
   );
