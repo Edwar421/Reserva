@@ -2,7 +2,6 @@ import { registerAs } from '@nestjs/config';
 
 
 export default registerAs('config', () => {
-  // console.log(process.env)
   return {
     postgres: {
       host: process.env.DB_HOST,
