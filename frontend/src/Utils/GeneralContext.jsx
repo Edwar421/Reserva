@@ -2,6 +2,12 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 const GeneralContext = createContext();
 
+const AUTH_KEYS = ["email", "username", "tipoUsuario"];
+
+const clearAuthStorage = () => {
+  AUTH_KEYS.forEach((key) => localStorage.removeItem(key));
+};
+
 export const GeneralProvider = ({ children }) => {
   const [show2, setShow2] = useState(false);
   const [show, setShow] = useState(false);
@@ -14,19 +20,31 @@ export const GeneralProvider = ({ children }) => {
 
   useEffect(() => {
     const email = localStorage.getItem("email");
-    if (email) {
+    const username = localStorage.getItem("username");
+    const tipoUsuario = localStorage.getItem("tipoUsuario");
+
+    if (email && username && tipoUsuario) {
       setUserEmail(email);
+    } else {
+      clearAuthStorage();
+      setUserEmail(null);
     }
     setAuthChecked(true); 
   }, []);
 
-  const login = (email) => {
+  const login = (email, username, tipoUsuario) => {
     localStorage.setItem("email", email);
+    if (username) {
+      localStorage.setItem("username", username);
+    }
+    if (tipoUsuario) {
+      localStorage.setItem("tipoUsuario", tipoUsuario);
+    }
     setUserEmail(email);
   };
 
   const logout = () => {
-    localStorage.removeItem("email");
+    clearAuthStorage();
     setUserEmail(null);
   };
 

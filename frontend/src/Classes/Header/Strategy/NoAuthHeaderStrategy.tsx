@@ -12,13 +12,11 @@ import {
   faUsers,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HeaderStrategy from "./HeaderStrategy";
 
 // Estrategia para usuario no autenticado
 class NoAuthHeaderStrategy implements HeaderStrategy {
-  private navigate = useNavigate();
-
   // Metodo que retorna la barra de navegacion del cliente
   public renderNavbar(): JSX.Element {
     return (

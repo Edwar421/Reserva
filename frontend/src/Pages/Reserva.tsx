@@ -25,6 +25,9 @@ const ReservaPage: React.FC = () => {
   return (
     <GeneralProvider>
       <Container fluid className="align-items-center m-0 p-0 containerR">
+        <Row className="width-100vw">
+          <Header />
+        </Row>
 
         <Row className="width-100vw mt-5">
           <Col xs={{ span: 8, offset: 2 }}>
@@ -64,6 +67,8 @@ const ReservaPage: React.FC = () => {
         </Row>
         <br />
         <br />
+
+        <Footer />
 
 
       </Container>

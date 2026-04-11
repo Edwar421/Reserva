@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Card, Badge, Container, Row } from "react-bootstrap";
+import Header from "../Classes/Header/Header";
+import Footer from "../Components/Footer";
 
 const Externo: React.FC = () => {
   const [mensaje, setMensaje] = useState("");
@@ -95,69 +97,73 @@ const Externo: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: "100%", padding: "40px 40px", minHeight: "70vh" }}>
-      <h1 className="text-center">Recuersos externos</h1>
-      {mensaje && (
-        <div
-          style={{
-            display: "block",
-            margin: "20px auto 0",
-            boxShadow: "0 0 12px rgba(66, 185, 26, 0.73) ",
-            padding: "10px",
-            width: "50%",
-            background: mensaje.startsWith("✅") ? "#d4edda" : "#f8d7da",
-            color: mensaje.startsWith("✅") ? "#155724" : "#721c24",
-            border: "1px solid",
-            borderColor: mensaje.startsWith("✅") ? "#c3e6cb" : "#f5c6cb",
-            borderRadius: "4px",
-          }}
-        >
-          {mensaje}
-        </div>
-      )}
-      {recursosObtenidos && (
-        <div style={{margin: "30px 0", maxWidth: "100%" }}>
-          <h3 style={{marginBottom:"30px", textIndent:"7px"}}>Recursos Disponibles</h3>
-          <div style={{ maxWidth: "90%", display:"block", margin: "auto" }}>
-            <Row className="g-4">
-              {recursos.map((recurso) => (
-                <Col
-                  key={recurso.id}
-                  xs={6}
-                  sm={6}
-                  md={6}
-                  lg={4}
-                  xl={3}
-                  className="d-flex justify-Content-around"
-                >
-                  <Card
-                    style={{
-                      width: "18rem",
-                    }}
-                    className={`custom-card ${!true ? "opacity-75" : ""}`}
-                  >
-                    <Card.Header className="text-center">
-                      {recurso.name}
-                    </Card.Header>
-                    <Card.Body>
-                      <Card.Text>
-                        Tipo: {recurso.typeName}
-                        <br />
-                        Unidad de servicio: {recurso.serviceUnitName}
-                        <br />
-                        Estado: {recurso.status}
-                        <br />
-                        Cantidad: {recurso.availableQuantity}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+    <>
+      <Header />
+      <div style={{ maxWidth: "100%", padding: "40px 40px", minHeight: "70vh" }}>
+        <h1 className="text-center">Recuersos externos</h1>
+        {mensaje && (
+          <div
+            style={{
+              display: "block",
+              margin: "20px auto 0",
+              boxShadow: "0 0 12px rgba(66, 185, 26, 0.73) ",
+              padding: "10px",
+              width: "50%",
+              background: mensaje.startsWith("✅") ? "#d4edda" : "#f8d7da",
+              color: mensaje.startsWith("✅") ? "#155724" : "#721c24",
+              border: "1px solid",
+              borderColor: mensaje.startsWith("✅") ? "#c3e6cb" : "#f5c6cb",
+              borderRadius: "4px",
+            }}
+          >
+            {mensaje}
           </div>
-        </div>
-      )}
-    </div>
+        )}
+        {recursosObtenidos && (
+          <div style={{margin: "30px 0", maxWidth: "100%" }}>
+            <h3 style={{marginBottom:"30px", textIndent:"7px"}}>Recursos Disponibles</h3>
+            <div style={{ maxWidth: "90%", display:"block", margin: "auto" }}>
+              <Row className="g-4">
+                {recursos.map((recurso) => (
+                  <Col
+                    key={recurso.id}
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={4}
+                    xl={3}
+                    className="d-flex justify-Content-around"
+                  >
+                    <Card
+                      style={{
+                        width: "18rem",
+                      }}
+                      className={`custom-card ${!true ? "opacity-75" : ""}`}
+                    >
+                      <Card.Header className="text-center">
+                        {recurso.name}
+                      </Card.Header>
+                      <Card.Body>
+                        <Card.Text>
+                          Tipo: {recurso.typeName}
+                          <br />
+                          Unidad de servicio: {recurso.serviceUnitName}
+                          <br />
+                          Estado: {recurso.status}
+                          <br />
+                          Cantidad: {recurso.availableQuantity}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 

@@ -71,9 +71,7 @@ function Login() {
             setAlertState(fachada.cambioEstadoDeAlerta(0));
             setShowAlert(fachada.cambioMostrarAlerta());
 
-            login(email); // ✅ usamos el contexto aquí
-            localStorage.setItem("username", nombre);
-            localStorage.setItem("tipoUsuario", tipo);
+            login(email, nombre, tipo); // ✅ usamos el contexto aquí
 
             // Redirigir según tipo de usuario
             switch (tipo) {

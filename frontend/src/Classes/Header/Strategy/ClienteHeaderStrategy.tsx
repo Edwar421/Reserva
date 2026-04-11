@@ -12,19 +12,17 @@ import {
   faStar,
   faArrowPointer,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HeaderStrategy from "./HeaderStrategy";
 
 // Estrategia para cliente autenticado
 class ClienteHeaderStrategy implements HeaderStrategy {
-  // Atributos de la clase
-  private navigate = useNavigate();
-
   // Metodo para cerrar sesion
   public reset = (): void => {
-    localStorage.clear();
-    this.navigate("/");
-    window.location.reload();
+    localStorage.removeItem("email");
+    localStorage.removeItem("username");
+    localStorage.removeItem("tipoUsuario");
+    window.location.assign("/");
   };
 
   // Metodo que retorna la barra de navegacion del cliente
